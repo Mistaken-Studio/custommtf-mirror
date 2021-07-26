@@ -63,6 +63,7 @@
     <Compile Include="Components\StickyComponent.cs" />
     <Compile Include="Handlers\StickyGrenadeHandler.cs" />
     <Compile Include="Items\StickyGrenadeItem.cs" />
+    <Compile Include="Items\MedicGunHandler.cs" />
     <Compile Include="PluginHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
