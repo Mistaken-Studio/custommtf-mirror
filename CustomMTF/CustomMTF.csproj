@@ -60,7 +60,9 @@
   <ItemGroup>
     <Compile Include="Classes\MTFMedic.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Items\StickyGrenade.cs" />
+    <Compile Include="Components\StickyComponent.cs" />
+    <Compile Include="Handlers\StickyGrenadeHandler.cs" />
+    <Compile Include="Items\StickyGrenadeItem.cs" />
     <Compile Include="PluginHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
