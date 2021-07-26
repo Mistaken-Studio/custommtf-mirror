@@ -33,6 +33,7 @@ namespace Mistaken.CustomMTF
         {
             Instance = this;
             new Mistaken.CustomMTF.Items.StickyGrenadeHandler(this);
+            new Items.MedicGunHandler(this);
 
             base.OnEnabled();
         }
