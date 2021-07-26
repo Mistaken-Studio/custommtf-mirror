@@ -49,7 +49,8 @@ namespace Mistaken.CustomMTF.Items
 
         private void FixedUpdate()
         {
-            this.transform.position = this.hitposition;
+            if (this.player == null) return;
+            this.transform.position = this.hitposition + this.player.Position;
         }
     }
 }
