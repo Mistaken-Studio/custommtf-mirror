@@ -27,6 +27,7 @@ namespace Mistaken.CustomMTF.Items
         public StickyGrenadeHandler(IPlugin<IConfig> plugin) : base(plugin)
         {
             Instance = this;
+            new StickyGrenadeItem();
         }
         /// <inheritdoc/>
         public override string Name => "StickyGrenadeHandler";
