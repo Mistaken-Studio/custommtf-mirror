@@ -28,21 +28,28 @@ namespace Mistaken.CustomMTF.Items
     public class StickyComponent : MonoBehaviour
     {
         private bool used;
+        private Player player;
+        private Vector3 hitposition;
 
         private void OnCollisionEnter(Collision collision)
         {
             if (!this.used && this.TryGetComponent<Rigidbody>(out Rigidbody component))
             {
                 component.constraints = RigidbodyConstraints.FreezeAll;
-                var player = Player.Get(collision?.gameObject);
-                if (player != null)
+                this.player = Player.Get(collision?.gameObject);
+                if (this.player != null)
                 {
-                    player.SendConsoleMessage("Grenade collided with you", "blue");
-                    StickyGrenadeHandler.Instance.RunCoroutine(StickyGrenadeHandler.UpdatePosition(player, this.gameObject));
+                    this.hitposition = this.player.Position - this.transform.position;
+                    this.player.SendConsoleMessage("Grenade collided with you", "blue");
                 }
             }
 
             this.used = true;
+        }
+
+        private void FixedUpdate()
+        {
+            this.transform.position = this.hitposition;
         }
     }
 }

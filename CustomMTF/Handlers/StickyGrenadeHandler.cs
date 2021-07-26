@@ -29,20 +29,6 @@ namespace Mistaken.CustomMTF.Items
         /// </summary>
         public static StickyGrenadeHandler Instance { get; private set; }
 
-        /// <summary>
-        /// Updates greande position.
-        /// </summary>
-        /// <param name="player">Player.</param>
-        /// <param name="grenade">Grenade.</param>
-        public static IEnumerator<float> UpdatePosition(Player player, GameObject grenade)
-        {
-            while (grenade != null)
-            {
-                yield return Timing.WaitForSeconds(0.2f);
-                grenade.transform.position = (Vector3.up * 2) + player.Position;
-            }
-        }
-
         /// <inheritdoc cref="Module.Module(IPlugin{IConfig})"/>
         public StickyGrenadeHandler(IPlugin<IConfig> plugin)
             : base(plugin)
