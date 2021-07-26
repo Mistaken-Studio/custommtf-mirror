@@ -61,7 +61,7 @@ namespace Mistaken.CustomMTF.Items
                 Action action = () =>
                 {
                     var instance = player.GrenadeManager.availableGrenades[0].grenadeInstance;
-                    instance.layer += LayerMask.GetMask("PlyCenter");
+                    instance.layer |= LayerMask.GetMask("Player", "PlyCenter");
                     if (player.GetEffectActive<CustomPlayerEffects.Scp268>())
                         player.DisableEffect<CustomPlayerEffects.Scp268>();
                     Grenade grenade = UnityEngine.Object.Instantiate(instance).GetComponent<Grenade>();
