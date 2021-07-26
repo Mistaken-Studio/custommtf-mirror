@@ -89,19 +89,22 @@ namespace Mistaken.CustomMTF.Items
                 var ammo = this.GetInternalDurability(item);
                 if (ammo < 0)
                     return false;
+                ammo--;
+                this.SetInternalDurability(player, item, ammo);
 
-                // ammo--;
-                // this.SetInternalDurability(player, item, ammo);
                 var targetPlayer = Player.Get(target);
                 if (targetPlayer == null)
+                {
+                    player.ReferenceHub.weaponManager.CallRpcConfirmShot(false, player.ReferenceHub.weaponManager.curWeapon);
                     return false;
-                player.ShowHitMarker();
-                target = null;
+                }
+
                 var hpToHeal = Math.Min(targetPlayer.MaxHealth - targetPlayer.Health, HealAmount);
                 var ahpToHeal = HealAmount - hpToHeal;
                 targetPlayer.Health += hpToHeal;
                 targetPlayer.ArtificialHealth += ahpToHeal;
-                return base.OnShoot(player, item, target, position);
+                player.ReferenceHub.weaponManager.CallRpcConfirmShot(true, player.ReferenceHub.weaponManager.curWeapon);
+                return false;
             }
         }
 
