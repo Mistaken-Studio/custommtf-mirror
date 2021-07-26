@@ -95,7 +95,7 @@ namespace Mistaken.CustomMTF.Items
                 var targetPlayer = Player.Get(target);
                 if (targetPlayer == null)
                 {
-                    player.ReferenceHub.weaponManager.CallRpcConfirmShot(false, player.ReferenceHub.weaponManager.curWeapon);
+                    player.ReferenceHub.weaponManager.RpcConfirmShot(false, player.ReferenceHub.weaponManager.curWeapon);
                     return false;
                 }
 
@@ -103,7 +103,7 @@ namespace Mistaken.CustomMTF.Items
                 var ahpToHeal = HealAmount - hpToHeal;
                 targetPlayer.Health += hpToHeal;
                 targetPlayer.ArtificialHealth += ahpToHeal;
-                player.ReferenceHub.weaponManager.CallRpcConfirmShot(true, player.ReferenceHub.weaponManager.curWeapon);
+                player.ReferenceHub.weaponManager.RpcConfirmShot(true, player.ReferenceHub.weaponManager.curWeapon);
                 return false;
             }
         }
