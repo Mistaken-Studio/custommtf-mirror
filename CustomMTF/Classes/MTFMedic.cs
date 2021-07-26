@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomMTF
+namespace Mistaken.CustomMTF.Classes
 {
-    public class Class1
+    class MTFMedic
     {
     }
 }
