@@ -23,7 +23,7 @@ using UnityEngine;
 namespace Mistaken.CustomMTF.Items
 {
     /// <summary>
-    /// Handles freeze on impact.
+    /// Handles freeze on impact and updates position.
     /// </summary>
     public class StickyComponent : MonoBehaviour
     {
