@@ -87,7 +87,7 @@ namespace Mistaken.CustomMTF.Items
             public override bool OnShoot(Player player, Inventory.SyncItemInfo item, GameObject target, Vector3 position)
             {
                 var ammo = this.GetInternalDurability(item);
-                if (ammo < 0)
+                if (ammo < 1)
                     return false;
                 ammo--;
                 this.SetInternalDurability(player, item, ammo);
