@@ -60,9 +60,11 @@ namespace Mistaken.CustomMTF.Items
             {
                 Action action = () =>
                 {
+                    var instance = player.GrenadeManager.availableGrenades[0].grenadeInstance;
+                    instance.layer += LayerMask.GetMask("PlyCenter");
                     if (player.GetEffectActive<CustomPlayerEffects.Scp268>())
                         player.DisableEffect<CustomPlayerEffects.Scp268>();
-                    Grenade grenade = UnityEngine.Object.Instantiate(player.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
+                    Grenade grenade = UnityEngine.Object.Instantiate(instance).GetComponent<Grenade>();
                     grenade.InitData(player.GrenadeManager, Vector3.zero, player.CameraTransform.forward, slow ? 0.5f : 1f);
                     grenades.Add(grenade.gameObject);
                     Mirror.NetworkServer.Spawn(grenade.gameObject);
