@@ -58,14 +58,10 @@ namespace Mistaken.CustomMTF.Items
             /// <inheritdoc/>
             public override bool OnThrow(Player player, Inventory.SyncItemInfo item, bool slow)
             {
-                int t = player.GameObject.layer;
-                for (int i = 34; i > 0; i--)
+                for (int mask = 0; mask < 32; mask++)
                 {
-                    if ((t - (i * i)) >= 0)
-                    {
-                        t -= i * i;
-                        player.SendConsoleMessage($"{LayerMask.LayerToName(i * i)}", "blue");
-                    }
+                    if ((player.GameObject.layer & (int)Math.Pow(2, mask)) != 0)
+                        player.SendConsoleMessage($"{LayerMask.LayerToName(mask)}", "blue");
                 }
 
                 Action action = () =>
