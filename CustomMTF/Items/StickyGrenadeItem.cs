@@ -58,10 +58,21 @@ namespace Mistaken.CustomMTF.Items
             /// <inheritdoc/>
             public override bool OnThrow(Player player, Inventory.SyncItemInfo item, bool slow)
             {
+                int t = player.GameObject.layer;
+                for (int i = 34; i > 0; i--)
+                {
+                    if ((t - (i * i)) >= 0)
+                    {
+                        t -= i * i;
+                        player.SendConsoleMessage($"{LayerMask.LayerToName(i * i)}", "blue");
+                    }
+                }
+
                 Action action = () =>
                 {
                     var instance = player.GrenadeManager.availableGrenades[0].grenadeInstance;
-                    instance.layer |= LayerMask.GetMask("Player", "PlyCenter");
+
+                    // instance.layer |= LayerMask.GetMask("Player", "PlyCenter");
                     if (player.GetEffectActive<CustomPlayerEffects.Scp268>())
                         player.DisableEffect<CustomPlayerEffects.Scp268>();
                     Grenade grenade = UnityEngine.Object.Instantiate(instance).GetComponent<Grenade>();
