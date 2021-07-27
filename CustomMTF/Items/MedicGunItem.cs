@@ -1,49 +1,20 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MedicGunHandler.cs" company="Mistaken">
+// <copyright file="MedicGunItem.cs" company="Mistaken">
 // Copyright (c) Mistaken. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
 using System;
 using Exiled.API.Features;
-using Exiled.API.Interfaces;
-using Exiled.Events.EventArgs;
-using Grenades;
-using MEC;
 using Mistaken.API;
-using Mistaken.API.Diagnostics;
 using Mistaken.API.Extensions;
 using Mistaken.CustomItems;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Items
 {
-    /// <summary>
-    /// Gun that heals hit players.
-    /// </summary>
-    public class MedicGunHandler : Module
+    public partial class MedicGunHandler
     {
-        /// <inheritdoc cref="Module.Module(IPlugin{IConfig})"/>
-        public MedicGunHandler(IPlugin<IConfig> plugin)
-            : base(plugin)
-        {
-            Instance = this;
-            new MedicGunItem();
-        }
-
-        /// <inheritdoc/>
-        public override string Name => "MedicGunHandler";
-
-        /// <inheritdoc/>
-        public override void OnEnable()
-        {
-        }
-
-        /// <inheritdoc/>
-        public override void OnDisable()
-        {
-        }
-
         /// <inheritdoc/>
         public class MedicGunItem : CustomItem
         {
@@ -107,9 +78,5 @@ namespace Mistaken.CustomMTF.Items
                 return false;
             }
         }
-
-        internal static MedicGunHandler Instance { get; private set; }
-
-        private const float HealAmount = 35;
     }
 }
