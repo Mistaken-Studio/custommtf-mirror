@@ -33,9 +33,11 @@ namespace Mistaken.CustomMTF.Components
 
         private void OnCollisionEnter(Collision collision)
         {
-            if ((!this.onSurfaceUsed || !this.onPlayerUsed) && this.TryGetComponent<Rigidbody>(out Rigidbody component))
-                component.constraints = RigidbodyConstraints.FreezeAll;
-            this.onSurfaceUsed = true;
+            if (!this.onSurfaceUsed && !this.onPlayerUsed)
+            {
+                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                this.onSurfaceUsed = true;
+            }
         }
 
         private void FixedUpdate()
