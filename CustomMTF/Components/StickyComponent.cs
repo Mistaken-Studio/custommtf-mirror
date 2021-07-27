@@ -27,22 +27,30 @@ namespace Mistaken.CustomMTF.Components
     /// </summary>
     public class StickyComponent : MonoBehaviour
     {
-        private bool used;
+        private bool onPlayerUsed;
+
+        private bool onSurfaceUsed;
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (!this.used && this.TryGetComponent<Rigidbody>(out Rigidbody component))
+            if ((!this.onSurfaceUsed || !this.onPlayerUsed) && this.TryGetComponent<Rigidbody>(out Rigidbody component))
                 component.constraints = RigidbodyConstraints.FreezeAll;
-
-            this.used = true;
+            this.onSurfaceUsed = true;
         }
 
         private void FixedUpdate()
         {
-            if (Items.StickyGrenadeItem.GrenadePlayer == null) return;
-            var hitposition = Items.StickyGrenadeItem.GrenadePlayer.Position - Items.StickyGrenadeItem.GrenadeGo.transform.position;
-            Items.StickyGrenadeItem.GrenadeGo.transform.position = Items.StickyGrenadeItem.GrenadePlayer.Position + hitposition;
-            Items.StickyGrenadeItem.GrenadePlayer.SendConsoleMessage("works", "blue");
+            if (Items.StickyGrenadeItem.GrenadePlayer != null && !this.onSurfaceUsed)
+            {
+                this.onPlayerUsed = true;
+                var hitposition = Items.StickyGrenadeItem.GrenadePlayer.Position - Items.StickyGrenadeItem.GrenadeGo.transform.position;
+                Items.StickyGrenadeItem.GrenadeGo.transform.position = Items.StickyGrenadeItem.GrenadePlayer.Position + hitposition;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            Items.StickyGrenadeItem.GrenadePlayer = null;
         }
     }
 }

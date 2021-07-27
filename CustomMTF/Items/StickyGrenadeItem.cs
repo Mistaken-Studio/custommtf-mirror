@@ -68,7 +68,7 @@ namespace Mistaken.CustomMTF.Items
                 GrenadeGo.GetComponent<Rigidbody>().AddForce(new Vector3(grenade.NetworkserverVelocities.linear.x * 1.5f, grenade.NetworkserverVelocities.linear.y / 2f, grenade.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
                 player.RemoveItem(item);
                 GrenadeGo.AddComponent<Components.StickyComponent>();
-                Handlers.StickyGrenadeHandler.Instance.CallDelayed(0.2f, () => Mistaken.API.Components.InRange.Spawn(GrenadeGo.transform, Vector3.zero, new Vector3(1, 1, 1), OnEnter, OnExit));
+                Handlers.StickyGrenadeHandler.Instance.CallDelayed(0.2f, () => Mistaken.API.Components.InRange.Spawn(GrenadeGo.transform, Vector3.zero, new Vector3(1, 1, 1), OnEnter));
                 this.OnStopHolding(player, item);
             };
             Handlers.StickyGrenadeHandler.Instance.CallDelayed(1f, action, "OnThrow");
@@ -77,16 +77,11 @@ namespace Mistaken.CustomMTF.Items
 
         internal static GameObject GrenadeGo { get; private set; }
 
-        internal static Player GrenadePlayer { get; private set; }
+        internal static Player GrenadePlayer { get; set; }
 
         private static readonly Action<Player> OnEnter = (player) =>
         {
             GrenadePlayer = player;
-        };
-
-        private static readonly Action<Player> OnExit = (player) =>
-        {
-            GrenadePlayer = null;
         };
     }
 }
