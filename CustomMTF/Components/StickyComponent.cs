@@ -36,5 +36,13 @@ namespace Mistaken.CustomMTF.Components
 
             this.used = true;
         }
+
+        private void FixedUpdate()
+        {
+            if (Items.StickyGrenadeItem.GrenadePlayer == null) return;
+            var hitposition = Items.StickyGrenadeItem.GrenadePlayer.Position - Items.StickyGrenadeItem.GrenadeGo.transform.position;
+            Items.StickyGrenadeItem.GrenadeGo.transform.position = Items.StickyGrenadeItem.GrenadePlayer.Position + hitposition;
+            Items.StickyGrenadeItem.GrenadePlayer.SendConsoleMessage("works", "blue");
+        }
     }
 }
