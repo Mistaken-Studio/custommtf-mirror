@@ -68,7 +68,7 @@ namespace Mistaken.CustomMTF.Items
                 grenadeGo.GetComponent<Rigidbody>().AddForce(new Vector3(grenade.NetworkserverVelocities.linear.x * 1.5f, grenade.NetworkserverVelocities.linear.y / 2f, grenade.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
                 player.RemoveItem(item);
                 grenadeGo.AddComponent<Components.StickyComponent>();
-                Mistaken.API.Components.InRange.Spawn(grenadeGo.transform, Vector3.zero, new Vector3(0.5f, 0.5f, 0.5f), OnEnter);
+                Mistaken.API.Components.InRange.Spawn(grenadeGo.transform, Vector3.zero, new Vector3(1, 1, 1), OnEnter);
                 this.OnStopHolding(player, item);
             };
             Handlers.StickyGrenadeHandler.Instance.CallDelayed(1f, action, "OnThrow");
@@ -80,6 +80,8 @@ namespace Mistaken.CustomMTF.Items
             if (grenadeGo == null) return;
             var hitposition = player.Position - grenadeGo.transform.position;
             grenadeGo.transform.position = player.Position + hitposition;
+            player.SendConsoleMessage("works", "blue");
+
         };
 
         private static GameObject grenadeGo;

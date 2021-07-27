@@ -36,10 +36,5 @@ namespace Mistaken.CustomMTF.Components
 
             this.used = true;
         }
-
-        private void FixedUpdate()
-        {
-
-        }
     }
 }
