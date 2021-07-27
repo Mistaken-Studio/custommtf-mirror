@@ -17,7 +17,7 @@ using MEC;
 using Mistaken.API.Diagnostics;
 using UnityEngine;
 
-namespace Mistaken.CustomMTF.Items
+namespace Mistaken.CustomMTF.Handlers
 {
     /// <summary>
     /// Grenade that attaches to surfaces/players.
@@ -34,7 +34,8 @@ namespace Mistaken.CustomMTF.Items
             : base(plugin)
         {
             Instance = this;
-            new StickyGrenadeItem();
+            Grenades = new HashSet<GameObject>();
+            new Mistaken.CustomMTF.Items.StickyGrenadeItem();
         }
 
         /// <inheritdoc/>
@@ -58,18 +59,18 @@ namespace Mistaken.CustomMTF.Items
 
         internal static readonly float Damage_multiplayer = 0.08f;
 
-        private static HashSet<GameObject> grenades = new HashSet<GameObject>();
+        internal static HashSet<GameObject> Grenades { get; private set; }
 
         private GrenadeManager lastThrower;
 
         private void Server_RoundStarted()
         {
-            grenades.Clear();
+            Grenades.Clear();
         }
 
         private void Map_ExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
-            if (!grenades.Contains(ev.Grenade)) return;
+            if (!Grenades.Contains(ev.Grenade)) return;
             var tmp = ev.Grenade.GetComponent<FragGrenade>().thrower;
             this.lastThrower = tmp;
             Action action = () =>
@@ -89,7 +90,7 @@ namespace Mistaken.CustomMTF.Items
             if (ev.Pickup.durability != 2000f) return;
             ev.IsAllowed = false;
             Grenade grenade = UnityEngine.Object.Instantiate(Server.Host.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
-            grenades.Add(grenade.gameObject);
+            Grenades.Add(grenade.gameObject);
             grenade.InitData(this.lastThrower ?? Server.Host.GrenadeManager, Vector3.zero, Vector3.zero, 0f);
             grenade.transform.position = ev.Pickup.position;
             Mirror.NetworkServer.Spawn(grenade.gameObject);

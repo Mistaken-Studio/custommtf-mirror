@@ -20,37 +20,21 @@ using Mistaken.API.Extensions;
 using Mistaken.CustomItems;
 using UnityEngine;
 
-namespace Mistaken.CustomMTF.Items
+namespace Mistaken.CustomMTF.Components
 {
     /// <summary>
-    /// Handles freeze on impact and updates position.
+    /// Handles freeze on impact with surfaces.
     /// </summary>
     public class StickyComponent : MonoBehaviour
     {
         private bool used;
-        private Player player;
-        private Vector3 hitposition;
 
         private void OnCollisionEnter(Collision collision)
         {
             if (!this.used && this.TryGetComponent<Rigidbody>(out Rigidbody component))
-            {
                 component.constraints = RigidbodyConstraints.FreezeAll;
-                this.player = Player.Get(collision?.gameObject);
-                if (this.player != null)
-                {
-                    this.hitposition = this.player.Position - this.transform.position;
-                    this.player.SendConsoleMessage("Grenade collided with you", "blue");
-                }
-            }
 
             this.used = true;
-        }
-
-        private void FixedUpdate()
-        {
-            if (this.player == null) return;
-            this.transform.position = this.hitposition + this.player.Position;
         }
     }
 }

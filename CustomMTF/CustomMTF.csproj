@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\MTFMedic.cs" />
+    <Compile Include="Components\StickyComponent2.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Components\StickyComponent.cs" />
     <Compile Include="Handlers\StickyGrenadeHandler.cs" />
