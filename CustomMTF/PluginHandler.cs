@@ -23,7 +23,7 @@ namespace Mistaken.CustomMTF
         public override string Prefix => "MCMTF";
 
         /// <inheritdoc/>
-        public override PluginPriority Priority => PluginPriority.Medium;
+        public override PluginPriority Priority => PluginPriority.Low;
 
         /// <inheritdoc/>
         public override Version RequiredExiledVersion => new Version(2, 11, 0);
@@ -32,8 +32,9 @@ namespace Mistaken.CustomMTF
         public override void OnEnabled()
         {
             Instance = this;
-            new Mistaken.CustomMTF.Items.StickyGrenadeHandler(this);
+            new Items.StickyGrenadeHandler(this);
             new Items.MedicGunHandler(this);
+            new Classes.MTFMedicHandler(this);
 
             base.OnEnabled();
         }
