@@ -45,6 +45,7 @@ namespace Mistaken.CustomMTF.Components
             if (Items.StickyGrenadeItem.GrenadePlayer != null && !this.onSurfaceUsed)
             {
                 this.onPlayerUsed = true;
+                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
                 var hitposition = Items.StickyGrenadeItem.GrenadePlayer.Position - Items.StickyGrenadeItem.GrenadeGo.transform.position;
                 Items.StickyGrenadeItem.GrenadeGo.transform.position = Items.StickyGrenadeItem.GrenadePlayer.Position + hitposition;
             }
