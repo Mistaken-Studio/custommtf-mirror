@@ -62,16 +62,26 @@ namespace Mistaken.CustomMTF.Items
                     player.DisableEffect<CustomPlayerEffects.Scp268>();
                 Grenade grenade = UnityEngine.Object.Instantiate(player.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
                 grenade.InitData(player.GrenadeManager, Vector3.zero, player.CameraTransform.forward, slow ? 0.5f : 1f);
-                Handlers.StickyGrenadeHandler.Grenades.Add(grenade.gameObject);
-                Mirror.NetworkServer.Spawn(grenade.gameObject);
-                grenade.GetComponent<Rigidbody>().AddForce(new Vector3(grenade.NetworkserverVelocities.linear.x * 1.5f, grenade.NetworkserverVelocities.linear.y / 2f, grenade.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
+                grenadeGo = grenade.gameObject;
+                Handlers.StickyGrenadeHandler.Grenades.Add(grenadeGo);
+                Mirror.NetworkServer.Spawn(grenadeGo);
+                grenadeGo.GetComponent<Rigidbody>().AddForce(new Vector3(grenade.NetworkserverVelocities.linear.x * 1.5f, grenade.NetworkserverVelocities.linear.y / 2f, grenade.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
                 player.RemoveItem(item);
-                grenade.gameObject.AddComponent<Components.StickyComponent>();
-                grenade.gameObject.AddComponent<Components.StickyComponent2>();
+                grenadeGo.AddComponent<Components.StickyComponent>();
+                Mistaken.API.Components.InRange.Spawn(grenadeGo.transform, Vector3.zero, new Vector3(0.5f, 0.5f, 0.5f), OnEnter);
                 this.OnStopHolding(player, item);
             };
             Handlers.StickyGrenadeHandler.Instance.CallDelayed(1f, action, "OnThrow");
             return false;
         }
+
+        private static readonly Action<Player> OnEnter = (player) =>
+        {
+            if (grenadeGo == null) return;
+            var hitposition = player.Position - grenadeGo.transform.position;
+            grenadeGo.transform.position = player.Position + hitposition;
+        };
+
+        private static GameObject grenadeGo;
     }
 }
