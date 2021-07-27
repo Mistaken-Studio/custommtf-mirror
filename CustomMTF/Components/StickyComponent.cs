@@ -49,18 +49,18 @@ namespace Mistaken.CustomMTF.Components
 
         private void FixedUpdate()
         {
-            if (Items.StickyGrenadeItem.GrenadePlayer != null && !this.onSurfaceUsed)
+            if (Items.StickyGrenadeHandler.StickyGrenadeItem.GrenadePlayer != null && !this.onSurfaceUsed)
             {
                 this.onPlayerUsed = true;
                 this.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-                var hitposition = Items.StickyGrenadeItem.GrenadePlayer.Position - Items.StickyGrenadeItem.GrenadeGo.transform.position;
-                Items.StickyGrenadeItem.GrenadeGo.transform.position = Items.StickyGrenadeItem.GrenadePlayer.Position + hitposition;
+                var hitposition = Items.StickyGrenadeHandler.StickyGrenadeItem.GrenadePlayer.Position - Items.StickyGrenadeHandler.StickyGrenadeItem.GrenadeGo.transform.position;
+                Items.StickyGrenadeHandler.StickyGrenadeItem.GrenadeGo.transform.position = Items.StickyGrenadeHandler.StickyGrenadeItem.GrenadePlayer.Position + hitposition;
             }
         }
 
         private void OnDestroy()
         {
-            Items.StickyGrenadeItem.GrenadePlayer = null;
+            Items.StickyGrenadeHandler.StickyGrenadeItem.GrenadePlayer = null;
         }
     }
 }
