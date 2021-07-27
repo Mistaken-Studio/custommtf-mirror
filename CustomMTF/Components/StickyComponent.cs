@@ -31,11 +31,18 @@ namespace Mistaken.CustomMTF.Components
 
         private bool onSurfaceUsed;
 
+        private Rigidbody rigidbody;
+
+        private void Awake()
+        {
+            this.rigidbody = this.GetComponent<Rigidbody>();
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
             if (!this.onSurfaceUsed && !this.onPlayerUsed)
             {
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                this.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
                 this.onSurfaceUsed = true;
             }
         }
@@ -45,7 +52,7 @@ namespace Mistaken.CustomMTF.Components
             if (Items.StickyGrenadeItem.GrenadePlayer != null && !this.onSurfaceUsed)
             {
                 this.onPlayerUsed = true;
-                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                this.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
                 var hitposition = Items.StickyGrenadeItem.GrenadePlayer.Position - Items.StickyGrenadeItem.GrenadeGo.transform.position;
                 Items.StickyGrenadeItem.GrenadeGo.transform.position = Items.StickyGrenadeItem.GrenadePlayer.Position + hitposition;
             }
