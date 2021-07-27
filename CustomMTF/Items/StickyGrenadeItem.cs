@@ -10,8 +10,6 @@ using Grenades;
 using Mistaken.API;
 using Mistaken.API.Extensions;
 using Mistaken.CustomItems;
-using Mistaken.CustomMTF.Components;
-using Mistaken.CustomMTF.Handlers;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Items
@@ -64,15 +62,15 @@ namespace Mistaken.CustomMTF.Items
                     player.DisableEffect<CustomPlayerEffects.Scp268>();
                 Grenade grenade = UnityEngine.Object.Instantiate(player.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
                 grenade.InitData(player.GrenadeManager, Vector3.zero, player.CameraTransform.forward, slow ? 0.5f : 1f);
-                StickyGrenadeHandler.Grenades.Add(grenade.gameObject);
+                Handlers.StickyGrenadeHandler.Grenades.Add(grenade.gameObject);
                 Mirror.NetworkServer.Spawn(grenade.gameObject);
                 grenade.GetComponent<Rigidbody>().AddForce(new Vector3(grenade.NetworkserverVelocities.linear.x * 1.5f, grenade.NetworkserverVelocities.linear.y / 2f, grenade.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
                 player.RemoveItem(item);
-                grenade.gameObject.AddComponent<StickyComponent>();
-                grenade.gameObject.AddComponent<StickyComponent2>();
+                grenade.gameObject.AddComponent<Components.StickyComponent>();
+                grenade.gameObject.AddComponent<Components.StickyComponent2>();
                 this.OnStopHolding(player, item);
             };
-            StickyGrenadeHandler.Instance.CallDelayed(1f, action, "OnThrow");
+            Handlers.StickyGrenadeHandler.Instance.CallDelayed(1f, action, "OnThrow");
             return false;
         }
     }

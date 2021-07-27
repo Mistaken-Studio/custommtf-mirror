@@ -35,7 +35,7 @@ namespace Mistaken.CustomMTF.Handlers
         {
             Instance = this;
             Grenades = new HashSet<GameObject>();
-            new Mistaken.CustomMTF.Items.StickyGrenadeItem();
+            new Items.StickyGrenadeItem();
         }
 
         /// <inheritdoc/>
