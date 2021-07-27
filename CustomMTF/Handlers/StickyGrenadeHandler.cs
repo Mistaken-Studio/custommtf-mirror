@@ -17,7 +17,7 @@ using MEC;
 using Mistaken.API.Diagnostics;
 using UnityEngine;
 
-namespace Mistaken.CustomMTF.Handlers
+namespace Mistaken.CustomMTF.Items
 {
     /// <summary>
     /// Grenade that attaches to surfaces/players.
@@ -35,7 +35,7 @@ namespace Mistaken.CustomMTF.Handlers
         {
             Instance = this;
             Grenades = new HashSet<GameObject>();
-            new Items.StickyGrenadeHandler.StickyGrenadeItem();
+            new StickyGrenadeItem();
         }
 
         /// <inheritdoc/>

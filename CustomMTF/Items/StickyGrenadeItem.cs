@@ -14,9 +14,6 @@ using UnityEngine;
 
 namespace Mistaken.CustomMTF.Items
 {
-    /// <summary>
-    /// Grenade that attaches to surfaces/players.
-    /// </summary>
     public partial class StickyGrenadeHandler
     {
         /// <inheritdoc/>
@@ -68,15 +65,15 @@ namespace Mistaken.CustomMTF.Items
                     Grenade grenade = UnityEngine.Object.Instantiate(player.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
                     grenade.InitData(player.GrenadeManager, Vector3.zero, player.CameraTransform.forward, slow ? 0.5f : 1f);
                     GrenadeGo = grenade.gameObject;
-                    Handlers.StickyGrenadeHandler.Grenades.Add(GrenadeGo);
+                    Grenades.Add(GrenadeGo);
                     Mirror.NetworkServer.Spawn(GrenadeGo);
                     GrenadeGo.GetComponent<Rigidbody>().AddForce(new Vector3(grenade.NetworkserverVelocities.linear.x * 1.5f, grenade.NetworkserverVelocities.linear.y / 2f, grenade.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
                     player.RemoveItem(item);
                     GrenadeGo.AddComponent<Components.StickyComponent>();
-                    Handlers.StickyGrenadeHandler.Instance.CallDelayed(0.2f, () => Mistaken.API.Components.InRange.Spawn(GrenadeGo.transform, Vector3.zero, new Vector3(1, 1, 1), OnEnter));
+                    Instance.CallDelayed(0.2f, () => Mistaken.API.Components.InRange.Spawn(GrenadeGo.transform, Vector3.zero, new Vector3(1, 1, 1), OnEnter));
                     this.OnStopHolding(player, item);
                 };
-                Handlers.StickyGrenadeHandler.Instance.CallDelayed(1f, action, "OnThrow");
+                Instance.CallDelayed(1f, action, "OnThrow");
                 return false;
             }
 

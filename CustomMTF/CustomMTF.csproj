@@ -59,9 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\MTFExplosivesSpecialist.cs" />
     <Compile Include="Classes\MTFMedic.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Components\StickyComponent.cs" />
+    <Compile Include="Handlers\MTFExplosivesSpecialistHandler.cs" />
     <Compile Include="Handlers\MTFMedicHandler.cs" />
     <Compile Include="Items\MedicGunItem.cs" />
     <Compile Include="Handlers\StickyGrenadeHandler.cs" />

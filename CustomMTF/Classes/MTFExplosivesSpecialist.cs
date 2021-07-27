@@ -1,41 +1,46 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MTFMedic.cs" company="Mistaken">
+// <copyright file="MTFExplosivesSpecialist.cs" company="Mistaken">
 // Copyright (c) Mistaken. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Exiled.API.Features;
 using Mistaken.API;
 using Mistaken.API.Extensions;
 
 namespace Mistaken.CustomMTF.Classes
 {
-    public partial class MTFMedicHandler
+    public partial class MTFExplosivesSpecialistHandler
     {
         /// <inheritdoc/>
-        public class MTFMedic : CustomClasses.CustomClass
+        public class MTFExplosivesSpecialist : CustomClasses.CustomClass
         {
             /// <inheritdoc cref="CustomClasses.CustomClass.CustomClass()"/>
-            public MTFMedic()
+            public MTFExplosivesSpecialist()
             {
                 this.Register();
                 Instance = this;
             }
 
             /// <inheritdoc/>
-            public override SessionVarType ClassSessionVarType => SessionVarType.CC_MTF_MEDIC;
+            public override SessionVarType ClassSessionVarType => SessionVarType.CC_MTF_EXPLOSIVES_SPECIALIST;
 
             /// <inheritdoc/>
-            public override string ClassName => "MTF Medic";
+            public override string ClassName => "MTF Explosives Specialist";
 
             /// <inheritdoc/>
-            public override string ClassDescription => "MTF Medic";
+            public override string ClassDescription => "MTF Explosives Specialist";
 
             /// <inheritdoc/>
             public override RoleType Role => RoleType.NtfLieutenant;
 
             /// <inheritdoc/>
-            public override string Color => "#0095FF"; // cadet color #70C3FF
+            public override string Color => "#0095FF";
 
             /// <inheritdoc/>
             public override void Spawn(Player player)
@@ -46,25 +51,29 @@ namespace Mistaken.CustomMTF.Classes
                 player.AddItem(ItemType.KeycardNTFLieutenant);
                 player.AddItem(ItemType.Disarmer);
                 player.AddItem(ItemType.WeaponManagerTablet);
-                player.AddItem(ItemType.Adrenaline);
-                player.AddItem(ItemType.Medkit);
-                player.AddItem(ItemType.Medkit);
+                player.AddItem(ItemType.Radio);
+                player.AddItem(ItemType.GrenadeFrag);
                 player.AddItem(new Inventory.SyncItemInfo
                 {
-                    id = ItemType.GunCOM15,
-                    durability = 1003,
+                    id = ItemType.GrenadeFrag,
+                    durability = 1000,
                 });
-                player.SetGUI("cc_mtf_medic", API.GUI.PseudoGUIPosition.BOTTOM, $"You are <color=yellow>playing</color> as <color={this.Color}>{this.ClassName}</color>");
+                player.AddItem(new Inventory.SyncItemInfo
+                {
+                    id = ItemType.GrenadeFrag,
+                    durability = 2000,
+                });
+                player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, $"You are <color=yellow>playing</color> as <color={this.Color}>{this.ClassName}</color>");
             }
 
             /// <inheritdoc/>
             public override void OnDie(Player player)
             {
-                player.SetGUI("cc_mtf_medic", API.GUI.PseudoGUIPosition.BOTTOM, null);
+                player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, null);
                 base.OnDie(player);
             }
 
-            internal static MTFMedic Instance { get; private set; }
+            internal static MTFExplosivesSpecialist Instance { get; private set; }
         }
     }
 }

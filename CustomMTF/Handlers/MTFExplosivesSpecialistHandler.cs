@@ -1,34 +1,35 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MTFMedicHandler.cs" company="Mistaken">
+// <copyright file="MTFExplosivesSpecialistHandler.cs" company="Mistaken">
 // Copyright (c) Mistaken. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs;
-using Grenades;
-using MEC;
-using Mistaken.API;
 using Mistaken.API.Diagnostics;
 
 namespace Mistaken.CustomMTF.Classes
 {
     /// <summary>
-    /// Gun that heals hit players.
+    /// An MTF with special grenade.
     /// </summary>
-    public partial class MTFMedicHandler : Module
+    public partial class MTFExplosivesSpecialistHandler : Module
     {
         /// <inheritdoc cref="Module.Module(IPlugin{IConfig})"/>
-        public MTFMedicHandler(IPlugin<IConfig> plugin)
+        public MTFExplosivesSpecialistHandler(IPlugin<IConfig> plugin)
             : base(plugin)
         {
             Instance = this;
-            new MTFMedic();
+            new MTFExplosivesSpecialist();
         }
 
         /// <inheritdoc/>
-        public override string Name => nameof(MTFMedicHandler);
+        public override string Name => nameof(MTFExplosivesSpecialistHandler);
 
         /// <inheritdoc/>
         public override void OnEnable()
@@ -42,7 +43,7 @@ namespace Mistaken.CustomMTF.Classes
             Exiled.Events.Handlers.Server.RespawningTeam -= this.Handle<RespawningTeamEventArgs>((ev) => this.Server_RespawningTeam(ev));
         }
 
-        internal static MTFMedicHandler Instance { get; private set; }
+        internal static MTFExplosivesSpecialistHandler Instance { get; private set; }
 
         private const float SpawnChance = 10; // %
 
@@ -56,7 +57,7 @@ namespace Mistaken.CustomMTF.Classes
 
             var count = Math.Floor(players.Count * (SpawnChance / 100));
             for (int i = 0; i < count; i++)
-                MTFMedic.Instance.Spawn(players[i]);
+                MTFExplosivesSpecialist.Instance.Spawn(players[i]);
         }
     }
 }

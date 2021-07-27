@@ -32,7 +32,7 @@ namespace Mistaken.CustomMTF
         public override void OnEnabled()
         {
             Instance = this;
-            new Handlers.StickyGrenadeHandler(this);
+            new Items.StickyGrenadeHandler(this);
             new Items.MedicGunHandler(this);
             new Classes.MTFMedicHandler(this);
 
