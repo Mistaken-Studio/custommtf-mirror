@@ -68,12 +68,12 @@ namespace Mistaken.CustomMTF.Items
                     Grenade grenade = UnityEngine.Object.Instantiate(player.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
                     grenade.InitData(player.GrenadeManager, Vector3.zero, player.CameraTransform.forward, slow ? 0.5f : 1f);
                     GrenadeGo = grenade.gameObject;
-                    Grenades.Add(GrenadeGo);
+                    Grenades.Add(grenade.gameObject);
                     Mirror.NetworkServer.Spawn(GrenadeGo);
                     GrenadeGo.GetComponent<Rigidbody>().AddForce(new Vector3(grenade.NetworkserverVelocities.linear.x * 1.5f, grenade.NetworkserverVelocities.linear.y / 2f, grenade.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
                     player.RemoveItem(item);
                     GrenadeGo.AddComponent<Components.StickyComponent>();
-                    Instance.CallDelayed(0.2f, () => Mistaken.API.Components.InRange.Spawn(GrenadeGo.transform, Vector3.zero, new Vector3(1, 1, 1), OnEnter));
+                    Instance.CallDelayed(0.2f, () => Mistaken.API.Components.InRange.Spawn(GrenadeGo.transform, Vector3.zero, new Vector3(0.5f, 0.5f, 0.5f), OnEnter));
                     this.OnStopHolding(player, item);
                 };
                 Instance.CallDelayed(1f, action, "OnThrow");

@@ -45,7 +45,6 @@ namespace Mistaken.CustomMTF.Items
         public override void OnEnable()
         {
             Exiled.Events.Handlers.Map.ExplodingGrenade += this.Handle<ExplodingGrenadeEventArgs>((ev) => this.Map_ExplodingGrenade(ev));
-            Exiled.Events.Handlers.Server.RoundStarted += this.Handle(() => this.Server_RoundStarted(), "RoundStart");
             Exiled.Events.Handlers.Map.ChangingIntoGrenade += this.Handle<ChangingIntoGrenadeEventArgs>((ev) => this.Map_ChangingIntoGrenade(ev));
         }
 
@@ -53,7 +52,6 @@ namespace Mistaken.CustomMTF.Items
         public override void OnDisable()
         {
             Exiled.Events.Handlers.Map.ExplodingGrenade -= this.Handle<ExplodingGrenadeEventArgs>((ev) => this.Map_ExplodingGrenade(ev));
-            Exiled.Events.Handlers.Server.RoundStarted -= this.Handle(() => this.Server_RoundStarted(), "RoundStart");
             Exiled.Events.Handlers.Map.ChangingIntoGrenade += this.Handle<ChangingIntoGrenadeEventArgs>((ev) => this.Map_ChangingIntoGrenade(ev));
         }
 
@@ -62,11 +60,6 @@ namespace Mistaken.CustomMTF.Items
         internal static HashSet<GameObject> Grenades { get; private set; }
 
         private GrenadeManager lastThrower;
-
-        private void Server_RoundStarted()
-        {
-            Grenades.Clear();
-        }
 
         private void Map_ExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
@@ -84,12 +77,11 @@ namespace Mistaken.CustomMTF.Items
                     this.lastThrower = null;
                 }
             };
+            this.CallDelayed(1, action, "MapExploadingGrenade");
             foreach (Player player in ev.TargetToDamages.Keys.ToArray())
             {
                 ev.TargetToDamages[player] *= DamageMultiplayer;
             }
-
-            this.CallDelayed(1, action, "MapExploadingGrenade");
         }
 
         private void Map_ChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
