@@ -61,7 +61,10 @@ namespace Mistaken.CustomMTF.Items
                 Action action = () =>
                 {
                     if (player.GetEffectActive<CustomPlayerEffects.Scp268>())
+                    {
                         player.DisableEffect<CustomPlayerEffects.Scp268>();
+                    }
+
                     Grenade grenade = UnityEngine.Object.Instantiate(player.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
                     grenade.InitData(player.GrenadeManager, Vector3.zero, player.CameraTransform.forward, slow ? 0.5f : 1f);
                     GrenadeGo = grenade.gameObject;

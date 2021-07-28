@@ -49,14 +49,18 @@ namespace Mistaken.CustomMTF.Classes
         private void Server_RespawningTeam(RespawningTeamEventArgs ev)
         {
             if (!ev.IsAllowed)
+            {
                 return;
+            }
 
             var players = ev.Players;
             players.ShuffleList();
 
             var count = Math.Floor(players.Count * (SpawnChance / 100));
             for (int i = 0; i < count; i++)
+            {
                 MTFMedic.Instance.Spawn(players[i]);
+            }
         }
     }
 }

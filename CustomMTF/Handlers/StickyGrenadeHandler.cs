@@ -57,7 +57,7 @@ namespace Mistaken.CustomMTF.Items
             Exiled.Events.Handlers.Map.ChangingIntoGrenade += this.Handle<ChangingIntoGrenadeEventArgs>((ev) => this.Map_ChangingIntoGrenade(ev));
         }
 
-        internal static readonly float Damage_multiplayer = 0.08f;
+        internal static readonly float DamageMultiplayer = 0.08f;
 
         internal static HashSet<GameObject> Grenades { get; private set; }
 
@@ -70,24 +70,35 @@ namespace Mistaken.CustomMTF.Items
 
         private void Map_ExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
-            if (!Grenades.Contains(ev.Grenade)) return;
+            if (!Grenades.Contains(ev.Grenade))
+            {
+                return;
+            }
+
             var tmp = ev.Grenade.GetComponent<FragGrenade>().thrower;
             this.lastThrower = tmp;
             Action action = () =>
             {
                 if (this.lastThrower == tmp)
+                {
                     this.lastThrower = null;
+                }
             };
-            this.CallDelayed(1, action, "MapExploadingGrenade");
             foreach (Player player in ev.TargetToDamages.Keys.ToArray())
             {
-                ev.TargetToDamages[player] *= Damage_multiplayer;
+                ev.TargetToDamages[player] *= DamageMultiplayer;
             }
+
+            this.CallDelayed(1, action, "MapExploadingGrenade");
         }
 
         private void Map_ChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
         {
-            if (ev.Pickup.durability != 2000f) return;
+            if (ev.Pickup.durability != 2000f)
+            {
+                return;
+            }
+
             ev.IsAllowed = false;
             Grenade grenade = UnityEngine.Object.Instantiate(Server.Host.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
             Grenades.Add(grenade.gameObject);
