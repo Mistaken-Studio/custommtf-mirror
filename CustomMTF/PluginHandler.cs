@@ -34,8 +34,10 @@ namespace Mistaken.CustomMTF
             Instance = this;
             new Handlers.StickyGrenadeHandler(this);
             new Handlers.MedicGunHandler(this);
+
             new Handlers.MTFMedicHandler(this);
             new Handlers.MTFExplosivesSpecialistHandler(this);
+            new Handlers.MTFContainmentEnginnerHandler(this);
 
             base.OnEnabled();
         }

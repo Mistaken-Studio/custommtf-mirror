@@ -26,7 +26,7 @@ namespace Mistaken.CustomMTF.Handlers
         }
 
         /// <inheritdoc/>
-        public override string Name => "MedicGunHandler";
+        public override string Name => nameof(MedicGunHandler);
 
         /// <inheritdoc/>
         public override void OnEnable()

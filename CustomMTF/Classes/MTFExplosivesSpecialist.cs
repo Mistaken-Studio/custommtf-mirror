@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Mistaken.API;
 using Mistaken.API.Extensions;
@@ -45,22 +46,23 @@ namespace Mistaken.CustomMTF.Classes
         {
             base.Spawn(player);
             player.ClearInventory();
-            player.AddItem(ItemType.GunE11SR);
             player.AddItem(ItemType.KeycardNTFLieutenant);
-            player.AddItem(ItemType.Disarmer);
+            player.AddItem(ItemType.GunProject90);
             player.AddItem(ItemType.WeaponManagerTablet);
             player.AddItem(ItemType.Radio);
-            player.AddItem(ItemType.GrenadeFrag);
+            player.AddItem(ItemType.Disarmer);
             player.AddItem(new Inventory.SyncItemInfo
             {
                 id = ItemType.GrenadeFrag,
-                durability = 1000,
+                durability = 2000,
             });
             player.AddItem(new Inventory.SyncItemInfo
             {
                 id = ItemType.GrenadeFrag,
                 durability = 2000,
             });
+            player.Ammo[(int)AmmoType.Nato556] = 40;
+            player.Ammo[(int)AmmoType.Nato9] = 100;
             player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, $"You are <color=yellow>playing</color> as <color={this.Color}>{this.ClassName}</color>");
         }
 

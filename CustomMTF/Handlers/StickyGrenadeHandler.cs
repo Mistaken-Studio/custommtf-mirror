@@ -39,7 +39,7 @@ namespace Mistaken.CustomMTF.Handlers
         }
 
         /// <inheritdoc/>
-        public override string Name => "StickyGrenadeHandler";
+        public override string Name => nameof(StickyGrenadeHandler);
 
         /// <inheritdoc/>
         public override void OnEnable()
