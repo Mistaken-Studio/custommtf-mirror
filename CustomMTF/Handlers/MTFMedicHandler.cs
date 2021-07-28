@@ -12,19 +12,19 @@ using MEC;
 using Mistaken.API;
 using Mistaken.API.Diagnostics;
 
-namespace Mistaken.CustomMTF.Classes
+namespace Mistaken.CustomMTF.Handlers
 {
     /// <summary>
     /// Gun that heals hit players.
     /// </summary>
-    public partial class MTFMedicHandler : Module
+    public class MTFMedicHandler : Module
     {
         /// <inheritdoc cref="Module.Module(IPlugin{IConfig})"/>
         public MTFMedicHandler(IPlugin<IConfig> plugin)
             : base(plugin)
         {
             Instance = this;
-            new MTFMedic();
+            new Classes.MTFMedic();
         }
 
         /// <inheritdoc/>
@@ -49,9 +49,7 @@ namespace Mistaken.CustomMTF.Classes
         private void Server_RespawningTeam(RespawningTeamEventArgs ev)
         {
             if (!ev.IsAllowed)
-            {
                 return;
-            }
 
             var players = ev.Players;
             players.ShuffleList();
@@ -59,7 +57,7 @@ namespace Mistaken.CustomMTF.Classes
             var count = Math.Floor(players.Count * (SpawnChance / 100));
             for (int i = 0; i < count; i++)
             {
-                MTFMedic.Instance.Spawn(players[i]);
+                Classes.MTFMedic.Instance.Spawn(players[i]);
             }
         }
     }

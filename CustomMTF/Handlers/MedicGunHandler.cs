@@ -10,19 +10,19 @@ using Grenades;
 using MEC;
 using Mistaken.API.Diagnostics;
 
-namespace Mistaken.CustomMTF.Items
+namespace Mistaken.CustomMTF.Handlers
 {
     /// <summary>
     /// Gun that heals hit players.
     /// </summary>
-    public partial class MedicGunHandler : Module
+    public class MedicGunHandler : Module
     {
         /// <inheritdoc cref="Module.Module(IPlugin{IConfig})"/>
         public MedicGunHandler(IPlugin<IConfig> plugin)
             : base(plugin)
         {
             Instance = this;
-            new MedicGunItem();
+            new Items.MedicGunItem();
         }
 
         /// <inheritdoc/>
@@ -40,6 +40,6 @@ namespace Mistaken.CustomMTF.Items
 
         internal static MedicGunHandler Instance { get; private set; }
 
-        private const float HealAmount = 35;
+        internal const float HealAmount = 35;
     }
 }

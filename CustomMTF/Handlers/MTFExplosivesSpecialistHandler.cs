@@ -13,19 +13,19 @@ using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs;
 using Mistaken.API.Diagnostics;
 
-namespace Mistaken.CustomMTF.Classes
+namespace Mistaken.CustomMTF.Handlers
 {
     /// <summary>
     /// An MTF with special grenade.
     /// </summary>
-    public partial class MTFExplosivesSpecialistHandler : Module
+    public class MTFExplosivesSpecialistHandler : Module
     {
         /// <inheritdoc cref="Module.Module(IPlugin{IConfig})"/>
         public MTFExplosivesSpecialistHandler(IPlugin<IConfig> plugin)
             : base(plugin)
         {
             Instance = this;
-            new MTFExplosivesSpecialist();
+            new Classes.MTFExplosivesSpecialist();
         }
 
         /// <inheritdoc/>
@@ -50,9 +50,7 @@ namespace Mistaken.CustomMTF.Classes
         private void Server_RespawningTeam(RespawningTeamEventArgs ev)
         {
             if (!ev.IsAllowed)
-            {
                 return;
-            }
 
             var players = ev.Players;
             players.ShuffleList();
@@ -60,7 +58,7 @@ namespace Mistaken.CustomMTF.Classes
             var count = Math.Floor(players.Count * (SpawnChance / 100));
             for (int i = 0; i < count; i++)
             {
-                MTFExplosivesSpecialist.Instance.Spawn(players[i]);
+                Classes.MTFExplosivesSpecialist.Instance.Spawn(players[i]);
             }
         }
     }

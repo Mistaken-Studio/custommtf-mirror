@@ -17,12 +17,12 @@ using MEC;
 using Mistaken.API.Diagnostics;
 using UnityEngine;
 
-namespace Mistaken.CustomMTF.Items
+namespace Mistaken.CustomMTF.Handlers
 {
     /// <summary>
     /// Grenade that attaches to surfaces/players.
     /// </summary>
-    public partial class StickyGrenadeHandler : Module
+    public class StickyGrenadeHandler : Module
     {
         /// <summary>
         /// Gets instance of the class.
@@ -35,7 +35,7 @@ namespace Mistaken.CustomMTF.Items
         {
             Instance = this;
             Grenades = new HashSet<GameObject>();
-            new StickyGrenadeItem();
+            new Items.StickyGrenadeItem();
         }
 
         /// <inheritdoc/>
@@ -64,18 +64,14 @@ namespace Mistaken.CustomMTF.Items
         private void Map_ExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
             if (!Grenades.Contains(ev.Grenade))
-            {
                 return;
-            }
 
             var tmp = ev.Grenade.GetComponent<FragGrenade>().thrower;
             this.lastThrower = tmp;
             Action action = () =>
             {
                 if (this.lastThrower == tmp)
-                {
                     this.lastThrower = null;
-                }
             };
             this.CallDelayed(1, action, "MapExploadingGrenade");
             foreach (Player player in ev.TargetToDamages.Keys.ToArray())
@@ -87,10 +83,7 @@ namespace Mistaken.CustomMTF.Items
         private void Map_ChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
         {
             if (ev.Pickup.durability != 2000f)
-            {
                 return;
-            }
-
             ev.IsAllowed = false;
             Grenade grenade = UnityEngine.Object.Instantiate(Server.Host.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
             Grenades.Add(grenade.gameObject);
