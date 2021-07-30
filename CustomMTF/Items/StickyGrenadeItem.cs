@@ -17,6 +17,46 @@ namespace Mistaken.CustomMTF.Items
     /// <inheritdoc/>
     public class StickyGrenadeItem : CustomItem
     {
+        /// <summary>
+        /// Spawns sticky grenade, adds momentum, disables SCP268 effect if enabled, removes item if <paramref name="item"/> has value.
+        /// </summary>
+        /// <param name="owner">Grenade owner.</param>
+        /// <param name="slow">If throw should only be with half throw power.</param>
+        /// <param name="item">Item converted to grenade.</param>
+        /// <returns>Spawned grenade.</returns>
+        public static Grenade ThrowGrenade(Player owner, bool slow, Inventory.SyncItemInfo? item = null)
+        {
+            if (owner.GetEffectActive<CustomPlayerEffects.Scp268>())
+                owner.DisableEffect<CustomPlayerEffects.Scp268>();
+            var instance = SpawnGrenade(owner, slow);
+            instance.GetComponent<Rigidbody>().AddForce(new Vector3(instance.NetworkserverVelocities.linear.x * 1.5f, instance.NetworkserverVelocities.linear.y / 2f, instance.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
+            if (item.HasValue)
+                owner.RemoveItem(item.Value);
+
+            instance.gameObject.AddComponent<Components.StickyComponent>();
+
+            return instance;
+        }
+
+        /// <summary>
+        /// Spawns sticky grenade, adds momentum.
+        /// </summary>
+        /// <param name="owner">Grenade owner.</param>
+        /// <param name="slow">If throw should only be with half throw power.</param>
+        /// <returns>Spawned grenade.</returns>
+        public static Grenade SpawnGrenade(Player owner, bool slow)
+        {
+            var instance = UnityEngine.Object.Instantiate(owner.GrenadeManager.availableGrenades[0].grenadeInstance);
+            Grenade grenade = instance.GetComponent<Grenade>();
+            grenade.InitData(owner.GrenadeManager, Vector3.zero, owner.CameraTransform.forward, slow ? 0.5f : 1f);
+            Handlers.StickyGrenadeHandler.Grenades.Add(grenade.gameObject);
+            Mirror.NetworkServer.Spawn(instance);
+
+            instance.AddComponent<Components.StickyComponent>();
+
+            return grenade;
+        }
+
         /// <inheritdoc cref="CustomItem.CustomItem()"/>
         public StickyGrenadeItem() => this.Register();
 
@@ -58,30 +98,12 @@ namespace Mistaken.CustomMTF.Items
         {
             Action action = () =>
             {
-                if (player.GetEffectActive<CustomPlayerEffects.Scp268>())
-                    player.DisableEffect<CustomPlayerEffects.Scp268>();
-                Grenade grenade = UnityEngine.Object.Instantiate(player.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
-                grenade.InitData(player.GrenadeManager, Vector3.zero, player.CameraTransform.forward, slow ? 0.5f : 1f);
-                GrenadeGo = grenade.gameObject;
-                Handlers.StickyGrenadeHandler.Grenades.Add(grenade.gameObject);
-                Mirror.NetworkServer.Spawn(GrenadeGo);
-                GrenadeGo.GetComponent<Rigidbody>().AddForce(new Vector3(grenade.NetworkserverVelocities.linear.x * 1.5f, grenade.NetworkserverVelocities.linear.y / 2f, grenade.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
-                player.RemoveItem(item);
-                GrenadeGo.AddComponent<Components.StickyComponent>();
-                Handlers.StickyGrenadeHandler.Instance.CallDelayed(0.2f, () => Mistaken.API.Components.InRange.Spawn(GrenadeGo.transform, Vector3.zero, new Vector3(0.5f, 0.5f, 0.5f), OnEnter));
+                ThrowGrenade(player, slow, item);
                 this.OnStopHolding(player, item);
             };
+
             Handlers.StickyGrenadeHandler.Instance.CallDelayed(1f, action, "OnThrow");
             return false;
         }
-
-        internal static GameObject GrenadeGo { get; private set; }
-
-        internal static Player GrenadePlayer { get; set; }
-
-        private static readonly Action<Player> OnEnter = (player) =>
-        {
-            GrenadePlayer = player;
-        };
     }
 }

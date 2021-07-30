@@ -56,9 +56,7 @@ namespace Mistaken.CustomMTF.Handlers
 
             var count = Math.Floor(players.Count * (SpawnChance / 100));
             for (int i = 0; i < count; i++)
-            {
                 Classes.MTFMedic.Instance.Spawn(players[i]);
-            }
         }
     }
 }

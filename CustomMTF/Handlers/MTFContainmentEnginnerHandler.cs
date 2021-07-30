@@ -52,13 +52,13 @@ namespace Mistaken.CustomMTF.Handlers
 
         internal static MTFContainmentEnginnerHandler Instance { get; private set; }
 
-        private static readonly List<Player> Campers = new List<Player>();
+        private static readonly HashSet<Player> Campers = new HashSet<Player>();
 
         private static readonly Action<Player> OnEnter = (player) => Campers.Add(player);
 
         private static readonly Action<Player> OnExit = (player) => Campers.Remove(player);
 
-        private float spawnChance = 0; // %
+        private float spawnChance = 0;
 
         private void Server_RespawningTeam(RespawningTeamEventArgs ev)
         {
@@ -82,32 +82,38 @@ namespace Mistaken.CustomMTF.Handlers
             Campers.Clear();
             this.spawnChance = 0;
 
+            var nuke = Map.Rooms.First(x => x.Type == Exiled.API.Enums.RoomType.HczNuke);
+
             // first nuke trigger
             // 40.5 989.5 -35.6   6 4 7.5
-            InRange.Spawn(new Vector3(40.5f, 989.5f, -35.6f), new Vector3(6, 4, 7.5f), OnEnter, OnExit);
+            InRange.Spawn(nuke.Transform, new Vector3(40.5f, 989.5f, -35.6f), new Vector3(6, 4, 7.5f), OnEnter, OnExit);
+
+            var scp106 = Map.Rooms.First(x => x.Type == Exiled.API.Enums.RoomType.Hcz106);
 
             // first 106 trigger
             // 14 -5 -29.8   40 30 8.5
-            InRange.Spawn(new Vector3(14, -5, -29.8f), new Vector3(40, 30, 8.5f), OnEnter, OnExit);
+            InRange.Spawn(scp106.Transform, new Vector3(14, -5, -29.8f), new Vector3(40, 30, 8.5f), OnEnter, OnExit);
 
             // second 106 trigger
             // 14 -16 -12   35 8.5 45
-            InRange.Spawn(new Vector3(14, -16, -12), new Vector3(35, 8.5f, 45), OnEnter, OnExit);
+            InRange.Spawn(scp106.Transform, new Vector3(14, -16, -12), new Vector3(35, 8.5f, 45), OnEnter, OnExit);
+
+            var scp079 = Map.Rooms.First(x => x.Type == Exiled.API.Enums.RoomType.Hcz079);
 
             // first 079 trigger
             // 14 -2.4 -5   31.5 10 18
-            InRange.Spawn(new Vector3(14, -2.4f, -5), new Vector3(31.5f, 10, 18), OnEnter, OnExit);
+            InRange.Spawn(scp079.Transform, new Vector3(14, -2.4f, -5), new Vector3(31.5f, 10, 18), OnEnter, OnExit);
 
             // second 079 trigger
             // 8.2 -2.4 -16.5   8.5 5 21.5
-            InRange.Spawn(new Vector3(8.2f, -2.4f, -16.5f), new Vector3(8.5f, 5, 21.5f), OnEnter, OnExit);
+            InRange.Spawn(scp079.Transform, new Vector3(8.2f, -2.4f, -16.5f), new Vector3(8.5f, 5, 21.5f), OnEnter, OnExit);
 
             Instance.RunCoroutine(this.DoRoundLoop());
         }
 
         private IEnumerator<float> DoRoundLoop()
         {
-            MEC.Timing.WaitForSeconds(1);
+            yield return MEC.Timing.WaitForSeconds(60);
             while (Round.IsStarted)
             {
                 yield return MEC.Timing.WaitForSeconds(1);

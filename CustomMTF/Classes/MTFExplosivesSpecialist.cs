@@ -61,6 +61,11 @@ namespace Mistaken.CustomMTF.Classes
                 id = ItemType.GrenadeFrag,
                 durability = 2000,
             });
+            player.AddItem(new Inventory.SyncItemInfo
+            {
+                id = ItemType.GunUSP,
+                durability = 589003,
+            });
             player.Ammo[(int)AmmoType.Nato556] = 40;
             player.Ammo[(int)AmmoType.Nato9] = 100;
             player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, $"You are <color=yellow>playing</color> as <color={this.Color}>{this.ClassName}</color>");

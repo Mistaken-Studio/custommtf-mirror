@@ -27,15 +27,27 @@ namespace Mistaken.CustomMTF.Components
     /// </summary>
     public class StickyComponent : MonoBehaviour
     {
+        internal float DamageMultiplayer { get; set; } = 0.08f;
+
         private bool onPlayerUsed;
-
         private bool onSurfaceUsed;
-
         private Rigidbody rigidbody;
+        private Player grenadePlayer;
+        private Action<Player> onEnter;
+        private Vector3 positionDiff;
 
         private void Awake()
         {
             this.rigidbody = this.GetComponent<Rigidbody>();
+
+            this.onEnter = (player) =>
+            {
+                this.grenadePlayer = player;
+                this.onPlayerUsed = true;
+                this.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                this.positionDiff = this.grenadePlayer.Position - this.transform.position;
+            };
+            Handlers.StickyGrenadeHandler.Instance.CallDelayed(0.2f, () => Mistaken.API.Components.InRange.Spawn(this.transform, Vector3.zero, new Vector3(0.5f, 0.5f, 0.5f), this.onEnter));
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -49,18 +61,8 @@ namespace Mistaken.CustomMTF.Components
 
         private void FixedUpdate()
         {
-            if (Items.StickyGrenadeItem.GrenadePlayer != null && !this.onSurfaceUsed)
-            {
-                this.onPlayerUsed = true;
-                this.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-                var hitposition = Items.StickyGrenadeItem.GrenadePlayer.Position - Items.StickyGrenadeItem.GrenadeGo.transform.position;
-                Items.StickyGrenadeItem.GrenadeGo.transform.position = Items.StickyGrenadeItem.GrenadePlayer.Position + hitposition;
-            }
-        }
-
-        private void OnDestroy()
-        {
-            Items.StickyGrenadeItem.GrenadePlayer = null;
+            if (this.onPlayerUsed)
+                this.transform.position = this.grenadePlayer.Position + this.positionDiff;
         }
     }
 }

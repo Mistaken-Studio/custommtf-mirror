@@ -55,8 +55,6 @@ namespace Mistaken.CustomMTF.Handlers
             Exiled.Events.Handlers.Map.ChangingIntoGrenade += this.Handle<ChangingIntoGrenadeEventArgs>((ev) => this.Map_ChangingIntoGrenade(ev));
         }
 
-        internal static readonly float DamageMultiplayer = 0.08f;
-
         internal static HashSet<GameObject> Grenades { get; private set; }
 
         private GrenadeManager lastThrower;
@@ -67,6 +65,7 @@ namespace Mistaken.CustomMTF.Handlers
                 return;
 
             var tmp = ev.Grenade.GetComponent<FragGrenade>().thrower;
+            var sticky = ev.Grenade.GetComponent<Components.StickyComponent>();
             this.lastThrower = tmp;
             Action action = () =>
             {
@@ -75,9 +74,7 @@ namespace Mistaken.CustomMTF.Handlers
             };
             this.CallDelayed(1, action, "MapExploadingGrenade");
             foreach (Player player in ev.TargetToDamages.Keys.ToArray())
-            {
-                ev.TargetToDamages[player] *= DamageMultiplayer;
-            }
+                ev.TargetToDamages[player] *= sticky.DamageMultiplayer;
         }
 
         private void Map_ChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
