@@ -74,7 +74,10 @@ namespace Mistaken.CustomMTF.Handlers
             };
             this.CallDelayed(1, action, "MapExploadingGrenade");
             foreach (Player player in ev.TargetToDamages.Keys.ToArray())
+            {
+                this.Log.Debug($"Damage for {player.Nickname}: {ev.TargetToDamages[player]} => {ev.TargetToDamages[player] * sticky.DamageMultiplayer}", PluginHandler.Instance.Config.VerbouseOutput);
                 ev.TargetToDamages[player] *= sticky.DamageMultiplayer;
+            }
         }
 
         private void Map_ChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
