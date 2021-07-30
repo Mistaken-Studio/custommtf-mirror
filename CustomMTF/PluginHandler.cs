@@ -40,12 +40,16 @@ namespace Mistaken.CustomMTF
             new Handlers.MTFExplosivesSpecialistHandler(this);
             new Handlers.MTFContainmentEnginnerHandler(this);
 
+            API.Diagnostics.Module.OnEnable(this);
+
             base.OnEnabled();
         }
 
         /// <inheritdoc/>
         public override void OnDisabled()
         {
+            API.Diagnostics.Module.OnDisable(this);
+
             base.OnDisabled();
         }
 
