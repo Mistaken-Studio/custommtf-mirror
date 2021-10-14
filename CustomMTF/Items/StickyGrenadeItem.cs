@@ -4,106 +4,131 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
+using System.Collections.Generic;
+using Exiled.API.Enums;
 using Exiled.API.Features;
-using Grenades;
-using Mistaken.API;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Spawn;
+using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs;
+using InventorySystem.Items.ThrowableProjectiles;
+using MEC;
+using Mirror;
 using Mistaken.API.Extensions;
-using Mistaken.CustomItems;
+using Mistaken.RoundLogger;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Items
 {
     /// <inheritdoc/>
-    public class StickyGrenadeItem : CustomItem
+    public class StickyGrenadeItem : CustomGrenade
     {
         /// <summary>
-        /// Spawns sticky grenade, adds momentum, disables SCP268 effect if enabled, removes item if <paramref name="item"/> has value.
+        /// Throws Sticky Grenade.
         /// </summary>
-        /// <param name="owner">Grenade owner.</param>
-        /// <param name="slow">If throw should only be with half throw power.</param>
-        /// <param name="item">Item converted to grenade.</param>
-        /// <returns>Spawned grenade.</returns>
-        public static Grenade ThrowGrenade(Player owner, bool slow, Inventory.SyncItemInfo? item = null)
+        /// <param name="player">Throwing Player.</param>
+        /// <returns>Thrown projectile.</returns>
+        public static ThrownProjectile Throw(Player player = null)
         {
-            if (owner.GetEffectActive<CustomPlayerEffects.Scp268>())
-                owner.DisableEffect<CustomPlayerEffects.Scp268>();
-            var instance = SpawnGrenade(owner, slow);
-            instance.GetComponent<Rigidbody>().AddForce(new Vector3(instance.NetworkserverVelocities.linear.x * 1.5f, instance.NetworkserverVelocities.linear.y / 2f, instance.NetworkserverVelocities.linear.z * 1.5f), ForceMode.VelocityChange);
-            if (item.HasValue)
-                owner.RemoveItem(item.Value);
-
-            instance.gameObject.AddComponent<Components.StickyComponent>();
-
-            return instance;
-        }
-
-        /// <summary>
-        /// Spawns sticky grenade, adds momentum.
-        /// </summary>
-        /// <param name="owner">Grenade owner.</param>
-        /// <param name="slow">If throw should only be with half throw power.</param>
-        /// <returns>Spawned grenade.</returns>
-        public static Grenade SpawnGrenade(Player owner, bool slow)
-        {
-            var instance = UnityEngine.Object.Instantiate(owner.GrenadeManager.availableGrenades[0].grenadeInstance);
-            Grenade grenade = instance.GetComponent<Grenade>();
-            grenade.InitData(owner.GrenadeManager, Vector3.zero, owner.CameraTransform.forward, slow ? 0.5f : 1f);
-            Handlers.StickyGrenadeHandler.Grenades.Add(grenade.gameObject);
-            Mirror.NetworkServer.Spawn(instance);
-
-            instance.AddComponent<Components.StickyComponent>();
-
-            return grenade;
-        }
-
-        /// <inheritdoc cref="CustomItem.CustomItem()"/>
-        public StickyGrenadeItem() => this.Register();
-
-        /// <inheritdoc/>
-        public override string ItemName => "Sticky Grenade";
-
-        /// <inheritdoc/>
-        public override SessionVarType SessionVarType => SessionVarType.CI_STICKY_GRENADE;
-
-        /// <inheritdoc/>
-        public override ItemType Item => ItemType.GrenadeFrag;
-
-        /// <inheritdoc/>
-        public override int Durability => 002;
-
-        /// <inheritdoc/>
-        public override Vector3 Size => base.Size;
-
-        /// <inheritdoc/>
-        public override void OnStartHolding(Player player, Inventory.SyncItemInfo item)
-        {
-            player.SetGUI("sticky", API.GUI.PseudoGUIPosition.BOTTOM, "Trzymasz <color=yellow>Granat Samoprzylepny</color>");
-        }
-
-        /// <inheritdoc/>
-        public override void OnStopHolding(Player player, Inventory.SyncItemInfo item)
-        {
-            player.SetGUI("sticky", API.GUI.PseudoGUIPosition.BOTTOM, null);
-        }
-
-        /// <inheritdoc/>
-        public override void OnForceclass(Player player)
-        {
-            player.SetGUI("sticky", API.GUI.PseudoGUIPosition.BOTTOM, null);
-        }
-
-        /// <inheritdoc/>
-        public override bool OnThrow(Player player, Inventory.SyncItemInfo item, bool slow)
-        {
-            Action action = () =>
+            var grenade = new Throwable(ItemType.GrenadeHE, player);
+            if (grenade.Base.Owner.characterClassManager.CurRole.team == Team.CHI || grenade.Base.Owner.characterClassManager.CurClass == RoleType.ClassD)
             {
-                ThrowGrenade(player, slow, item);
-                this.OnStopHolding(player, item);
-            };
+                Respawning.GameplayTickets.Singleton.HandleItemTickets(grenade.Base.OwnerInventory.CurItem);
+            }
 
-            Handlers.StickyGrenadeHandler.Instance.CallDelayed(1f, action, "OnThrow");
-            return false;
+            ThrownProjectile thrownProjectile = UnityEngine.Object.Instantiate<ThrownProjectile>(grenade.Base.Projectile, grenade.Base.Owner.PlayerCameraReference.position, grenade.Base.Owner.PlayerCameraReference.rotation);
+            InventorySystem.Items.Pickups.PickupSyncInfo pickupSyncInfo = new InventorySystem.Items.Pickups.PickupSyncInfo
+            {
+                ItemId = grenade.Type,
+                Locked = !grenade.Base._repickupable,
+                Serial = grenade.Serial,
+                Weight = 0.01f,
+                Position = thrownProjectile.transform.position,
+                Rotation = new LowPrecisionQuaternion(thrownProjectile.transform.rotation),
+            };
+            thrownProjectile.NetworkInfo = pickupSyncInfo;
+            thrownProjectile.PreviousOwner = new Footprinting.Footprint(grenade.Base.Owner);
+            NetworkServer.Spawn(thrownProjectile.gameObject, ownerConnection: null);
+            Patches.ExplodeDestructiblesPatch.Grenades.Add(thrownProjectile);
+            thrownProjectile.InfoReceived(default(InventorySystem.Items.Pickups.PickupSyncInfo), pickupSyncInfo);
+            Rigidbody rb;
+            if (thrownProjectile.TryGetComponent<Rigidbody>(out rb))
+                grenade.Base.PropelBody(rb, new Vector3(10, 10, 0), 25, 0.16f);
+
+            thrownProjectile.gameObject.AddComponent<Components.StickyComponent>();
+            thrownProjectile.ServerActivate();
+            return thrownProjectile;
+        }
+
+        /// <inheritdoc/>
+        public override ItemType Type { get; set; } = ItemType.GrenadeHE;
+
+        /// <inheritdoc/>
+        public override bool ExplodeOnCollision { get; set; } = false;
+
+        /// <inheritdoc/>
+        public override float FuseTime { get; set; } = 3f;
+
+        /// <inheritdoc/>
+        public override uint Id { get; set; } = 3;
+
+        /// <inheritdoc/>
+        public override string Name { get; set; } = "Sticky Grenade";
+
+        /// <inheritdoc/>
+        public override string Description { get; set; } = "A Sticky Grenade";
+
+        /// <inheritdoc/>
+        public override float Weight { get; set; } = 0.01f;
+
+        /// <inheritdoc/>
+        public override SpawnProperties SpawnProperties { get; set; }
+
+        /// <inheritdoc/>
+        public override Pickup Spawn(Vector3 position)
+        {
+            var pickup = base.Spawn(position);
+            pickup.Base.Info.Serial = pickup.Serial;
+            RLogger.Log("STICKY GRENADE", "SPAWN", $"Spawned {this.Name}");
+            return pickup;
+        }
+
+        /// <inheritdoc/>
+        public override Pickup Spawn(Vector3 position, Item item)
+        {
+            var pickup = base.Spawn(position, item);
+            pickup.Base.Info.Serial = pickup.Serial;
+            RLogger.Log("STICKY GRENADE", "SPAWN", $"Spawned {this.Name}");
+            return pickup;
+        }
+
+        /// <inheritdoc/>
+        protected override void OnThrowing(ThrowingItemEventArgs ev)
+        {
+            if (ev.RequestType != ThrowRequest.BeginThrow)
+            {
+                Patches.ServerThrowPatch.ThrowedItems.Add(ev.Item.Base);
+                ev.Player.RemoveItem(ev.Item);
+                RLogger.Log("STICKY GRENADE", "THROW", $"Player {ev.Player.PlayerToString()} threw a {this.Name}");
+            }
+        }
+
+        /// <inheritdoc/>
+        protected override void ShowSelectedMessage(Player player)
+        {
+            Handlers.StickyGrenadeHandler.Instance.RunCoroutine(this.UpdateInterface(player));
+        }
+
+        private IEnumerator<float> UpdateInterface(Player player)
+        {
+            yield return Timing.WaitForSeconds(0.1f);
+            while (this.Check(player.CurrentItem))
+            {
+                player.SetGUI("stickyhold", API.GUI.PseudoGUIPosition.BOTTOM, "Trzymasz <color=yellow>Granat Samoprzylepny</color>");
+                yield return Timing.WaitForSeconds(1f);
+            }
+
+            player.SetGUI("stickyhold", API.GUI.PseudoGUIPosition.BOTTOM, null);
         }
     }
 }

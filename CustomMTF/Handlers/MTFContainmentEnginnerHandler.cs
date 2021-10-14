@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
 using Exiled.API.Interfaces;
+using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
 using Mistaken.API;
 using Mistaken.API.Components;
@@ -30,7 +31,8 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            new Classes.MTFContainmentEnginner();
+
+            new Classes.MTFContainmentEnginner().TryRegister();
         }
 
         /// <inheritdoc/>
@@ -73,7 +75,8 @@ namespace Mistaken.CustomMTF.Handlers
             if (UnityEngine.Random.Range(0, 100) < this.spawnChance)
             {
                 this.spawnChance = 0;
-                Classes.MTFExplosivesSpecialist.Instance.Spawn(players[0]);
+
+                CustomRole.Get(3).AddRole(players[0]);
             }
         }
 
@@ -98,7 +101,7 @@ namespace Mistaken.CustomMTF.Handlers
             // 14 -16 -12   35 8.5 45
             InRange.Spawn(scp106.Transform, new Vector3(14, -16, -12), new Vector3(35, 8.5f, 45), OnEnter, OnExit);
 
-            var scp079 = Map.Rooms.First(x => x.Type == Exiled.API.Enums.RoomType.Hcz079);
+            /*var scp079 = Map.Rooms.First(x => x.Type == Exiled.API.Enums.RoomType.Hcz079);
 
             // first 079 trigger
             // 14 -2.4 -5   31.5 10 18
@@ -106,7 +109,7 @@ namespace Mistaken.CustomMTF.Handlers
 
             // second 079 trigger
             // 8.2 -2.4 -16.5   8.5 5 21.5
-            InRange.Spawn(scp079.Transform, new Vector3(8.2f, -2.4f, -16.5f), new Vector3(8.5f, 5, 21.5f), OnEnter, OnExit);
+            InRange.Spawn(scp079.Transform, new Vector3(8.2f, -2.4f, -16.5f), new Vector3(8.5f, 5, 21.5f), OnEnter, OnExit);*/
 
             Instance.RunCoroutine(this.DoRoundLoop());
         }

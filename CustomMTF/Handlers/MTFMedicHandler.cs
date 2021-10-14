@@ -6,10 +6,8 @@
 
 using System;
 using Exiled.API.Interfaces;
+using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
-using Grenades;
-using MEC;
-using Mistaken.API;
 using Mistaken.API.Diagnostics;
 
 namespace Mistaken.CustomMTF.Handlers
@@ -24,7 +22,7 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            new Classes.MTFMedic();
+            new Classes.MTFMedic().TryRegister();
         }
 
         /// <inheritdoc/>
@@ -56,7 +54,7 @@ namespace Mistaken.CustomMTF.Handlers
 
             var count = Math.Floor(players.Count * (SpawnChance / 100));
             for (int i = 0; i < count; i++)
-                Classes.MTFMedic.Instance.Spawn(players[i]);
+                CustomRole.Get(1).AddRole(players[i]);
         }
     }
 }

@@ -5,10 +5,8 @@
 // -----------------------------------------------------------------------
 
 using Exiled.API.Interfaces;
-using Exiled.Events.EventArgs;
-using Grenades;
-using MEC;
 using Mistaken.API.Diagnostics;
+using UnityEngine;
 
 namespace Mistaken.CustomMTF.Handlers
 {
@@ -22,7 +20,7 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            new Items.MedicGunItem();
+            new Items.MedicGunItem().TryRegister();
         }
 
         /// <inheritdoc/>
@@ -41,5 +39,9 @@ namespace Mistaken.CustomMTF.Handlers
         internal static MedicGunHandler Instance { get; private set; }
 
         internal const float HealAmount = 35;
+
+        internal const float BulletRecoveryTime = 90;
+
+        internal static readonly Vector3 Size = new Vector3(2, 2, 2);
     }
 }

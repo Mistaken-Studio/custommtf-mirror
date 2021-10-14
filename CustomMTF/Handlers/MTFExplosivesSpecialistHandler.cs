@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Interfaces;
+using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
 using Mistaken.API.Diagnostics;
 
@@ -25,7 +26,8 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            new Classes.MTFExplosivesSpecialist();
+
+            new Classes.MTFExplosivesSpecialist().TryRegister();
         }
 
         /// <inheritdoc/>
@@ -56,8 +58,9 @@ namespace Mistaken.CustomMTF.Handlers
             players.ShuffleList();
 
             var count = Math.Floor(players.Count * (SpawnChance / 100));
+
             for (int i = 0; i < count; i++)
-                Classes.MTFExplosivesSpecialist.Instance.Spawn(players[i]);
+                CustomRole.Get(2).AddRole(players[i]);
         }
     }
 }

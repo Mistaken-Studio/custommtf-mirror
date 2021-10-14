@@ -7,13 +7,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Exiled.API.Features;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs;
-using Grenades;
-using MEC;
 using Mistaken.API.Diagnostics;
 using UnityEngine;
 
@@ -34,8 +30,7 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            Grenades = new HashSet<GameObject>();
-            new Items.StickyGrenadeItem();
+            new Items.StickyGrenadeItem().TryRegister();
         }
 
         /// <inheritdoc/>
@@ -44,53 +39,11 @@ namespace Mistaken.CustomMTF.Handlers
         /// <inheritdoc/>
         public override void OnEnable()
         {
-            Exiled.Events.Handlers.Map.ExplodingGrenade += this.Handle<ExplodingGrenadeEventArgs>((ev) => this.Map_ExplodingGrenade(ev));
-            Exiled.Events.Handlers.Map.ChangingIntoGrenade += this.Handle<ChangingIntoGrenadeEventArgs>((ev) => this.Map_ChangingIntoGrenade(ev));
         }
 
         /// <inheritdoc/>
         public override void OnDisable()
         {
-            Exiled.Events.Handlers.Map.ExplodingGrenade -= this.Handle<ExplodingGrenadeEventArgs>((ev) => this.Map_ExplodingGrenade(ev));
-            Exiled.Events.Handlers.Map.ChangingIntoGrenade += this.Handle<ChangingIntoGrenadeEventArgs>((ev) => this.Map_ChangingIntoGrenade(ev));
-        }
-
-        internal static HashSet<GameObject> Grenades { get; private set; }
-
-        private GrenadeManager lastThrower;
-
-        private void Map_ExplodingGrenade(ExplodingGrenadeEventArgs ev)
-        {
-            if (!Grenades.Contains(ev.Grenade))
-                return;
-
-            var tmp = ev.Grenade.GetComponent<FragGrenade>().thrower;
-            var sticky = ev.Grenade.GetComponent<Components.StickyComponent>();
-            this.lastThrower = tmp;
-            Action action = () =>
-            {
-                if (this.lastThrower == tmp)
-                    this.lastThrower = null;
-            };
-            this.CallDelayed(1, action, "MapExploadingGrenade");
-            foreach (Player player in ev.TargetToDamages.Keys.ToArray())
-            {
-                this.Log.Debug($"Damage for {player.Nickname}: {ev.TargetToDamages[player]} => {ev.TargetToDamages[player] * sticky.DamageMultiplayer}", PluginHandler.Instance.Config.VerbouseOutput);
-                ev.TargetToDamages[player] *= sticky.DamageMultiplayer;
-            }
-        }
-
-        private void Map_ChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
-        {
-            if (ev.Pickup.durability != 2000f)
-                return;
-            ev.IsAllowed = false;
-            Grenade grenade = UnityEngine.Object.Instantiate(Server.Host.GrenadeManager.availableGrenades[0].grenadeInstance).GetComponent<Grenade>();
-            Grenades.Add(grenade.gameObject);
-            grenade.InitData(this.lastThrower ?? Server.Host.GrenadeManager, Vector3.zero, Vector3.zero, 0f);
-            grenade.transform.position = ev.Pickup.position;
-            Mirror.NetworkServer.Spawn(grenade.gameObject);
-            ev.Pickup.Delete();
         }
     }
 }

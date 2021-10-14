@@ -4,18 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Exiled.API.Features;
 using Exiled.API.Interfaces;
-using Exiled.Events.EventArgs;
-using Grenades;
-using MEC;
 using Mistaken.API.Diagnostics;
-using UnityEngine;
 
 namespace Mistaken.CustomMTF.Handlers
 {
@@ -34,7 +24,7 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            new Items.GrenadeLauncherItem();
+            new Items.GrenadeLauncherItem().TryRegister();
         }
 
         /// <inheritdoc/>

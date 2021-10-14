@@ -4,64 +4,85 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Collections.Generic;
 using Exiled.API.Features;
-using Mistaken.API;
+using Exiled.CustomRoles.API.Features;
 using Mistaken.API.Extensions;
+using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes
 {
     /// <inheritdoc/>
-    public class MTFMedic : CustomClasses.CustomClass
+    public class MTFMedic : CustomRole
     {
-        /// <inheritdoc cref="CustomClasses.CustomClass.CustomClass()"/>
-        public MTFMedic()
+        // Cadet color #70C3FF; Sergant color #0095FF
+
+        /// <inheritdoc/>
+        public override uint Id { get; set; } = 1;
+
+        /// <inheritdoc/>
+        public override RoleType Role { get; set; } = RoleType.NtfSergeant;
+
+        /// <inheritdoc/>
+        public override int MaxHealth { get; set; } = 100;
+
+        /// <inheritdoc/>
+        public override string Name { get; set; } = "MTF Medic";
+
+        /// <inheritdoc/>
+        public override string Description { get; set; } = "MTF Medic";
+
+        /// <inheritdoc/>
+        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>()
         {
-            this.Register();
-            Instance = this;
-        }
+            new Abilities.MedicGunAmmoRegenAbility(),
+        };
 
         /// <inheritdoc/>
-        public override SessionVarType ClassSessionVarType => SessionVarType.CC_MTF_MEDIC;
-
-        /// <inheritdoc/>
-        public override string ClassName => "MTF Medic";
-
-        /// <inheritdoc/>
-        public override string ClassDescription => "MTF Medic";
-
-        /// <inheritdoc/>
-        public override RoleType Role => RoleType.NtfLieutenant;
-
-        /// <inheritdoc/>
-        public override string Color => "#0095FF"; // cadet color #70C3FF
-
-        /// <inheritdoc/>
-        public override void Spawn(Player player)
+        public override void AddRole(Player player)
         {
-            base.Spawn(player);
-            player.ClearInventory();
-            player.AddItem(ItemType.GunE11SR);
-            player.AddItem(ItemType.KeycardNTFLieutenant);
-            player.AddItem(ItemType.Disarmer);
-            player.AddItem(ItemType.WeaponManagerTablet);
-            player.AddItem(ItemType.Adrenaline);
-            player.AddItem(ItemType.Medkit);
-            player.AddItem(ItemType.Medkit);
-            player.AddItem(new Inventory.SyncItemInfo
+            base.AddRole(player);
+            MEC.Timing.CallDelayed(2, () =>
             {
-                id = ItemType.GunCOM15,
-                durability = 1003,
+                player.Ammo[ItemType.Ammo556x45] = 100;
+                player.Ammo[ItemType.Ammo9x19] = 40;
             });
-            player.SetGUI("cc_mtf_medic", API.GUI.PseudoGUIPosition.BOTTOM, $"You are <color=yellow>playing</color> as <color={this.Color}>{this.ClassName}</color>");
         }
 
         /// <inheritdoc/>
-        public override void OnDie(Player player)
+        protected override bool KeepInventoryOnSpawn { get; set; } = false;
+
+        /// <inheritdoc/>
+        protected override bool KeepRoleOnDeath { get; set; } = false;
+
+        /// <inheritdoc/>
+        protected override bool RemovalKillsPlayer { get; set; } = true;
+
+        /// <inheritdoc/>
+        protected override List<string> Inventory { get; set; } = new List<string>()
         {
-            player.SetGUI("cc_mtf_medic", API.GUI.PseudoGUIPosition.BOTTOM, null);
-            base.OnDie(player);
+            ItemType.KeycardNTFLieutenant.ToString(),
+            ItemType.GunE11SR.ToString(),
+            "Medic Gun",
+            ItemType.Adrenaline.ToString(),
+            ItemType.Medkit.ToString(),
+            ItemType.Medkit.ToString(),
+            ItemType.Radio.ToString(),
+            ItemType.ArmorCombat.ToString(),
+        };
+
+        /// <inheritdoc/>
+        protected override void RoleAdded(Player player)
+        {
+            RLogger.Log("MTF MEDIC", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
+            player.SetGUI("cc_mtf_medic", API.GUI.PseudoGUIPosition.BOTTOM, $"<color=yellow>Grasz</color> jako <color=#0095FF>{this.Name}</color>");
         }
 
-        internal static MTFMedic Instance { get; private set; }
+        /// <inheritdoc/>
+        protected override void RoleRemoved(Player player)
+        {
+            RLogger.Log("MTF MEDIC", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
+            player.SetGUI("cc_mtf_medic", API.GUI.PseudoGUIPosition.BOTTOM, null);
+        }
     }
 }
