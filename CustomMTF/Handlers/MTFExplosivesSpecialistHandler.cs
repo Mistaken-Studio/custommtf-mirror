@@ -5,10 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
@@ -54,7 +51,7 @@ namespace Mistaken.CustomMTF.Handlers
             if (!ev.IsAllowed)
                 return;
 
-            var players = ev.Players;
+            var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !CustomRole.Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
             players.ShuffleList();
 
             var count = Math.Floor(players.Count * (SpawnChance / 100));

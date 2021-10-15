@@ -7,9 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Exiled.API.Features;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
@@ -69,7 +66,7 @@ namespace Mistaken.CustomMTF.Handlers
             if (!MapPlus.IsLCZDecontaminated())
                 return;
 
-            var players = ev.Players;
+            var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !CustomRole.Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
             players.ShuffleList();
 
             if (UnityEngine.Random.Range(0, 100) < this.spawnChance)

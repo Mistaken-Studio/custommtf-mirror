@@ -4,14 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Exiled.API.Features;
 using Exiled.API.Interfaces;
-using Exiled.Events.EventArgs;
 using Mistaken.API.Diagnostics;
-using UnityEngine;
 
 namespace Mistaken.CustomMTF.Handlers
 {

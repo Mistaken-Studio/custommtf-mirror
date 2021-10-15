@@ -8,7 +8,6 @@ using System;
 using Exiled.API.Features;
 using InventorySystem.Items.ThrowableProjectiles;
 using MEC;
-using Mistaken.API;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Components

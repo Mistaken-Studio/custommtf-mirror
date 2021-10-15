@@ -4,15 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
-using Mistaken.API;
 using Mistaken.API.Extensions;
 using Mistaken.RoundLogger;
 
