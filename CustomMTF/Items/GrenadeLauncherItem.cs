@@ -48,7 +48,7 @@ namespace Mistaken.CustomMTF.Items
         public override float Damage { get; set; } = 0;
 
         /// <inheritdoc/>
-        public override byte ClipSize { get; set; } = 3;
+        public override byte ClipSize { get; set; } = 4;
 
         /// <inheritdoc/>
         public override void Give(Player player, bool displayMessage)
@@ -82,7 +82,7 @@ namespace Mistaken.CustomMTF.Items
         /// <inheritdoc/>
         protected override void OnReloading(ReloadingWeaponEventArgs ev)
         {
-            if (ev.Firearm.Ammo >= this.ClipSize + 1)
+            if (ev.Firearm.Ammo >= this.ClipSize)
             {
                 ev.Player.SetGUI("grenadeLauncherWarn", PseudoGUIPosition.BOTTOM, "Nie możesz przeładować mając pełny magazynek", 3);
                 ev.IsAllowed = false;

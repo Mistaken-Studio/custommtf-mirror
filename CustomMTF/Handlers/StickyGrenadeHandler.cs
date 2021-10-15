@@ -39,11 +39,19 @@ namespace Mistaken.CustomMTF.Handlers
         /// <inheritdoc/>
         public override void OnEnable()
         {
+            Exiled.Events.Handlers.Server.RoundStarted += this.Handle(() => this.Server_RoundStarted(), "RoundStart");
         }
 
         /// <inheritdoc/>
         public override void OnDisable()
         {
+            Exiled.Events.Handlers.Server.RoundStarted -= this.Handle(() => this.Server_RoundStarted(), "RoundStart");
+        }
+
+        private void Server_RoundStarted()
+        {
+            Patches.ExplodeDestructiblesPatch.Grenades.Clear();
+            Patches.ServerThrowPatch.ThrowedItems.Clear();
         }
     }
 }

@@ -26,12 +26,14 @@ namespace Mistaken.CustomMTF.Components
         private Vector3 positionDiff;
         private int owner;
         private bool ignoreOwner;
+        private DateTime elapsedTime;
 
         private void Awake()
         {
             this.rigidbody = this.GetComponent<Rigidbody>();
             this.owner = this.GetComponent<ExplosionGrenade>().PreviousOwner.PlayerId;
             this.ignoreOwner = true;
+            this.elapsedTime = DateTime.Now;
 
             this.onEnter = (player) =>
             {
@@ -48,20 +50,9 @@ namespace Mistaken.CustomMTF.Components
 
         private void OnCollisionEnter(Collision collision)
         {
+            if ((DateTime.Now - this.elapsedTime).TotalSeconds < 0.25f) return;
             if (!this.onSurfaceUsed && !this.onPlayerUsed)
             {
-                var temp = collision.collider.transform;
-                while (temp != null)
-                {
-                    Log.Debug(temp.name);
-                    temp = temp.parent;
-                }
-
-                for (int i = 0; i < collision.contacts.Length; i++)
-                    Log.Debug($"Contacts: {collision.contacts[i].point}| {collision.contacts[i].separation}");
-
-                Log.Debug("Impulse" + collision.impulse);
-
                 this.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
                 this.onSurfaceUsed = true;
             }
