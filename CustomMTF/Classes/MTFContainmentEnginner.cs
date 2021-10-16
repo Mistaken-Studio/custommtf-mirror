@@ -66,7 +66,7 @@ namespace Mistaken.CustomMTF.Classes
         protected override void RoleAdded(Player player)
         {
             RLogger.Log("MTF CONTAINMENT ENGINNER", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
-            player.SetGUI("cc_mtf_ce", API.GUI.PseudoGUIPosition.BOTTOM, string.Format(PluginHandler.Instance.Translation.PlayingAs, PluginHandler.Instance.Translation.MTFPrivateColor, PluginHandler.Instance.Translation.MTFContainmentEnginner));
+            player.SetGUI("cc_mtf_ce", API.GUI.PseudoGUIPosition.BOTTOM, string.Format(PluginHandler.Instance.Translation.PlayingAs, PluginHandler.Instance.Translation.MtfPrivateColor, PluginHandler.Instance.Translation.MtfContainmentEnginner));
         }
 
         /// <inheritdoc/>

@@ -67,7 +67,7 @@ namespace Mistaken.CustomMTF.Classes
         protected override void RoleAdded(Player player)
         {
             RLogger.Log("MTF EXPLOSIVES SPECIALIST", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
-            player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, string.Format(PluginHandler.Instance.Translation.PlayingAs, PluginHandler.Instance.Translation.MTFSergantColor, PluginHandler.Instance.Translation.MTFExplosivesSpecialist));
+            player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, string.Format(PluginHandler.Instance.Translation.PlayingAs, PluginHandler.Instance.Translation.MtfSergantColor, PluginHandler.Instance.Translation.MtfExplosivesSpecialist));
         }
 
         /// <inheritdoc/>
