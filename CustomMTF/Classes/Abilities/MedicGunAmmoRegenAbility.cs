@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles.API.Features;
 using MEC;
 using Mistaken.API.CustomItems;
@@ -49,10 +50,13 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         {
             if (ev.IsAllowed && ev.Shooter == this.Player)
             {
-                if (MistakenCustomItems.MEDIC_GUN.Get().Check(ev.Shooter.CurrentItem))
+                if (CustomItem.TryGet(ev.Shooter.CurrentItem, out CustomItem item))
                 {
-                    if (!this.isActive)
-                        Handlers.MTFMedicHandler.Instance.RunCoroutine(this.RegenerateAmmo(ev.Shooter));
+                    if (item.Id == (uint)MistakenCustomItems.MEDIC_GUN)
+                    {
+                        if (!this.isActive)
+                            Handlers.MTFMedicHandler.Instance.RunCoroutine(this.RegenerateAmmo(ev.Shooter));
+                    }
                 }
             }
         }
@@ -61,10 +65,13 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         {
             if (ev.IsAllowed && ev.Player == this.Player)
             {
-                if (MistakenCustomItems.MEDIC_GUN.Get().Check(ev.Pickup))
+                if (CustomItem.TryGet(ev.Pickup, out CustomItem item))
                 {
-                    if (!this.isActive)
-                        Handlers.MTFMedicHandler.Instance.RunCoroutine(this.RegenerateAmmo(ev.Player));
+                    if (item.Id == (uint)MistakenCustomItems.MEDIC_GUN)
+                    {
+                        if (!this.isActive)
+                            Handlers.MTFMedicHandler.Instance.RunCoroutine(this.RegenerateAmmo(ev.Player));
+                    }
                 }
             }
         }
