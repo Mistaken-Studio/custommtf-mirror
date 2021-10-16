@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles.API.Features;
 using MEC;
+using Mistaken.API.CustomItems;
 using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes.Abilities
@@ -49,7 +49,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         {
             if (ev.IsAllowed && ev.Shooter == this.Player)
             {
-                if (CustomItem.Get(4).Check(ev.Shooter.CurrentItem))
+                if (MistakenCustomItems.MEDIC_GUN.Get().Check(ev.Shooter.CurrentItem))
                 {
                     if (!this.isActive)
                         Handlers.MTFMedicHandler.Instance.RunCoroutine(this.RegenerateAmmo(ev.Shooter));
@@ -61,7 +61,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         {
             if (ev.IsAllowed && ev.Player == this.Player)
             {
-                if (CustomItem.Get(4).Check(ev.Pickup))
+                if (MistakenCustomItems.MEDIC_GUN.Get().Check(ev.Pickup))
                 {
                     if (!this.isActive)
                         Handlers.MTFMedicHandler.Instance.RunCoroutine(this.RegenerateAmmo(ev.Player));
@@ -73,12 +73,12 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         {
             RLogger.Log("MTF MEDIC", "ABILITY", $"Started regenerating ammo for {player.PlayerToString()}");
             this.isActive = true;
-            Firearm medicgun = (Firearm)player.Items.FirstOrDefault(x => CustomItem.Get(4).Check(x));
+            Firearm medicgun = (Firearm)player.Items.FirstOrDefault(x => MistakenCustomItems.MEDIC_GUN.Get().Check(x));
             if (medicgun is null) yield break;
             while (medicgun.Ammo < 4)
             {
-                yield return Timing.WaitForSeconds(Handlers.MedicGunHandler.BulletRecoveryTime);
-                medicgun = (Firearm)player.Items.FirstOrDefault(x => CustomItem.Get(4).Check(x));
+                yield return Timing.WaitForSeconds(PluginHandler.Instance.Config.MedicGunBulletRecoveryTime);
+                medicgun = (Firearm)player.Items.FirstOrDefault(x => MistakenCustomItems.MEDIC_GUN.Get().Check(x));
                 if (medicgun is null) break;
                 RLogger.Log("MTF MEDIC", "ABILITY", $"Regenerated 1 ammo for {player.PlayerToString()}");
                 medicgun.Ammo++;

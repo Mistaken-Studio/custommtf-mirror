@@ -6,17 +6,17 @@
 
 using System.Collections.Generic;
 using Exiled.API.Features;
-using Exiled.CustomRoles.API.Features;
+using Mistaken.API.CustomRoles;
 using Mistaken.API.Extensions;
 using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes
 {
     /// <inheritdoc/>
-    public class MTFExplosivesSpecialist : CustomRole
+    public class MTFExplosivesSpecialist : MistakenCustomRole
     {
         /// <inheritdoc/>
-        public override uint Id { get; set; } = 2;
+        public override MistakenCustomRoles CustomRole => MistakenCustomRoles.MTF_EXPLOSIVE_SPECIALIST;
 
         /// <inheritdoc/>
         public override RoleType Role { get; set; } = RoleType.NtfSergeant;

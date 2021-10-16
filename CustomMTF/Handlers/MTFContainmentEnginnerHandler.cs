@@ -13,6 +13,7 @@ using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
 using Mistaken.API;
 using Mistaken.API.Components;
+using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
 using UnityEngine;
 
@@ -73,7 +74,7 @@ namespace Mistaken.CustomMTF.Handlers
             {
                 this.spawnChance = 0;
 
-                CustomRole.Get(3).AddRole(players[0]);
+                MistakenCustomRoles.MTF_CONTAINMENT_ENGINNER.Get().AddRole(players[0]);
             }
         }
 

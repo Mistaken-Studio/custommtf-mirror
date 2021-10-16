@@ -9,6 +9,7 @@ using System.Linq;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
+using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
 
 namespace Mistaken.CustomMTF.Handlers
@@ -55,7 +56,7 @@ namespace Mistaken.CustomMTF.Handlers
 
             var count = Math.Floor(players.Count * (SpawnChance / 100));
             for (int i = 0; i < count; i++)
-                CustomRole.Get(1).AddRole(players[i]);
+                MistakenCustomRoles.MTF_MEDIC.Get().AddRole(players[i]);
         }
     }
 }

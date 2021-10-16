@@ -48,6 +48,7 @@
     <Reference Include="UnityEngine.CoreModule" HintPath="$(MISTAKEN_REFERENCES)\UnityEngine.CoreModule.dll" />
     <Reference Include="UnityEngine.PhysicsModule" HintPath="$(MISTAKEN_REFERENCES)\UnityEngine.PhysicsModule.dll" />
     <Reference Include="Mistaken.RoundLogger" HintPath="$(MISTAKEN_REFERENCES)\Mistaken.RoundLogger.dll" />
+    <Reference Include="Mistaken.NotEnoughItems" HintPath="$(MISTAKEN_REFERENCES)\Mistaken.NotEnoughItems.dll" />
     <Reference Include="Mirror" HintPath="$(MISTAKEN_REFERENCES)\Mirror.dll" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,19 +65,9 @@
     <Compile Include="Classes\MTFExplosivesSpecialist.cs" />
     <Compile Include="Classes\MTFMedic.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Components\StickyComponent.cs" />
     <Compile Include="Handlers\MTFContainmentEnginnerHandler.cs" />
     <Compile Include="Handlers\MTFExplosivesSpecialistHandler.cs" />
     <Compile Include="Handlers\MTFMedicHandler.cs" />
-    <Compile Include="Handlers\GrenadeLauncherHandler.cs" />
-    <Compile Include="Items\MedicGunItem.cs" />
-    <Compile Include="Handlers\StickyGrenadeHandler.cs" />
-    <Compile Include="Items\GrenadeLauncherItem.cs" />
-    <Compile Include="Items\StickyGrenadeItem.cs" />
-    <Compile Include="Handlers\MedicGunHandler.cs" />
-    <Compile Include="Patches\ExplodeDestructiblesPatch.cs" />
-    <Compile Include="Patches\ServerThrowPatch.cs" />
-    <Compile Include="Patches\TimedGrenadePickupUpdatePatch.cs" />
     <Compile Include="PluginHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

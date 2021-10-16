@@ -16,6 +16,12 @@ namespace Mistaken.CustomMTF
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets time needed to recover one ammo in Medic Gun.
+        /// </summary>
+        [Description("Abilities Settings")]
+        public float MedicGunBulletRecoveryTime { get; set; } = 90f;
+
+        /// <summary>
         /// Gets or sets a value indicating whether debug should be displayed.
         /// </summary>
         [Description("If true then debug will be displayed")]
