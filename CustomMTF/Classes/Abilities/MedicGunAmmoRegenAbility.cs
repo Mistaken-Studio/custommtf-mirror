@@ -80,12 +80,12 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         {
             RLogger.Log("MTF MEDIC", "ABILITY", $"Started regenerating ammo for {player.PlayerToString()}");
             this.isActive = true;
-            Firearm medicgun = (Firearm)player.Items.FirstOrDefault(x => MistakenCustomItems.MEDIC_GUN.Get().Check(x));
+            Firearm medicgun = (Firearm)player.Items.FirstOrDefault(x => CustomItem.TryGet(x, out _));
             if (medicgun is null) yield break;
             while (medicgun.Ammo < 4)
             {
                 yield return Timing.WaitForSeconds(PluginHandler.Instance.Config.MedicGunBulletRecoveryTime);
-                medicgun = (Firearm)player.Items.FirstOrDefault(x => MistakenCustomItems.MEDIC_GUN.Get().Check(x));
+                medicgun = (Firearm)player.Items.FirstOrDefault(x => CustomItem.TryGet(x, out _));
                 if (medicgun is null) break;
                 RLogger.Log("MTF MEDIC", "ABILITY", $"Regenerated 1 ammo for {player.PlayerToString()}");
                 medicgun.Ammo++;
