@@ -20,6 +20,6 @@ namespace Mistaken.CustomMTF
 
         public string MtfPrivateColor { get; set; } = "#70C3FF";
 
-        public string PlayingAs { get; set; } = "You're playing as <color={0}>{1}</color>";
+        public string PlayingAs { get; set; } = "You are playing as <color={0}>{1}</color>";
     }
 }
