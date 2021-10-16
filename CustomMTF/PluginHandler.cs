@@ -26,7 +26,7 @@ namespace Mistaken.CustomMTF
         public override PluginPriority Priority => PluginPriority.Low;
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(2, 11, 0);
+        public override Version RequiredExiledVersion => new Version(3, 0, 4);
 
         /// <inheritdoc/>
         public override void OnEnabled()
