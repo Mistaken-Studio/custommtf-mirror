@@ -6,8 +6,9 @@
 
 using System.Collections.Generic;
 using Exiled.API.Features;
-using Mistaken.API.CustomRoles;
+using Exiled.CustomRoles.API.Features;
 using Mistaken.API.Extensions;
+using Mistaken.CustomRolesExtensions;
 using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes
@@ -29,6 +30,12 @@ namespace Mistaken.CustomMTF.Classes
 
         /// <inheritdoc/>
         public override string Description { get; set; } = "MTF Explosives Specialist";
+
+        /// <inheritdoc/>
+        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>()
+        {
+            new Abilities.ExplosiveDeathAbility(),
+        };
 
         /// <inheritdoc/>
         public override void AddRole(Player player)

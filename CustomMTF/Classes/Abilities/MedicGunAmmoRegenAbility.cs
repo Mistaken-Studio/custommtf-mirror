@@ -30,7 +30,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         /// <inheritdoc/>
         protected override void AbilityAdded(Player player)
         {
-            this.Player = player;
+            this.player = player;
             Exiled.Events.Handlers.Player.Shooting += this.Player_Shooting;
             Exiled.Events.Handlers.Player.PickingUpItem += this.Player_PickingUpItem;
         }
@@ -42,13 +42,13 @@ namespace Mistaken.CustomMTF.Classes.Abilities
             Exiled.Events.Handlers.Player.PickingUpItem -= this.Player_PickingUpItem;
         }
 
-        private bool isActive = false;
+        private Player player;
 
-        private Player Player { get; set; }
+        private bool isActive = false;
 
         private void Player_Shooting(Exiled.Events.EventArgs.ShootingEventArgs ev)
         {
-            if (ev.IsAllowed && ev.Shooter == this.Player)
+            if (ev.IsAllowed && this.player == ev.Shooter)
             {
                 if (CustomItem.TryGet(ev.Shooter.CurrentItem, out CustomItem item))
                 {
@@ -63,7 +63,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
 
         private void Player_PickingUpItem(Exiled.Events.EventArgs.PickingUpItemEventArgs ev)
         {
-            if (ev.IsAllowed && ev.Player == this.Player)
+            if (ev.IsAllowed && this.player == ev.Player)
             {
                 if (CustomItem.TryGet(ev.Pickup, out CustomItem item))
                 {

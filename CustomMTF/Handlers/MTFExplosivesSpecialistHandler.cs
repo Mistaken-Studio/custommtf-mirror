@@ -9,8 +9,8 @@ using System.Linq;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
-using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
+using Mistaken.CustomRolesExtensions;
 
 namespace Mistaken.CustomMTF.Handlers
 {

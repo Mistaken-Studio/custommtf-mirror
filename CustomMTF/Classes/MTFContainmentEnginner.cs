@@ -5,9 +5,11 @@
 // -----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using Exiled.API.Enums;
 using Exiled.API.Features;
-using Mistaken.API.CustomRoles;
+using Microsoft.Win32;
 using Mistaken.API.Extensions;
+using Mistaken.CustomRolesExtensions;
 using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes
@@ -17,6 +19,16 @@ namespace Mistaken.CustomMTF.Classes
     {
         /// <inheritdoc/>
         public override MistakenCustomRoles CustomRole => MistakenCustomRoles.MTF_CONTAINMENT_ENGINNER;
+
+        /// <inheritdoc/>
+        public override KeycardPermissions BuiltInPermissions =>
+            KeycardPermissions.ContainmentLevelOne |
+            KeycardPermissions.ContainmentLevelTwo |
+            KeycardPermissions.ContainmentLevelThree |
+            KeycardPermissions.ArmoryLevelOne |
+            KeycardPermissions.AlphaWarhead |
+            KeycardPermissions.Checkpoints |
+            KeycardPermissions.Intercom;
 
         /// <inheritdoc/>
         public override RoleType Role { get; set; } = RoleType.NtfPrivate;
@@ -53,7 +65,6 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override List<string> Inventory { get; set; } = new List<string>()
         {
-            ItemType.KeycardContainmentEngineer.ToString(),
             ItemType.GunE11SR.ToString(),
             ItemType.GunCOM18.ToString(),
             ItemType.Medkit.ToString(),
@@ -65,6 +76,7 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void RoleAdded(Player player)
         {
+            player.SetSessionVar(API.SessionVarType.BUILTIN_DOOR_ACCESS, this.BuiltInPermissions);
             RLogger.Log("MTF CONTAINMENT ENGINNER", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
             player.SetGUI("cc_mtf_ce", API.GUI.PseudoGUIPosition.BOTTOM, string.Format(PluginHandler.Instance.Translation.PlayingAs, PluginHandler.Instance.Translation.MtfPrivateColor, PluginHandler.Instance.Translation.MtfContainmentEnginner));
         }
@@ -72,6 +84,7 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void RoleRemoved(Player player)
         {
+            player.SetSessionVar(API.SessionVarType.BUILTIN_DOOR_ACCESS, null);
             RLogger.Log("MTF CONTAINMENT ENGINNER", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
             player.SetGUI("cc_mtf_ce", API.GUI.PseudoGUIPosition.BOTTOM, null);
         }

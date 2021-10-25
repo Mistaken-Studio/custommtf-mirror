@@ -13,8 +13,8 @@ using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
 using Mistaken.API;
 using Mistaken.API.Components;
-using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
+using Mistaken.CustomRolesExtensions;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Handlers

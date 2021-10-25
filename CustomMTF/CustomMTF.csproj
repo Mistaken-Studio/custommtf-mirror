@@ -37,6 +37,7 @@
     <Reference Include="Exiled.API" HintPath="$(MISTAKEN_REFERENCES)\Exiled.API.dll" />
     <Reference Include="Exiled.Events" HintPath="$(MISTAKEN_REFERENCES)\Exiled.Events.dll" />
     <Reference Include="Mistaken.API.CustomItems" HintPath="$(MISTAKEN_REFERENCES)\Mistaken.API.CustomItems.dll" />
+    <Reference Include="Mistaken.CustomRolesExtensions" HintPath="$(MISTAKEN_REFERENCES)\Mistaken.CustomRolesExtensions.dll" />
     <Reference Include="Mistaken.Events" HintPath="$(MISTAKEN_REFERENCES)\Mistaken.Events.dll" />
     <Reference Include="Exiled.Permissions" HintPath="$(MISTAKEN_REFERENCES)\Exiled.Permissions.dll" />
     <Reference Include="0Harmony" HintPath="$(MISTAKEN_REFERENCES)\0Harmony.dll" />
@@ -62,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Abilities\ExplosiveDeathAbility.cs" />
     <Compile Include="Classes\Abilities\MedicGunAmmoRegenAbility.cs" />
     <Compile Include="Classes\MTFContainmentEnginner.cs" />
     <Compile Include="Classes\MTFExplosivesSpecialist.cs" />
