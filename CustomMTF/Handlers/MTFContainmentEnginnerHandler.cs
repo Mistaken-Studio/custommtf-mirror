@@ -13,8 +13,8 @@ using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
 using Mistaken.API;
 using Mistaken.API.Components;
+using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
-using Mistaken.CustomRolesExtensions;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Handlers
@@ -39,15 +39,15 @@ namespace Mistaken.CustomMTF.Handlers
         /// <inheritdoc/>
         public override void OnEnable()
         {
-            Exiled.Events.Handlers.Server.RespawningTeam += this.Handle<RespawningTeamEventArgs>((ev) => this.Server_RespawningTeam(ev));
-            Exiled.Events.Handlers.Server.RoundStarted += this.Handle(() => this.Server_RoundStarted(), "RoundStart");
+            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
+            Exiled.Events.Handlers.Server.RoundStarted += this.Server_RoundStarted;
         }
 
         /// <inheritdoc/>
         public override void OnDisable()
         {
-            Exiled.Events.Handlers.Server.RespawningTeam -= this.Handle<RespawningTeamEventArgs>((ev) => this.Server_RespawningTeam(ev));
-            Exiled.Events.Handlers.Server.RoundStarted -= this.Handle(() => this.Server_RoundStarted(), "RoundStart");
+            Exiled.Events.Handlers.Server.RespawningTeam -= this.Server_RespawningTeam;
+            Exiled.Events.Handlers.Server.RoundStarted -= this.Server_RoundStarted;
         }
 
         internal static MTFContainmentEnginnerHandler Instance { get; private set; }

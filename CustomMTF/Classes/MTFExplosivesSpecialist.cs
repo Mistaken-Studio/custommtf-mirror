@@ -7,8 +7,8 @@
 using System.Collections.Generic;
 using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
+using Mistaken.API.CustomRoles;
 using Mistaken.API.Extensions;
-using Mistaken.CustomRolesExtensions;
 using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes

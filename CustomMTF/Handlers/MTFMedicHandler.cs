@@ -9,8 +9,8 @@ using System.Linq;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
+using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
-using Mistaken.CustomRolesExtensions;
 
 namespace Mistaken.CustomMTF.Handlers
 {
@@ -33,13 +33,13 @@ namespace Mistaken.CustomMTF.Handlers
         /// <inheritdoc/>
         public override void OnEnable()
         {
-            Exiled.Events.Handlers.Server.RespawningTeam += this.Handle<RespawningTeamEventArgs>((ev) => this.Server_RespawningTeam(ev));
+            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
         }
 
         /// <inheritdoc/>
         public override void OnDisable()
         {
-            Exiled.Events.Handlers.Server.RespawningTeam -= this.Handle<RespawningTeamEventArgs>((ev) => this.Server_RespawningTeam(ev));
+            Exiled.Events.Handlers.Server.RespawningTeam -= this.Server_RespawningTeam;
         }
 
         internal static MTFMedicHandler Instance { get; private set; }

@@ -7,9 +7,8 @@
 using System.Collections.Generic;
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using Microsoft.Win32;
+using Mistaken.API.CustomRoles;
 using Mistaken.API.Extensions;
-using Mistaken.CustomRolesExtensions;
 using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes
@@ -76,7 +75,7 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void RoleAdded(Player player)
         {
-            player.SetSessionVar(API.SessionVarType.BUILTIN_DOOR_ACCESS, this.BuiltInPermissions);
+            player.SetSessionVariable(API.SessionVarType.BUILTIN_DOOR_ACCESS, this.BuiltInPermissions);
             RLogger.Log("MTF CONTAINMENT ENGINNER", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
             player.SetGUI("cc_mtf_ce", API.GUI.PseudoGUIPosition.BOTTOM, string.Format(PluginHandler.Instance.Translation.PlayingAs, PluginHandler.Instance.Translation.MtfPrivateColor, PluginHandler.Instance.Translation.MtfContainmentEnginner));
         }
@@ -84,7 +83,7 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void RoleRemoved(Player player)
         {
-            player.SetSessionVar(API.SessionVarType.BUILTIN_DOOR_ACCESS, null);
+            player.SetSessionVariable(API.SessionVarType.BUILTIN_DOOR_ACCESS, null);
             RLogger.Log("MTF CONTAINMENT ENGINNER", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
             player.SetGUI("cc_mtf_ce", API.GUI.PseudoGUIPosition.BOTTOM, null);
         }
