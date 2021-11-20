@@ -41,7 +41,7 @@ namespace Mistaken.CustomMTF.Classes
                 player.Ammo[ItemType.Ammo556x45] = 80;
                 player.Ammo[ItemType.Ammo9x19] = 50;
             });
-            player.InfoArea = ~PlayerInfoArea.CustomInfo;
+            player.InfoArea = ~PlayerInfoArea.Role;
             CustomInfoHandler.Set(player, "Guard_Commander", "<color=blue><b>Dowódca Ochrony</b></color>");
             player.SetGUI("Guard_Commander", PseudoGUIPosition.MIDDLE, $"<size=150%>Jesteś <color=blue>Dowódcą Ochrony</color></size><br>{this.Description}", 20);
             player.SetGUI("Guard_Commander_Info", PseudoGUIPosition.BOTTOM, "<color=yellow>Grasz</color> jako <color=blue>Dowódca Ochrony</color>");
