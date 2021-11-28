@@ -74,7 +74,7 @@ namespace Mistaken.CustomMTF.Handlers
             {
                 this.spawnChance = 0;
 
-                MistakenCustomRoles.MTF_CONTAINMENT_ENGINNER.Get().AddRole(players[0]);
+                Classes.MTFContainmentEnginner.Instance.AddRole(players[0]);
             }
         }
 

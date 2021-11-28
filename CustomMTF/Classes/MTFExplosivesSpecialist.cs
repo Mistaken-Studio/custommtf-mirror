@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
+using Mistaken.API.CustomItems;
 using Mistaken.API.CustomRoles;
 using Mistaken.API.Extensions;
 using Mistaken.RoundLogger;
@@ -16,6 +17,11 @@ namespace Mistaken.CustomMTF.Classes
     /// <inheritdoc/>
     public class MTFExplosivesSpecialist : MistakenCustomRole
     {
+        /// <summary>
+        /// Gets the MTF explosives specialist instance.
+        /// </summary>
+        public static MTFExplosivesSpecialist Instance { get; private set; }
+
         /// <inheritdoc/>
         public override MistakenCustomRoles CustomRole => MistakenCustomRoles.MTF_EXPLOSIVE_SPECIALIST;
 
@@ -36,6 +42,12 @@ namespace Mistaken.CustomMTF.Classes
         {
             new Abilities.ExplosiveDeathAbility(),
         };
+
+        /// <inheritdoc/>
+        public override void Init()
+        {
+            Instance = this;
+        }
 
         /// <inheritdoc/>
         public override void AddRole(Player player)
@@ -62,7 +74,7 @@ namespace Mistaken.CustomMTF.Classes
         {
             ItemType.KeycardNTFLieutenant.ToString(),
             ItemType.GunFSP9.ToString(),
-            "Grenade Launcher",
+            ((int)MistakenCustomItems.GRENADE_LAUNCHER).ToString(),
             ItemType.Painkillers.ToString(),
             ItemType.GrenadeHE.ToString(),
             ItemType.GrenadeHE.ToString(),

@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
+using Mistaken.API.CustomItems;
 using Mistaken.API.CustomRoles;
 using Mistaken.API.Extensions;
 using Mistaken.RoundLogger;
@@ -16,6 +17,11 @@ namespace Mistaken.CustomMTF.Classes
     /// <inheritdoc/>
     public class MTFMedic : MistakenCustomRole
     {
+        /// <summary>
+        /// Gets the MTF medic instance.
+        /// </summary>
+        public static MTFMedic Instance { get; private set; }
+
         // Cadet color #70C3FF; Sergant color #0095FF
 
         /// <inheritdoc/>
@@ -38,6 +44,12 @@ namespace Mistaken.CustomMTF.Classes
         {
             new Abilities.MedicGunAmmoRegenAbility(),
         };
+
+        /// <inheritdoc/>
+        public override void Init()
+        {
+            Instance = this;
+        }
 
         /// <inheritdoc/>
         public override void AddRole(Player player)
@@ -64,7 +76,7 @@ namespace Mistaken.CustomMTF.Classes
         {
             ItemType.KeycardNTFLieutenant.ToString(),
             ItemType.GunE11SR.ToString(),
-            "Medic Gun",
+            ((int)MistakenCustomItems.MEDIC_GUN).ToString(),
             ItemType.Adrenaline.ToString(),
             ItemType.Medkit.ToString(),
             ItemType.Medkit.ToString(),

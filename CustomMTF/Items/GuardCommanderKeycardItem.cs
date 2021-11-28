@@ -25,6 +25,11 @@ namespace Mistaken.CustomMTF.Items
     public class GuardCommanderKeycardItem : MistakenCustomItem
     {
         /// <summary>
+        /// Gets the guard commander keycard instance.
+        /// </summary>
+        public static GuardCommanderKeycardItem Instance { get; private set; }
+
+        /// <summary>
         /// Gets or sets owner of the item.
         /// </summary>
         public Player CurrentOwner { get; set; }
@@ -46,6 +51,12 @@ namespace Mistaken.CustomMTF.Items
 
         /// <inheritdoc/>
         public override SpawnProperties SpawnProperties { get; set; }
+
+        /// <inheritdoc/>
+        public override void Init()
+        {
+            Instance = this;
+        }
 
         /// <inheritdoc/>
         public override Pickup Spawn(Vector3 position)
@@ -76,17 +87,6 @@ namespace Mistaken.CustomMTF.Items
             this.CurrentOwner = null;
         }
 
-        /*/// <inheritdoc/>
-        public override bool OnDrop(Player player, Inventory item)
-        {
-            base.OnDrop(player, item);
-            if (CurrentOwner == null)
-                return true;
-            CurrentOwner.SetSessionVar(Main.SessionVarType.CI_GUARD_COMMANDER_KEYCARD_OWNER, false);
-            CurrentOwner = null;
-            return true;
-        }*/
-
         /// <inheritdoc/>
         protected override void OnWaitingForPlayers()
         {
@@ -99,7 +99,7 @@ namespace Mistaken.CustomMTF.Items
 
             while (this.Check(player.CurrentItem))
             {
-                if (MistakenCustomRoles.GUARD_COMMANDER.Get().Check(player) || player == this.CurrentOwner)
+                if (Classes.GuardCommander.Instance.Check(player) || player == this.CurrentOwner)
                     player.SetGUI("GC_Keycard", PseudoGUIPosition.BOTTOM, "<color=yellow>Trzymasz</color> kartę <color=blue>Dowódcy Ochrony</color>");
                 else
                     player.SetGUI("GC_Keycard", PseudoGUIPosition.BOTTOM, "<color=yellow>Trzymasz</color> kartę <color=blue>Dowódcy Ochrony</color>, ale chyba <color=yellow>nie</color> możesz jej używać");

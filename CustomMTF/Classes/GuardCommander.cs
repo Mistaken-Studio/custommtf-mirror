@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using Exiled.API.Features;
 using Mistaken.API;
+using Mistaken.API.CustomItems;
 using Mistaken.API.CustomRoles;
 using Mistaken.API.Extensions;
 using Mistaken.API.GUI;
@@ -17,6 +18,11 @@ namespace Mistaken.CustomMTF.Classes
     /// <inheritdoc/>
     public class GuardCommander : MistakenCustomRole
     {
+        /// <summary>
+        /// Gets the guard commander instance.
+        /// </summary>
+        public static GuardCommander Instance { get; private set; }
+
         /// <inheritdoc/>
         public override MistakenCustomRoles CustomRole => MistakenCustomRoles.GUARD_COMMANDER;
 
@@ -31,6 +37,12 @@ namespace Mistaken.CustomMTF.Classes
 
         /// <inheritdoc/>
         public override string Description { get; set; } = "Twoim zadaniem jest <color=yellow>dowodzenie</color> <color=#7795a9>ochroną placówki</color>.<br>Twoja karta <color=yellow>pozwala</color> ci otworzyć Gate A i Gate B, ale tylko gdy:<br>- Obok jest <color=#f1e96e>Naukowiec</color><br>- Obok jest skuta <color=#ff8400>Klasa D</color><br>- Obok jest skuty <color=#1d6f00>Rebeliant Chaosu</color>";
+
+        /// <inheritdoc/>
+        public override void Init()
+        {
+            Instance = this;
+        }
 
         /// <inheritdoc/>
         public override void AddRole(Player player)
@@ -66,11 +78,11 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override List<string> Inventory { get; set; } = new List<string>
         {
-            "Karta Dowódcy Ochrony",
+            ((int)MistakenCustomItems.GUARD_COMMANDER_KEYCARD).ToString(),
             ItemType.GunCrossvec.ToString(),
             ItemType.Radio.ToString(),
-            "Taser",
-            "Impact Grenade",
+            ((int)MistakenCustomItems.TASER).ToString(),
+            ((int)MistakenCustomItems.IMPACT_GRENADE).ToString(),
             ItemType.ArmorCombat.ToString(),
             ItemType.Medkit.ToString(),
         };

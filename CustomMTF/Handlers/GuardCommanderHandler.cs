@@ -79,7 +79,7 @@ namespace Mistaken.CustomMTF.Handlers
                 return;
             if (!this.hasCommanderEscorted)
             {
-                foreach (var item in MistakenCustomRoles.GUARD_COMMANDER.Get().TrackedPlayers)
+                foreach (var item in Classes.GuardCommander.Instance.TrackedPlayers)
                     item.SetGUI("GuardCommander_Escort", PseudoGUIPosition.TOP, "Dostałeś <color=yellow>informację</color> przez pager: W związu z <color=yellow>eskortą personelu</color>, od teraz jesteś <color=yellow>autoryzowany</color> do otwierania Gatów bez kogoś obok oraz do otwierania <color=yellow>generatorów</color>.", 10);
             }
 
@@ -88,13 +88,11 @@ namespace Mistaken.CustomMTF.Handlers
 
         private void Player_UnlockingGenerator(Exiled.Events.EventArgs.UnlockingGeneratorEventArgs ev)
         {
-            if (ev.Player.CurrentItem.Type != ItemType.KeycardNTFOfficer)
-                return;
-            if (!MistakenCustomItems.GUARD_COMMANDER_KEYCARD.TryGet(out var customitem))
+            if (!Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
                 return;
             if (this.hasCommanderEscorted)
                 return;
-            if (MistakenCustomRoles.GUARD_COMMANDER.Get().TrackedPlayers.Contains(ev.Player) || ((Items.GuardCommanderKeycardItem)customitem).CurrentOwner == ev.Player)
+            if (Classes.GuardCommander.Instance.TrackedPlayers.Contains(ev.Player) || Items.GuardCommanderKeycardItem.Instance.CurrentOwner == ev.Player)
             {
                 ev.IsAllowed = false;
                 return;
@@ -105,8 +103,8 @@ namespace Mistaken.CustomMTF.Handlers
         {
             if (ev.KnobSetting == Scp914.Scp914KnobSetting.OneToOne)
             {
-                if (MistakenCustomItems.GUARD_COMMANDER_KEYCARD.TryGet(out var customItem) && customItem.Check(ev.Player.CurrentItem))
-                    ((Items.GuardCommanderKeycardItem)customItem).CurrentOwner = ev.Player;
+                if (Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
+                    Items.GuardCommanderKeycardItem.Instance.CurrentOwner = ev.Player;
             }
         }
 
@@ -123,7 +121,7 @@ namespace Mistaken.CustomMTF.Handlers
                     return;
                 if (!this.hasCommanderEscorted)
                 {
-                    foreach (var item in MistakenCustomRoles.GUARD_COMMANDER.Get().TrackedPlayers)
+                    foreach (var item in Classes.GuardCommander.Instance.TrackedPlayers)
                         item.SetGUI("GuardCommander_Access", PseudoGUIPosition.TOP, "Dostałeś <color=yellow>informację</color> przez pager: Aktywowano protokuł <color=yellow>GB-12</color>, od teraz jesteś <color=yellow>autoryzowany</color> do otwierania Gatów bez kogoś obok oraz do otwierania <color=yellow>generatorów</color>.", 10);
                     this.hasCommanderEscorted = true;
                 }
@@ -137,7 +135,7 @@ namespace Mistaken.CustomMTF.Handlers
                     var guards = RealPlayers.Get(RoleType.FacilityGuard).ToArray();
                     if (guards.Length < 3)
                         return;
-                    MistakenCustomRoles.GUARD_COMMANDER.Get().AddRole(guards[UnityEngine.Random.Range(0, guards.Length)]);
+                    Classes.GuardCommander.Instance.AddRole(guards[UnityEngine.Random.Range(0, guards.Length)]);
                 }
                 catch (System.Exception ex)
                 {
@@ -151,9 +149,7 @@ namespace Mistaken.CustomMTF.Handlers
         {
             if (ev.Player.CurrentItem.Type != ItemType.KeycardNTFOfficer)
                 return;
-            if (MistakenCustomItems.GUARD_COMMANDER_KEYCARD.TryGet(out var customItem))
-                return;
-            if (!MistakenCustomRoles.GUARD_COMMANDER.Get().Check(ev.Player) && ((Items.GuardCommanderKeycardItem)customItem).CurrentOwner != ev.Player)
+            if (!Classes.GuardCommander.Instance.Check(ev.Player) && Items.GuardCommanderKeycardItem.Instance.CurrentOwner != ev.Player)
             {
                 ev.IsAllowed = false;
                 return;
@@ -190,9 +186,7 @@ namespace Mistaken.CustomMTF.Handlers
                         if (!tmp)
                             tmp = true;
                         else
-                        {
                             ev.IsAllowed = true;
-                        }
                     }
                 }
             }

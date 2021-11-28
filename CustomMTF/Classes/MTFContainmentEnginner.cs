@@ -16,6 +16,11 @@ namespace Mistaken.CustomMTF.Classes
     /// <inheritdoc/>
     public class MTFContainmentEnginner : MistakenCustomRole
     {
+        /// <summary>
+        /// Gets the MTF containment enginner instance.
+        /// </summary>
+        public static MTFContainmentEnginner Instance { get; private set; }
+
         /// <inheritdoc/>
         public override MistakenCustomRoles CustomRole => MistakenCustomRoles.MTF_CONTAINMENT_ENGINNER;
 
@@ -40,6 +45,12 @@ namespace Mistaken.CustomMTF.Classes
 
         /// <inheritdoc/>
         public override string Description { get; set; } = "MTF Containment Enginner";
+
+        /// <inheritdoc/>
+        public override void Init()
+        {
+            Instance = this;
+        }
 
         /// <inheritdoc/>
         public override void AddRole(Player player)
