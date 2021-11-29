@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="MTFContainmentEnginner.cs" company="Mistaken">
 // Copyright (c) Mistaken. All rights reserved.
 // </copyright>
@@ -25,7 +25,7 @@ namespace Mistaken.CustomMTF.Classes
         public override MistakenCustomRoles CustomRole => MistakenCustomRoles.MTF_CONTAINMENT_ENGINNER;
 
         /// <inheritdoc/>
-        public override KeycardPermissions BuiltInPermissions =>
+        protected override KeycardPermissions BuiltInPermissions =>
             KeycardPermissions.ContainmentLevelOne |
             KeycardPermissions.ContainmentLevelTwo |
             KeycardPermissions.ContainmentLevelThree |
