@@ -25,16 +25,6 @@ namespace Mistaken.CustomMTF.Classes
         public override MistakenCustomRoles CustomRole => MistakenCustomRoles.MTF_CONTAINMENT_ENGINNER;
 
         /// <inheritdoc/>
-        protected override KeycardPermissions BuiltInPermissions =>
-            KeycardPermissions.ContainmentLevelOne |
-            KeycardPermissions.ContainmentLevelTwo |
-            KeycardPermissions.ContainmentLevelThree |
-            KeycardPermissions.ArmoryLevelOne |
-            KeycardPermissions.AlphaWarhead |
-            KeycardPermissions.Checkpoints |
-            KeycardPermissions.Intercom;
-
-        /// <inheritdoc/>
         public override RoleType Role { get; set; } = RoleType.NtfPrivate;
 
         /// <inheritdoc/>
@@ -62,6 +52,16 @@ namespace Mistaken.CustomMTF.Classes
                 player.Ammo[ItemType.Ammo9x19] = 50;
             });
         }
+
+        /// <inheritdoc/>
+        protected override KeycardPermissions BuiltInPermissions =>
+            KeycardPermissions.ContainmentLevelOne |
+            KeycardPermissions.ContainmentLevelTwo |
+            KeycardPermissions.ContainmentLevelThree |
+            KeycardPermissions.ArmoryLevelOne |
+            KeycardPermissions.AlphaWarhead |
+            KeycardPermissions.Checkpoints |
+            KeycardPermissions.Intercom;
 
         /// <inheritdoc/>
         protected override bool KeepInventoryOnSpawn { get; set; } = false;
