@@ -34,13 +34,13 @@ namespace Mistaken.CustomMTF.Handlers
         /// <inheritdoc/>
         public override void OnEnable()
         {
-            Exiled.Events.Handlers.Server.RespawningTeam += this.Handle<RespawningTeamEventArgs>((ev) => this.Server_RespawningTeam(ev));
+            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
         }
 
         /// <inheritdoc/>
         public override void OnDisable()
         {
-            Exiled.Events.Handlers.Server.RespawningTeam -= this.Handle<RespawningTeamEventArgs>((ev) => this.Server_RespawningTeam(ev));
+            Exiled.Events.Handlers.Server.RespawningTeam -= this.Server_RespawningTeam;
         }
 
         internal static MTFExplosivesSpecialistHandler Instance { get; private set; }
@@ -58,7 +58,7 @@ namespace Mistaken.CustomMTF.Handlers
             var count = Math.Floor(players.Count * (SpawnChance / 100));
 
             for (int i = 0; i < count; i++)
-                MistakenCustomRoles.MTF_EXPLOSIVE_SPECIALIST.Get().AddRole(players[i]);
+                Classes.MTFExplosivesSpecialist.Instance.AddRole(players[i]);
         }
     }
 }
