@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.API.Features.Spawn;
 using Exiled.CustomRoles.API.Features;
 using Mistaken.API.CustomItems;
 using Mistaken.API.CustomRoles;
@@ -46,19 +47,12 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         public override void Init()
         {
+            base.Init();
             Instance = this;
         }
 
         /// <inheritdoc/>
-        public override void AddRole(Player player)
-        {
-            base.AddRole(player);
-            MEC.Timing.CallDelayed(2, () =>
-            {
-                player.Ammo[ItemType.Ammo556x45] = 40;
-                player.Ammo[ItemType.Ammo9x19] = 100;
-            });
-        }
+        protected override string DisplayName => this.Name;
 
         /// <inheritdoc/>
         protected override bool KeepInventoryOnSpawn { get; set; } = false;
@@ -68,6 +62,13 @@ namespace Mistaken.CustomMTF.Classes
 
         /// <inheritdoc/>
         protected override bool RemovalKillsPlayer { get; set; } = true;
+
+        /// <inheritdoc/>
+        protected override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
+        {
+            { ItemType.Ammo556x45, 40 },
+            { ItemType.Ammo9x19, 100 },
+        };
 
         /// <inheritdoc/>
         protected override List<string> Inventory { get; set; } = new List<string>()
@@ -83,8 +84,22 @@ namespace Mistaken.CustomMTF.Classes
         };
 
         /// <inheritdoc/>
+        protected override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        {
+            RoleSpawnPoints = new List<RoleSpawnPoint>()
+            {
+                new RoleSpawnPoint()
+                {
+                    Chance = 100,
+                    Role = RoleType.NtfSergeant,
+                },
+            },
+        };
+
+        /// <inheritdoc/>
         protected override void RoleAdded(Player player)
         {
+            base.RoleAdded(player);
             RLogger.Log("MTF EXPLOSIVES SPECIALIST", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
             player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, string.Format(PluginHandler.Instance.Translation.PlayingAs, PluginHandler.Instance.Translation.MtfSergantColor, PluginHandler.Instance.Translation.MtfExplosivesSpecialist));
         }
@@ -92,6 +107,7 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void RoleRemoved(Player player)
         {
+            base.RoleRemoved(player);
             RLogger.Log("MTF EXPLOSIVES SPECIALIST", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
             player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, null);
         }
