@@ -52,7 +52,7 @@ namespace Mistaken.CustomMTF.Handlers
 
         internal static MTFContainmentEnginnerHandler Instance { get; private set; }
 
-        private static readonly HashSet<Player> Campers = new HashSet<Player>();
+        private static readonly List<Player> Campers = new List<Player>();
 
         private static readonly Action<Player> OnEnter = (player) => Campers.Add(player);
 
@@ -62,20 +62,24 @@ namespace Mistaken.CustomMTF.Handlers
 
         private void Server_RespawningTeam(RespawningTeamEventArgs ev)
         {
+            if (ev.NextKnownTeam != Respawning.SpawnableTeamType.NineTailedFox)
+                return;
             if (!ev.IsAllowed)
                 return;
             if (!MapPlus.IsLCZDecontaminated())
                 return;
 
-            var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !CustomRole.Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
-            players.ShuffleList();
-
-            if (UnityEngine.Random.Range(0, 100) < this.spawnChance)
+            MEC.Timing.CallDelayed(1.5f, () =>
             {
-                this.spawnChance = 0;
+                var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !CustomRole.Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
+                players.ShuffleList();
 
-                Classes.MTFContainmentEnginner.Instance.AddRole(players[0]);
-            }
+                if (UnityEngine.Random.Range(0, 100) <= this.spawnChance)
+                {
+                    Classes.MTFContainmentEnginner.Instance.AddRole(players[0]);
+                    this.spawnChance = 0;
+                }
+            });
         }
 
         private void Server_RoundStarted()
