@@ -4,12 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
 using System.Linq;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
-using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
 
 namespace Mistaken.CustomMTF.Handlers
@@ -24,8 +22,8 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-
             new Classes.MTFExplosivesSpecialist().TryRegister();
+            new Classes.Abilities.ExplosiveDeathAbility().TryRegister();
         }
 
         /// <inheritdoc/>
@@ -45,8 +43,6 @@ namespace Mistaken.CustomMTF.Handlers
 
         internal static MTFExplosivesSpecialistHandler Instance { get; private set; }
 
-        private const float SpawnChance = 30; // %
-
         private void Server_RespawningTeam(RespawningTeamEventArgs ev)
         {
             if (ev.NextKnownTeam != Respawning.SpawnableTeamType.NineTailedFox)
@@ -58,7 +54,7 @@ namespace Mistaken.CustomMTF.Handlers
             {
                 var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !CustomRole.Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
                 players.ShuffleList();
-                players.SpawnPlayerWithRole(Classes.MTFExplosivesSpecialist.Instance, SpawnChance);
+                players.SpawnPlayerWithRole(Classes.MTFExplosivesSpecialist.Instance, PluginHandler.Instance.Config.MtfExplosivesSpecialistSpawnChance);
             });
         }
     }

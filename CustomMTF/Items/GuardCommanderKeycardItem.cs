@@ -56,6 +56,7 @@ namespace Mistaken.CustomMTF.Items
         public override void Init()
         {
             Instance = this;
+            base.Init();
         }
 
         /// <inheritdoc/>
