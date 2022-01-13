@@ -51,7 +51,6 @@
     <Reference Include="UnityEngine.CoreModule" HintPath="$(MISTAKEN_REFERENCES)\UnityEngine.CoreModule.dll" />
     <Reference Include="UnityEngine.PhysicsModule" HintPath="$(MISTAKEN_REFERENCES)\UnityEngine.PhysicsModule.dll" />
     <Reference Include="Mistaken.RoundLogger" HintPath="$(MISTAKEN_REFERENCES)\Mistaken.RoundLogger.dll" />
-    <Reference Include="Mistaken.NotEnoughItems" HintPath="$(MISTAKEN_REFERENCES)\Mistaken.NotEnoughItems.dll" />
     <Reference Include="Mirror" HintPath="$(MISTAKEN_REFERENCES)\Mirror.dll" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -70,6 +69,7 @@
     <Compile Include="Classes\MTFExplosivesSpecialist.cs" />
     <Compile Include="Classes\MTFMedic.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Handlers\GuardCommanderHandler.cs" />
     <Compile Include="Handlers\MTFContainmentEnginnerHandler.cs" />
     <Compile Include="Handlers\MTFExplosivesSpecialistHandler.cs" />

@@ -22,27 +22,24 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         public override string Description { get; set; } = "Let's you explode on death";
 
         /// <inheritdoc/>
-        protected override void AbilityAdded(Player player)
+        protected override void SubscribeEvents()
         {
-            this.player = player;
             Exiled.Events.Handlers.Player.Dying += this.Player_Dying;
         }
 
         /// <inheritdoc/>
-        protected override void AbilityRemoved(Player player)
+        protected override void UnSubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Dying -= this.Player_Dying;
         }
 
-        private Player player;
-
         private void Player_Dying(Exiled.Events.EventArgs.DyingEventArgs ev)
         {
-            if (ev.IsAllowed && this.player == ev.Target)
+            if (ev.IsAllowed && this.Players.Contains(ev.Target))
             {
                 ExplosiveGrenade grenade = new ExplosiveGrenade(ItemType.GrenadeHE);
                 grenade.FuseTime = 5f;
-                grenade.SpawnActive(ev.Target.Position, ev.Target);
+                grenade.SpawnActive(ev.Target.Position);
             }
         }
     }

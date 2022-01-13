@@ -4,12 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
 using System.Linq;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
-using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
 
 namespace Mistaken.CustomMTF.Handlers
@@ -25,6 +23,7 @@ namespace Mistaken.CustomMTF.Handlers
         {
             Instance = this;
             new Classes.MTFMedic().TryRegister();
+            new Classes.Abilities.MedicGunAmmoRegenAbility().TryRegister();
         }
 
         /// <inheritdoc/>
@@ -44,19 +43,19 @@ namespace Mistaken.CustomMTF.Handlers
 
         internal static MTFMedicHandler Instance { get; private set; }
 
-        private const float SpawnChance = 10; // %
-
         private void Server_RespawningTeam(RespawningTeamEventArgs ev)
         {
+            if (ev.NextKnownTeam != Respawning.SpawnableTeamType.NineTailedFox)
+                return;
             if (!ev.IsAllowed)
                 return;
 
-            var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !CustomRole.Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
-            players.ShuffleList();
-
-            var count = Math.Floor(players.Count * (SpawnChance / 100));
-            for (int i = 0; i < count; i++)
-                Classes.MTFMedic.Instance.AddRole(players[i]);
+            MEC.Timing.CallDelayed(1.5f, () =>
+            {
+                var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !CustomRole.Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
+                players.ShuffleList();
+                players.SpawnPlayerWithRole(Classes.MTFMedic.Instance, PluginHandler.Instance.Config.MtfMedicSpawnChance);
+            });
         }
     }
 }
