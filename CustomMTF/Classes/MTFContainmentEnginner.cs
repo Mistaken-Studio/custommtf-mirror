@@ -54,7 +54,7 @@ namespace Mistaken.CustomMTF.Classes
         protected override bool KeepRoleOnDeath { get; set; } = false;
 
         /// <inheritdoc/>
-        protected override bool RemovalKillsPlayer { get; set; } = true;
+        protected override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
         protected override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
