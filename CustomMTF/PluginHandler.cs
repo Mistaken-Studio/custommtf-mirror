@@ -35,6 +35,7 @@ namespace Mistaken.CustomMTF
             new Handlers.MTFMedicHandler(this);
             new Handlers.MTFExplosivesSpecialistHandler(this);
             new Handlers.MTFContainmentEnginnerHandler(this);
+            new Handlers.GuardCommanderHandler(this);
 
             API.Diagnostics.Module.OnEnable(this);
 
