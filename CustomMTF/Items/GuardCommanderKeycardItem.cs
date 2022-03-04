@@ -44,6 +44,9 @@ namespace Mistaken.CustomMTF.Items
         public override string Name { get; set; } = "Karta Dowódcy Ochrony";
 
         /// <inheritdoc/>
+        public override string DisplayName => "Karta Dowódcy Ochrony";
+
+        /// <inheritdoc/>
         public override string Description { get; set; } = "Guard Commander's Keycard";
 
         /// <inheritdoc/>

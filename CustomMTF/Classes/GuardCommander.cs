@@ -76,6 +76,9 @@ namespace Mistaken.CustomMTF.Classes
         protected override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
+        protected override string DisplayName => "Guard Commander";
+
+        /// <inheritdoc/>
         protected override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
         {
             { ItemType.Ammo556x45, 80 },
