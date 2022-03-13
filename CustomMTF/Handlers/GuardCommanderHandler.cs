@@ -6,6 +6,7 @@
 
 using System.Linq;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Interfaces;
 using Mistaken.API;
 using Mistaken.API.Diagnostics;
@@ -73,7 +74,7 @@ namespace Mistaken.CustomMTF.Handlers
         {
             if (ev.Reason != SpawnReason.Escaped)
                 return;
-            if ((byte)ev.NewRole != 4 || (byte)ev.NewRole < 11 || (byte)ev.NewRole > 13)
+            if (ev.NewRole.GetTeam() != Team.MTF)
                 return;
             if (!this.hasCommanderEscorted)
             {
@@ -86,9 +87,9 @@ namespace Mistaken.CustomMTF.Handlers
 
         private void Player_UnlockingGenerator(Exiled.Events.EventArgs.UnlockingGeneratorEventArgs ev)
         {
-            if (!Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
-                return;
             if (this.hasCommanderEscorted)
+                return;
+            if (!Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
                 return;
             if (Classes.GuardCommander.Instance.TrackedPlayers.Contains(ev.Player) || Items.GuardCommanderKeycardItem.Instance.CurrentOwner == ev.Player)
             {
@@ -145,7 +146,7 @@ namespace Mistaken.CustomMTF.Handlers
 
         private void Player_InteractingDoor(Exiled.Events.EventArgs.InteractingDoorEventArgs ev)
         {
-            if (ev.Player.CurrentItem.Type != ItemType.KeycardNTFOfficer)
+            if (!Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
                 return;
             if (!Classes.GuardCommander.Instance.Check(ev.Player) && Items.GuardCommanderKeycardItem.Instance.CurrentOwner != ev.Player)
             {

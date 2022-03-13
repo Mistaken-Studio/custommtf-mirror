@@ -46,7 +46,7 @@ namespace Mistaken.CustomMTF.Classes
             Instance = this;
         }
 
-        /// <inheritdoc/>
+        /*/// <inheritdoc/>
         public override void AddRole(Player player)
         {
             base.AddRole(player);
@@ -64,7 +64,7 @@ namespace Mistaken.CustomMTF.Classes
             CustomInfoHandler.Set(player, "Guard_Commander", null);
             player.SetGUI("Guard_Commander_Info", PseudoGUIPosition.BOTTOM, null);
             RLogger.Log("GUARD COMMANDER", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
-        }
+        }*/
 
         /// <inheritdoc/>
         protected override bool KeepInventoryOnSpawn { get; set; } = false;
@@ -74,6 +74,9 @@ namespace Mistaken.CustomMTF.Classes
 
         /// <inheritdoc/>
         protected override bool RemovalKillsPlayer { get; set; } = false;
+
+        /// <inheritdoc/>
+        protected override string DisplayName => "Guard Commander";
 
         /// <inheritdoc/>
         protected override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()

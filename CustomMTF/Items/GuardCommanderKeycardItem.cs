@@ -44,6 +44,9 @@ namespace Mistaken.CustomMTF.Items
         public override string Name { get; set; } = "Karta Dowódcy Ochrony";
 
         /// <inheritdoc/>
+        public override string DisplayName => "Karta Dowódcy Ochrony";
+
+        /// <inheritdoc/>
         public override string Description { get; set; } = "Guard Commander's Keycard";
 
         /// <inheritdoc/>
@@ -70,8 +73,9 @@ namespace Mistaken.CustomMTF.Items
         /// <inheritdoc/>
         public override Pickup Spawn(Vector3 position, Item item)
         {
-            item.Scale = Handlers.GuardCommanderHandler.Size;
-            return item.Spawn(position);
+            var pickup = base.Spawn(position);
+            pickup.Scale = Handlers.GuardCommanderHandler.Size;
+            return pickup;
         }
 
         /// <inheritdoc/>
@@ -100,9 +104,7 @@ namespace Mistaken.CustomMTF.Items
 
             while (this.Check(player.CurrentItem))
             {
-                if (Classes.GuardCommander.Instance.Check(player) || player == this.CurrentOwner)
-                    player.SetGUI("GC_Keycard", PseudoGUIPosition.BOTTOM, "<color=yellow>Trzymasz</color> kartę <color=blue>Dowódcy Ochrony</color>");
-                else
+                if (!(Classes.GuardCommander.Instance.Check(player) || player == this.CurrentOwner))
                     player.SetGUI("GC_Keycard", PseudoGUIPosition.BOTTOM, "<color=yellow>Trzymasz</color> kartę <color=blue>Dowódcy Ochrony</color>, ale chyba <color=yellow>nie</color> możesz jej używać");
 
                 yield return Timing.WaitForSeconds(1f);
