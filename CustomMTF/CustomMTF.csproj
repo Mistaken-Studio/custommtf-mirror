@@ -70,11 +70,6 @@
     <Compile Include="Classes\MTFMedic.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Handlers\GuardCommanderHandler.cs" />
-    <Compile Include="Handlers\MTFContainmentEnginnerHandler.cs" />
-    <Compile Include="Handlers\MTFEnginnerHandler.cs" />
-    <Compile Include="Handlers\MTFExplosivesSpecialistHandler.cs" />
-    <Compile Include="Handlers\MTFMedicHandler.cs" />
     <Compile Include="Items\GuardCommanderKeycardItem.cs" />
     <Compile Include="PluginHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

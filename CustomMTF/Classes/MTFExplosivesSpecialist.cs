@@ -5,9 +5,11 @@
 // -----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using Exiled.API.Features;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.EventArgs;
 using Mistaken.API.CustomItems;
 using Mistaken.API.CustomRoles;
 using Mistaken.API.Extensions;
@@ -110,6 +112,35 @@ namespace Mistaken.CustomMTF.Classes
             base.RoleRemoved(player);
             RLogger.Log("MTF EXPLOSIVES SPECIALIST", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
             player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, null);
+        }
+
+        /// <inheritdoc/>
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
+            base.SubscribeEvents();
+        }
+
+        /// <inheritdoc/>
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
+            base.UnsubscribeEvents();
+        }
+
+        private void Server_RespawningTeam(RespawningTeamEventArgs ev)
+        {
+            if (ev.NextKnownTeam != Respawning.SpawnableTeamType.NineTailedFox)
+                return;
+            if (!ev.IsAllowed)
+                return;
+
+            MEC.Timing.CallDelayed(1.5f, () =>
+            {
+                var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
+                players.ShuffleList();
+                players.SpawnPlayerWithRole(this, PluginHandler.Instance.Config.MtfExplosivesSpecialistSpawnChance);
+            });
         }
     }
 }

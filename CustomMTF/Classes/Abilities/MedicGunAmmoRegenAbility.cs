@@ -13,6 +13,7 @@ using Exiled.CustomRoles.API.Features;
 using MEC;
 using Mistaken.API;
 using Mistaken.API.CustomItems;
+using Mistaken.API.Diagnostics;
 using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes.Abilities
@@ -31,7 +32,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         /// <inheritdoc/>
         protected override void AbilityAdded(Player player)
         {
-            Handlers.MTFMedicHandler.Instance.RunCoroutine(this.RegenerateAmmo(player), "custommtf_medicgun_ability");
+            Module.RunSafeCoroutine(this.RegenerateAmmo(player), "custommtf_medicgun_ability");
         }
 
         private IEnumerator<float> RegenerateAmmo(Player player)
