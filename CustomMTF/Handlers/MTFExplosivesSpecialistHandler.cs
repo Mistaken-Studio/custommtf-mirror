@@ -22,8 +22,6 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            new Classes.MTFExplosivesSpecialist().TryRegister();
-            new Classes.Abilities.ExplosiveDeathAbility().TryRegister();
         }
 
         /// <inheritdoc/>

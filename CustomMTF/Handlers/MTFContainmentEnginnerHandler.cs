@@ -28,7 +28,6 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            new Classes.MTFContainmentEnginner().TryRegister();
         }
 
         /// <inheritdoc/>
@@ -85,13 +84,13 @@ namespace Mistaken.CustomMTF.Handlers
             Campers.Clear();
             this.spawnChance = 0;
 
-            var nuke = Map.Rooms.First(x => x.Type == Exiled.API.Enums.RoomType.HczNuke);
+            var nuke = Room.List.First(x => x.Type == Exiled.API.Enums.RoomType.HczNuke);
 
             // first nuke trigger
             // 40.5 989.5 -35.6   6 4 7.5
             InRange.Spawn(nuke.Transform, new Vector3(40.5f, 989.5f, -35.6f), new Vector3(6, 4, 7.5f), OnEnter, OnExit);
 
-            var scp106 = Map.Rooms.First(x => x.Type == Exiled.API.Enums.RoomType.Hcz106);
+            var scp106 = Room.List.First(x => x.Type == Exiled.API.Enums.RoomType.Hcz106);
 
             // first 106 trigger
             // 14 -5 -29.8   40 30 8.5

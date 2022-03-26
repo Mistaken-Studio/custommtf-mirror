@@ -45,33 +45,26 @@ namespace Mistaken.CustomMTF.Classes
         };
 
         /// <inheritdoc/>
-        public override void Init()
-        {
-            base.Init();
-            Instance = this;
-        }
+        public override string DisplayName => this.Name;
 
         /// <inheritdoc/>
-        protected override string DisplayName => this.Name;
+        public override bool KeepInventoryOnSpawn { get; set; } = false;
 
         /// <inheritdoc/>
-        protected override bool KeepInventoryOnSpawn { get; set; } = false;
+        public override bool KeepRoleOnDeath { get; set; } = false;
 
         /// <inheritdoc/>
-        protected override bool KeepRoleOnDeath { get; set; } = false;
+        public override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
-        protected override bool RemovalKillsPlayer { get; set; } = false;
-
-        /// <inheritdoc/>
-        protected override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
+        public override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
         {
             { ItemType.Ammo556x45, 40 },
             { ItemType.Ammo9x19, 100 },
         };
 
         /// <inheritdoc/>
-        protected override List<string> Inventory { get; set; } = new List<string>()
+        public override List<string> Inventory { get; set; } = new List<string>()
         {
             ItemType.KeycardNTFLieutenant.ToString(),
             ItemType.GunFSP9.ToString(),
@@ -84,7 +77,7 @@ namespace Mistaken.CustomMTF.Classes
         };
 
         /// <inheritdoc/>
-        protected override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             RoleSpawnPoints = new List<RoleSpawnPoint>()
             {
@@ -95,6 +88,13 @@ namespace Mistaken.CustomMTF.Classes
                 },
             },
         };
+
+        /// <inheritdoc/>
+        public override void Init()
+        {
+            base.Init();
+            Instance = this;
+        }
 
         /// <inheritdoc/>
         protected override void RoleAdded(Player player)

@@ -28,7 +28,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         }
 
         /// <inheritdoc/>
-        protected override void UnSubscribeEvents()
+        protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Dying -= this.Player_Dying;
         }
@@ -37,7 +37,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         {
             if (ev.IsAllowed && this.Players.Contains(ev.Target))
             {
-                ExplosiveGrenade grenade = new ExplosiveGrenade(ItemType.GrenadeHE);
+                ExplosiveGrenade grenade = Item.Create(ItemType.GrenadeHE) as ExplosiveGrenade;
                 grenade.FuseTime = 5f;
                 grenade.SpawnActive(ev.Target.Position);
             }

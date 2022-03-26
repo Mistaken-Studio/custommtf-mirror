@@ -31,8 +31,6 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            new Classes.GuardCommander().TryRegister();
-            new Items.GuardCommanderKeycardItem().TryRegister();
         }
 
         /// <inheritdoc/>
@@ -164,7 +162,7 @@ namespace Mistaken.CustomMTF.Handlers
             }
             else if (type == DoorType.NukeSurface)
             {
-                foreach (var player in RealPlayers.List.Where(p => p.Id != ev.Player.Id && (p.Role != RoleType.FacilityGuard && p.Team == Team.MTF)))
+                foreach (var player in RealPlayers.List.Where(p => p.Id != ev.Player.Id && (p.Role != RoleType.FacilityGuard && p.Role.Team == Team.MTF)))
                 {
                     if (Vector3.Distance(player.Position, ev.Player.Position) < 10)
                     {
@@ -197,7 +195,7 @@ namespace Mistaken.CustomMTF.Handlers
                     return;
                 }
 
-                foreach (var player in RealPlayers.List.Where(p => (p.Id != ev.Player.Id && p.Team == Team.RSC) || ((p.Team == Team.CDP || p.Team == Team.CHI) && p.IsCuffed)))
+                foreach (var player in RealPlayers.List.Where(p => (p.Id != ev.Player.Id && p.Role.Team == Team.RSC) || ((p.Role.Team == Team.CDP || p.Role.Team == Team.CHI) && p.IsCuffed)))
                 {
                     if (Vector3.Distance(player.Position, ev.Player.Position) < 10)
                     {

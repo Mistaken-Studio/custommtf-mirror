@@ -40,6 +40,50 @@ namespace Mistaken.CustomMTF.Classes
         public override string Description { get; set; } = "Twoim zadaniem jest <color=yellow>dowodzenie</color> <color=#7795a9>ochroną placówki</color>.<br>Twoja karta <color=yellow>pozwala</color> ci otworzyć Gate A i Gate B, ale tylko gdy:<br>- Obok jest <color=#f1e96e>Naukowiec</color><br>- Obok jest skuta <color=#ff8400>Klasa D</color><br>- Obok jest skuty <color=#1d6f00>Rebeliant Chaosu</color>";
 
         /// <inheritdoc/>
+        public override bool KeepInventoryOnSpawn { get; set; } = false;
+
+        /// <inheritdoc/>
+        public override bool KeepRoleOnDeath { get; set; } = false;
+
+        /// <inheritdoc/>
+        public override bool RemovalKillsPlayer { get; set; } = false;
+
+        /// <inheritdoc/>
+        public override string DisplayName => "Guard Commander";
+
+        /// <inheritdoc/>
+        public override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
+        {
+            { ItemType.Ammo556x45, 80 },
+            { ItemType.Ammo9x19, 50 },
+        };
+
+        /// <inheritdoc/>
+        public override List<string> Inventory { get; set; } = new List<string>
+        {
+            ((int)MistakenCustomItems.GUARD_COMMANDER_KEYCARD).ToString(),
+            ItemType.GunCrossvec.ToString(),
+            ItemType.Radio.ToString(),
+            ((int)MistakenCustomItems.TASER).ToString(),
+            ((int)MistakenCustomItems.IMPACT_GRENADE).ToString(),
+            ItemType.ArmorCombat.ToString(),
+            ItemType.Medkit.ToString(),
+        };
+
+        /// <inheritdoc/>
+        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        {
+            RoleSpawnPoints = new List<RoleSpawnPoint>()
+            {
+                new RoleSpawnPoint()
+                {
+                    Chance = 100,
+                    Role = RoleType.FacilityGuard,
+                },
+            },
+        };
+
+        /// <inheritdoc/>
         public override void Init()
         {
             base.Init();
@@ -65,49 +109,5 @@ namespace Mistaken.CustomMTF.Classes
             player.SetGUI("Guard_Commander_Info", PseudoGUIPosition.BOTTOM, null);
             RLogger.Log("GUARD COMMANDER", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
         }*/
-
-        /// <inheritdoc/>
-        protected override bool KeepInventoryOnSpawn { get; set; } = false;
-
-        /// <inheritdoc/>
-        protected override bool KeepRoleOnDeath { get; set; } = false;
-
-        /// <inheritdoc/>
-        protected override bool RemovalKillsPlayer { get; set; } = false;
-
-        /// <inheritdoc/>
-        protected override string DisplayName => "Guard Commander";
-
-        /// <inheritdoc/>
-        protected override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
-        {
-            { ItemType.Ammo556x45, 80 },
-            { ItemType.Ammo9x19, 50 },
-        };
-
-        /// <inheritdoc/>
-        protected override List<string> Inventory { get; set; } = new List<string>
-        {
-            ((int)MistakenCustomItems.GUARD_COMMANDER_KEYCARD).ToString(),
-            ItemType.GunCrossvec.ToString(),
-            ItemType.Radio.ToString(),
-            ((int)MistakenCustomItems.TASER).ToString(),
-            ((int)MistakenCustomItems.IMPACT_GRENADE).ToString(),
-            ItemType.ArmorCombat.ToString(),
-            ItemType.Medkit.ToString(),
-        };
-
-        /// <inheritdoc/>
-        protected override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
-        {
-            RoleSpawnPoints = new List<RoleSpawnPoint>()
-            {
-                new RoleSpawnPoint()
-                {
-                    Chance = 100,
-                    Role = RoleType.FacilityGuard,
-                },
-            },
-        };
     }
 }

@@ -22,8 +22,6 @@ namespace Mistaken.CustomMTF.Handlers
             : base(plugin)
         {
             Instance = this;
-            new Classes.MTFMedic().TryRegister();
-            new Classes.Abilities.MedicGunAmmoRegenAbility().TryRegister();
         }
 
         /// <inheritdoc/>

@@ -65,7 +65,7 @@ namespace Mistaken.CustomMTF.Items
         /// <inheritdoc/>
         public override Pickup Spawn(Vector3 position)
         {
-            Item keycard = new Item(this.Type);
+            Item keycard = Item.Create(this.Type);
             RLogger.Log("GUARD COMMANDER KEYCARD", "SPAWN", $"{this.Name} spawned");
             return this.Spawn(position, keycard);
         }
