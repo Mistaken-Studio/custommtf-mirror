@@ -7,11 +7,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
-using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles.API.Features;
 using MEC;
-using Mistaken.API;
 using Mistaken.API.CustomItems;
 using Mistaken.API.Diagnostics;
 using Mistaken.RoundLogger;
@@ -21,6 +20,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
     /// <summary>
     /// Ability that makes Medic Gun regenerate ammo.
     /// </summary>
+    [CustomAbility]
     public class MedicGunAmmoRegenAbility : PassiveAbility
     {
         /// <inheritdoc/>

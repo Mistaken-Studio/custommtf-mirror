@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.CustomRoles.API.Features;
 
@@ -13,6 +13,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
     /// <summary>
     /// Spawns grenade on death.
     /// </summary>
+    [CustomAbility]
     public class ExplosiveDeathAbility : PassiveAbility
     {
         /// <inheritdoc/>

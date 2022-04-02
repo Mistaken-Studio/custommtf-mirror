@@ -9,6 +9,7 @@ using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Mistaken.API;
 using Mistaken.API.CustomItems;
@@ -16,12 +17,12 @@ using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
 using Mistaken.API.Extensions;
 using Mistaken.API.GUI;
-using Mistaken.RoundLogger;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Classes
 {
     /// <inheritdoc/>
+    [CustomRole(RoleType.NtfCaptain)]
     public class GuardCommander : MistakenCustomRole
     {
         /// <summary>

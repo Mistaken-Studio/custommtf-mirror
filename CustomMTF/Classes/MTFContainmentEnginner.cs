@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs;
 using Mistaken.API;
@@ -22,6 +23,7 @@ using UnityEngine;
 namespace Mistaken.CustomMTF.Classes
 {
     /// <inheritdoc/>
+    [CustomRole(RoleType.NtfPrivate)]
     public class MTFContainmentEnginner : MistakenCustomRole
     {
         /// <summary>
