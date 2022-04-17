@@ -45,7 +45,7 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>()
         {
-            new Abilities.ExplosiveDeathAbility(),
+            CustomAbility.Get(nameof(Abilities.ExplosiveDeathAbility)),
         };
 
         /// <inheritdoc/>

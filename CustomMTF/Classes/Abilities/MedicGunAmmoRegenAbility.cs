@@ -37,27 +37,23 @@ namespace Mistaken.CustomMTF.Classes.Abilities
 
         private IEnumerator<float> RegenerateAmmo(Player player)
         {
+            yield return Timing.WaitForSeconds(5f);
+            Firearm item = (Firearm)player.Items.FirstOrDefault(x => MistakenCustomItems.MEDIC_GUN.TryGet(out var y) && y.Check(x));
             while (this.Players.Contains(player))
             {
-                yield return Timing.WaitForSeconds(5f);
-                var item = (Firearm)player.Items.FirstOrDefault(x => MistakenCustomItems.MEDIC_GUN.TryGet(out var ci) && ci.Check(x));
-                while (!(item is null) && item.Ammo < 4)
+                if (!player?.IsConnected ?? true)
+                    break;
+                if (!player.HasItem(item))
+                    item = (Firearm)player.Items.FirstOrDefault(x => MistakenCustomItems.MEDIC_GUN.TryGet(out var y) && y.Check(x));
+                while (item.Ammo < 4)
                 {
                     yield return Timing.WaitForSeconds(PluginHandler.Instance.Config.MedicGunBulletRecoveryTime);
-                    if (!player.IsConnected)
-                    {
-                        if (this.Players.Contains(player))
-                            this.Players.Remove(player);
-                        break;
-                    }
-
-                    if (!player.Items.Contains(item))
-                        item = null;
-                    if (item is null)
-                        break;
-                    item.Ammo++;
+                    if (player?.HasItem(item) ?? false)
+                        item.Ammo++;
                     RLogger.Log("MTF MEDIC", "ABILITY", $"Regenerated 1 ammo for {player.Nickname}");
                 }
+
+                yield return Timing.WaitForSeconds(1f);
             }
         }
     }

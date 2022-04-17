@@ -38,7 +38,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         {
             if (ev.IsAllowed && this.Players.Contains(ev.Target))
             {
-                ExplosiveGrenade grenade = Item.Create(ItemType.GrenadeHE) as ExplosiveGrenade;
+                var grenade = Item.Create(ItemType.GrenadeHE, ev.Target) as ExplosiveGrenade;
                 grenade.FuseTime = 5f;
                 grenade.SpawnActive(ev.Target.Position);
             }
