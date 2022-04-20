@@ -25,7 +25,7 @@ namespace Mistaken.CustomMTF
         /// Gets or sets time needed to recover one ammo in Medic Gun.
         /// </summary>
         [Description("Abilities Settings")]
-        public float MedicGunBulletRecoveryTime { get; set; } = 90f;
+        public float MedicGunBulletRecoveryTime { get; set; } = 70f;
 
         /// <summary>
         /// Gets or sets spawn chance of MTF Medic class.

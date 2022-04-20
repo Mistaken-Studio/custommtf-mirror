@@ -6,12 +6,13 @@
 
 using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs;
 using MEC;
 using Mistaken.API.CustomItems;
-using Mistaken.API.CustomRoles;
+using Mistaken.API.Diagnostics;
 using Mistaken.API.Extensions;
 using Mistaken.API.GUI;
 using Mistaken.RoundLogger;
@@ -22,6 +23,7 @@ namespace Mistaken.CustomMTF.Items
     /// <summary>
     /// Keycard that Guard commander uses.
     /// </summary>
+    [CustomItem(ItemType.KeycardNTFOfficer)]
     public class GuardCommanderKeycardItem : MistakenCustomItem
     {
         /// <summary>
@@ -65,7 +67,7 @@ namespace Mistaken.CustomMTF.Items
         /// <inheritdoc/>
         public override Pickup Spawn(Vector3 position)
         {
-            Item keycard = new Item(this.Type);
+            Item keycard = Item.Create(this.Type);
             RLogger.Log("GUARD COMMANDER KEYCARD", "SPAWN", $"{this.Name} spawned");
             return this.Spawn(position, keycard);
         }
@@ -74,14 +76,14 @@ namespace Mistaken.CustomMTF.Items
         public override Pickup Spawn(Vector3 position, Item item)
         {
             var pickup = base.Spawn(position);
-            pickup.Scale = Handlers.GuardCommanderHandler.Size;
+            pickup.Scale = Classes.GuardCommander.KeycardSize;
             return pickup;
         }
 
         /// <inheritdoc/>
         protected override void ShowSelectedMessage(Player player)
         {
-            Handlers.GuardCommanderHandler.Instance.RunCoroutine(this.UpdateInterface(player));
+            Module.RunSafeCoroutine(this.UpdateInterface(player), nameof(this.UpdateInterface));
         }
 
         /// <inheritdoc/>

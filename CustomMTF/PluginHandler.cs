@@ -17,7 +17,7 @@ namespace Mistaken.CustomMTF
         public override string Author => "Mistaken Devs";
 
         /// <inheritdoc/>
-        public override string Name => "Mistaken CustomMTF";
+        public override string Name => "CustomMTF";
 
         /// <inheritdoc/>
         public override string Prefix => "MCMTF";
@@ -26,18 +26,12 @@ namespace Mistaken.CustomMTF
         public override PluginPriority Priority => PluginPriority.Low;
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(4, 1, 2);
+        public override Version RequiredExiledVersion => new Version(5, 0, 0);
 
         /// <inheritdoc/>
         public override void OnEnabled()
         {
             Instance = this;
-            new Handlers.MTFMedicHandler(this);
-            new Handlers.MTFExplosivesSpecialistHandler(this);
-            new Handlers.MTFContainmentEnginnerHandler(this);
-            new Handlers.GuardCommanderHandler(this);
-
-            API.Diagnostics.Module.OnEnable(this);
 
             base.OnEnabled();
         }
@@ -45,8 +39,6 @@ namespace Mistaken.CustomMTF
         /// <inheritdoc/>
         public override void OnDisabled()
         {
-            API.Diagnostics.Module.OnDisable(this);
-
             base.OnDisabled();
         }
 

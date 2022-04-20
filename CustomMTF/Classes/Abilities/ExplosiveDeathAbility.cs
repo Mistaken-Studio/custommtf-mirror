@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.CustomRoles.API.Features;
 
@@ -13,6 +13,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
     /// <summary>
     /// Spawns grenade on death.
     /// </summary>
+    [CustomAbility]
     public class ExplosiveDeathAbility : PassiveAbility
     {
         /// <inheritdoc/>
@@ -28,7 +29,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         }
 
         /// <inheritdoc/>
-        protected override void UnSubscribeEvents()
+        protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Dying -= this.Player_Dying;
         }
@@ -37,7 +38,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         {
             if (ev.IsAllowed && this.Players.Contains(ev.Target))
             {
-                ExplosiveGrenade grenade = new ExplosiveGrenade(ItemType.GrenadeHE);
+                var grenade = Item.Create(ItemType.GrenadeHE, ev.Target) as ExplosiveGrenade;
                 grenade.FuseTime = 5f;
                 grenade.SpawnActive(ev.Target.Position);
             }

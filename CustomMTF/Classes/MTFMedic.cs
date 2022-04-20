@@ -5,9 +5,12 @@
 // -----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.EventArgs;
 using Mistaken.API.CustomItems;
 using Mistaken.API.CustomRoles;
 using Mistaken.API.Extensions;
@@ -16,6 +19,7 @@ using Mistaken.RoundLogger;
 namespace Mistaken.CustomMTF.Classes
 {
     /// <inheritdoc/>
+    [CustomRole(RoleType.NtfSergeant)]
     public class MTFMedic : MistakenCustomRole
     {
         /// <summary>
@@ -43,37 +47,30 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>()
         {
-            new Abilities.MedicGunAmmoRegenAbility(),
+            CustomAbility.Get(nameof(Abilities.MedicGunAmmoRegenAbility)),
         };
 
         /// <inheritdoc/>
-        public override void Init()
-        {
-            base.Init();
-            Instance = this;
-        }
+        public override string DisplayName => this.Name;
 
         /// <inheritdoc/>
-        protected override string DisplayName => this.Name;
+        public override bool KeepInventoryOnSpawn { get; set; } = false;
 
         /// <inheritdoc/>
-        protected override bool KeepInventoryOnSpawn { get; set; } = false;
+        public override bool KeepRoleOnDeath { get; set; } = false;
 
         /// <inheritdoc/>
-        protected override bool KeepRoleOnDeath { get; set; } = false;
+        public override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
-        protected override bool RemovalKillsPlayer { get; set; } = false;
-
-        /// <inheritdoc/>
-        protected override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
+        public override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
         {
             { ItemType.Ammo556x45, 100 },
             { ItemType.Ammo9x19, 40 },
         };
 
         /// <inheritdoc/>
-        protected override List<string> Inventory { get; set; } = new List<string>()
+        public override List<string> Inventory { get; set; } = new List<string>()
         {
             ItemType.KeycardNTFLieutenant.ToString(),
             ItemType.GunE11SR.ToString(),
@@ -86,7 +83,7 @@ namespace Mistaken.CustomMTF.Classes
         };
 
         /// <inheritdoc/>
-        protected override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             RoleSpawnPoints = new List<RoleSpawnPoint>()
             {
@@ -97,6 +94,13 @@ namespace Mistaken.CustomMTF.Classes
                 },
             },
         };
+
+        /// <inheritdoc/>
+        public override void Init()
+        {
+            base.Init();
+            Instance = this;
+        }
 
         /// <inheritdoc/>
         protected override void RoleAdded(Player player)
@@ -112,6 +116,36 @@ namespace Mistaken.CustomMTF.Classes
             base.RoleRemoved(player);
             RLogger.Log("MTF MEDIC", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
             player.SetGUI("cc_mtf_medic", API.GUI.PseudoGUIPosition.BOTTOM, null);
+        }
+
+        /// <inheritdoc/>
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
+            base.SubscribeEvents();
+        }
+
+        /// <inheritdoc/>
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
+            base.UnsubscribeEvents();
+        }
+
+        private void Server_RespawningTeam(RespawningTeamEventArgs ev)
+        {
+            if (ev.NextKnownTeam != Respawning.SpawnableTeamType.NineTailedFox)
+                return;
+
+            if (!ev.IsAllowed)
+                return;
+
+            MEC.Timing.CallDelayed(1.5f, () =>
+            {
+                var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
+                players.ShuffleList();
+                players.SpawnPlayerWithRole(this, PluginHandler.Instance.Config.MtfMedicSpawnChance);
+            });
         }
     }
 }
