@@ -67,7 +67,6 @@ namespace Mistaken.CustomMTF.Items
         /// <inheritdoc/>
         public override Pickup Spawn(Vector3 position, Player previousOwner = null)
         {
-            RLogger.Log("GUARD COMMANDER KEYCARD", "SPAWN", $"{this.Name} spawned");
             return this.Spawn(position, this.CreateCorrectItem(), previousOwner);
         }
 
@@ -75,6 +74,7 @@ namespace Mistaken.CustomMTF.Items
         public override Pickup Spawn(Vector3 position, Item item, Player previousOwner = null)
         {
             var pickup = base.Spawn(position, item, previousOwner);
+            RLogger.Log("GUARD COMMANDER KEYCARD", "SPAWN", $"{this.Name} spawned");
             pickup.Scale = Classes.GuardCommander.KeycardSize;
             return pickup;
         }
