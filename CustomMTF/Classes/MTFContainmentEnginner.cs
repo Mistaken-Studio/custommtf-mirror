@@ -16,7 +16,6 @@ using Mistaken.API;
 using Mistaken.API.Components;
 using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
-using Mistaken.API.Extensions;
 using Mistaken.RoundLogger;
 using UnityEngine;
 
@@ -61,30 +60,21 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         public override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
         {
-            { ItemType.Ammo556x45, 80 },
-            { ItemType.Ammo9x19, 50 },
+            { ItemType.Ammo556x45, 100 },
+            { ItemType.Ammo9x19, 40 },
         };
 
         /// <inheritdoc/>
         public override List<string> Inventory { get; set; } = new List<string>()
         {
+            ItemType.KeycardNTFOfficer.ToString(),
+            ItemType.KeycardContainmentEngineer.ToString(),
             ItemType.GunE11SR.ToString(),
-            ItemType.GunCOM18.ToString(),
             ItemType.Medkit.ToString(),
             ItemType.GrenadeHE.ToString(),
             ItemType.Radio.ToString(),
             ItemType.ArmorCombat.ToString(),
         };
-
-        /// <inheritdoc/>
-        public override KeycardPermissions BuiltInPermissions =>
-            KeycardPermissions.ContainmentLevelOne |
-            KeycardPermissions.ContainmentLevelTwo |
-            KeycardPermissions.ContainmentLevelThree |
-            KeycardPermissions.ArmoryLevelOne |
-            KeycardPermissions.AlphaWarhead |
-            KeycardPermissions.Checkpoints |
-            KeycardPermissions.Intercom;
 
         /// <inheritdoc/>
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -129,6 +119,7 @@ namespace Mistaken.CustomMTF.Classes
         {
             Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
             Exiled.Events.Handlers.Server.RoundStarted += this.Server_RoundStarted;
+            Exiled.Events.Handlers.Player.InteractingDoor += this.Player_InteractingDoor;
         }
 
         /// <inheritdoc/>
@@ -136,6 +127,7 @@ namespace Mistaken.CustomMTF.Classes
         {
             Exiled.Events.Handlers.Server.RespawningTeam -= this.Server_RespawningTeam;
             Exiled.Events.Handlers.Server.RoundStarted -= this.Server_RoundStarted;
+            Exiled.Events.Handlers.Player.InteractingDoor -= this.Player_InteractingDoor;
         }
 
         private static readonly List<Player> Campers = new List<Player>();
@@ -157,7 +149,7 @@ namespace Mistaken.CustomMTF.Classes
 
             MEC.Timing.CallDelayed(1.5f, () =>
             {
-                var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
+                var players = ev.Players.Where(x => x.Role.Type != RoleType.NtfCaptain && !Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
                 players.ShuffleList();
 
                 if (UnityEngine.Random.Range(0, 100) <= this.spawnChance)
@@ -173,33 +165,33 @@ namespace Mistaken.CustomMTF.Classes
             Campers.Clear();
             this.spawnChance = 0;
 
-            var nuke = Room.List.First(x => x.Type == Exiled.API.Enums.RoomType.HczNuke);
-
-            // first nuke trigger
-            // 40.5 989.5 -35.6   6 4 7.5
-            InRange.Spawn(nuke.Transform, new Vector3(40.5f, 989.5f, -35.6f), new Vector3(6, 4, 7.5f), OnEnter, OnExit);
-
-            var scp106 = Room.List.First(x => x.Type == Exiled.API.Enums.RoomType.Hcz106);
+            var scp106 = Room.List.First(x => x.Type == RoomType.Hcz106);
 
             // first 106 trigger
-            // 14 -5 -29.8   40 30 8.5
-            InRange.Spawn(scp106.Transform, new Vector3(14, -5, -29.8f), new Vector3(40, 30, 8.5f), OnEnter, OnExit);
+            // offset: 30 -7 -13.7 scale: 9 26 37
+            InRange.Spawn(scp106.Transform, new Vector3(30, -7, -13.7f), new Vector3(9, 26, 37), OnEnter, OnExit);
 
             // second 106 trigger
-            // 14 -16 -12   35 8.5 45
-            InRange.Spawn(scp106.Transform, new Vector3(14, -16, -12), new Vector3(35, 8.5f, 45), OnEnter, OnExit);
+            // offset: 7.5 -17 -14.5 scale: 35 7 35
+            InRange.Spawn(scp106.Transform, new Vector3(7.5f, -17, -14.5f), new Vector3(35, 7, 35), OnEnter, OnExit);
 
-            /*var scp079 = Map.Rooms.First(x => x.Type == Exiled.API.Enums.RoomType.Hcz079);
+            Module.RunSafeCoroutine(this.DoRoundLoop(), nameof(this.DoRoundLoop), true);
+        }
 
-            // first 079 trigger
-            // 14 -2.4 -5   31.5 10 18
-            InRange.Spawn(scp079.Transform, new Vector3(14, -2.4f, -5), new Vector3(31.5f, 10, 18), OnEnter, OnExit);
+        private void Player_InteractingDoor(InteractingDoorEventArgs ev)
+        {
+            if (ev.Player is null)
+                return;
 
-            // second 079 trigger
-            // 8.2 -2.4 -16.5   8.5 5 21.5
-            InRange.Spawn(scp079.Transform, new Vector3(8.2f, -2.4f, -16.5f), new Vector3(8.5f, 5, 21.5f), OnEnter, OnExit);*/
+            if (!this.Check(ev.Player))
+                return;
 
-            Module.RunSafeCoroutine(this.DoRoundLoop(), nameof(this.DoRoundLoop));
+            var item = ev.Player.CurrentItem;
+            if (item == null || item.Type != ItemType.KeycardContainmentEngineer)
+                return;
+
+            if (ev.Door.Type == DoorType.Scp106Primary || ev.Door.Type == DoorType.Scp106Bottom || ev.Door.Type == DoorType.Scp106Secondary)
+                ev.IsAllowed = true;
         }
 
         private IEnumerator<float> DoRoundLoop()

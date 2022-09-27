@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
@@ -13,7 +14,6 @@ using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
 using Mistaken.API.CustomItems;
 using Mistaken.API.CustomRoles;
-using Mistaken.API.Extensions;
 using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes
@@ -146,7 +146,11 @@ namespace Mistaken.CustomMTF.Classes
             {
                 var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
                 players.ShuffleList();
-                players.SpawnPlayerWithRole(this, PluginHandler.Instance.Config.MtfMedicSpawnChance);
+
+                var count = Math.Floor(players.Count * (PluginHandler.Instance.Config.MtfMedicSpawnChance / 100f));
+
+                for (int i = 0; i < count; i++)
+                    this.AddRole(players[i]);
             });
         }
     }
