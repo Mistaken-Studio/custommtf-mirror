@@ -136,6 +136,7 @@ namespace Mistaken.CustomMTF.Classes
         {
             if (ev.NextKnownTeam != Respawning.SpawnableTeamType.NineTailedFox)
                 return;
+
             if (!ev.IsAllowed)
                 return;
 

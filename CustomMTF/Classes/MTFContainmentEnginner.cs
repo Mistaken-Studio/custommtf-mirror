@@ -142,9 +142,14 @@ namespace Mistaken.CustomMTF.Classes
         {
             if (ev.NextKnownTeam != Respawning.SpawnableTeamType.NineTailedFox)
                 return;
+
             if (!ev.IsAllowed)
                 return;
+
             if (!MapPlus.IsLCZDecontaminated())
+                return;
+
+            if (ev.Players.Count == 0)
                 return;
 
             MEC.Timing.CallDelayed(1.5f, () =>
