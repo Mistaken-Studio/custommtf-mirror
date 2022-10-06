@@ -20,7 +20,7 @@ namespace Mistaken.CustomMTF.Classes
 {
     /// <inheritdoc/>
     [CustomRole(RoleType.NtfSergeant)]
-    public class MTFMedic : MistakenCustomRole
+    public sealed class MTFMedic : MistakenCustomRole
     {
         /// <summary>
         /// Gets the MTF medic instance.
@@ -63,7 +63,7 @@ namespace Mistaken.CustomMTF.Classes
         public override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
-        public override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
+        public override Dictionary<ItemType, ushort> Ammo => new ()
         {
             { ItemType.Ammo556x45, 100 },
             { ItemType.Ammo9x19, 40 },
@@ -144,10 +144,9 @@ namespace Mistaken.CustomMTF.Classes
 
             MEC.Timing.CallDelayed(1.5f, () =>
             {
-                var players = ev.Players.Where(x => x.Role != RoleType.NtfCaptain && !Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
+                var players = ev.Players.Where(x => x.Role.Type != RoleType.NtfCaptain && !Registered.Any(y => y.TrackedPlayers.Contains(x))).ToArray();
                 players.ShuffleList();
-
-                var count = Math.Floor(players.Count * (PluginHandler.Instance.Config.MtfMedicSpawnChance / 100f));
+                var count = Math.Floor(players.Length * (PluginHandler.Instance.Config.MtfMedicSpawnChance / 100f));
 
                 for (int i = 0; i < count; i++)
                     this.AddRole(players[i]);

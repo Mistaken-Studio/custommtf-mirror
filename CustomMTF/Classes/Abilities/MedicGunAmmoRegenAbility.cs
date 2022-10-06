@@ -13,6 +13,7 @@ using Exiled.CustomRoles.API.Features;
 using MEC;
 using Mistaken.API.CustomItems;
 using Mistaken.API.Diagnostics;
+using Mistaken.API.Extensions;
 using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes.Abilities
@@ -21,7 +22,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
     /// Ability that makes Medic Gun regenerate ammo.
     /// </summary>
     [CustomAbility]
-    public class MedicGunAmmoRegenAbility : PassiveAbility
+    public sealed class MedicGunAmmoRegenAbility : PassiveAbility
     {
         /// <inheritdoc/>
         public override string Name { get; set; } = nameof(MedicGunAmmoRegenAbility);
@@ -32,24 +33,31 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         /// <inheritdoc/>
         protected override void AbilityAdded(Player player)
         {
-            Module.RunSafeCoroutine(this.RegenerateAmmo(player), "custommtf_medicgun_ability");
+            Module.RunSafeCoroutine(this.RegenerateAmmo(player), nameof(this.RegenerateAmmo));
         }
 
         private IEnumerator<float> RegenerateAmmo(Player player)
         {
             yield return Timing.WaitForSeconds(5f);
-            Firearm item = (Firearm)player.Items.FirstOrDefault(x => MistakenCustomItems.MEDIC_GUN.TryGet(out var y) && y.Check(x));
+            var medicGun = MistakenCustomItems.MEDIC_GUN.Get();
+            Firearm item = (Firearm)player.Items.FirstOrDefault(x => medicGun.Check(x));
             while (this.Players.Contains(player))
             {
-                if (!player?.IsConnected ?? true)
+                if (!player.IsConnected())
                     break;
-                if (!player.HasItem(item))
-                    item = (Firearm)player.Items.FirstOrDefault(x => MistakenCustomItems.MEDIC_GUN.TryGet(out var y) && y.Check(x));
-                while (item.Ammo < 4)
+
+                if (item is null || !player.HasItem(item))
+                    item = (Firearm)player.Items.FirstOrDefault(x => medicGun.Check(x));
+
+                while (item is not null && item.Ammo < 4)
                 {
                     yield return Timing.WaitForSeconds(PluginHandler.Instance.Config.MedicGunBulletRecoveryTime);
-                    if (player?.HasItem(item) ?? false)
+                    if (!player.IsConnected())
+                        break;
+
+                    if (item is not null && player.HasItem(item))
                         item.Ammo++;
+
                     RLogger.Log("MTF MEDIC", "ABILITY", $"Regenerated 1 ammo for {player.Nickname}");
                 }
 

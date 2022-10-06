@@ -10,25 +10,18 @@ using Exiled.API.Features;
 
 namespace Mistaken.CustomMTF
 {
-    /// <inheritdoc/>
-    internal class PluginHandler : Plugin<Config, Translation>
+    internal sealed class PluginHandler : Plugin<Config, Translation>
     {
-        /// <inheritdoc/>
         public override string Author => "Mistaken Devs";
 
-        /// <inheritdoc/>
         public override string Name => "CustomMTF";
 
-        /// <inheritdoc/>
         public override string Prefix => "MCMTF";
 
-        /// <inheritdoc/>
         public override PluginPriority Priority => PluginPriority.Low;
 
-        /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(5, 2, 2);
+        public override Version RequiredExiledVersion => new (5, 2, 2);
 
-        /// <inheritdoc/>
         public override void OnEnabled()
         {
             Instance = this;
@@ -36,7 +29,6 @@ namespace Mistaken.CustomMTF
             base.OnEnabled();
         }
 
-        /// <inheritdoc/>
         public override void OnDisabled()
         {
             base.OnDisabled();

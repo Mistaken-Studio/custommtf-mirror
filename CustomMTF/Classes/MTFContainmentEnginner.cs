@@ -12,6 +12,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs;
+using MEC;
 using Mistaken.API;
 using Mistaken.API.Components;
 using Mistaken.API.CustomRoles;
@@ -23,7 +24,7 @@ namespace Mistaken.CustomMTF.Classes
 {
     /// <inheritdoc/>
     [CustomRole(RoleType.NtfPrivate)]
-    public class MTFContainmentEnginner : MistakenCustomRole
+    public sealed class MTFContainmentEnginner : MistakenCustomRole
     {
         /// <summary>
         /// Gets the MTF containment enginner instance.
@@ -58,7 +59,7 @@ namespace Mistaken.CustomMTF.Classes
         public override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
-        public override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
+        public override Dictionary<ItemType, ushort> Ammo => new ()
         {
             { ItemType.Ammo556x45, 100 },
             { ItemType.Ammo9x19, 40 },
@@ -130,7 +131,7 @@ namespace Mistaken.CustomMTF.Classes
             Exiled.Events.Handlers.Player.InteractingDoor -= this.Player_InteractingDoor;
         }
 
-        private static readonly List<Player> Campers = new List<Player>();
+        private static readonly HashSet<Player> Campers = new ();
 
         private static readonly Action<Player> OnEnter = (player) => Campers.Add(player);
 
@@ -154,7 +155,7 @@ namespace Mistaken.CustomMTF.Classes
 
             MEC.Timing.CallDelayed(1.5f, () =>
             {
-                var players = ev.Players.Where(x => x.Role.Type != RoleType.NtfCaptain && !Registered.Any(c => c.TrackedPlayers.Contains(x))).ToList();
+                var players = ev.Players.Where(x => x.Role.Type != RoleType.NtfCaptain && !Registered.Any(y => y.TrackedPlayers.Contains(x))).ToArray();
                 players.ShuffleList();
 
                 if (UnityEngine.Random.Range(0, 100) <= this.spawnChance)
@@ -180,7 +181,7 @@ namespace Mistaken.CustomMTF.Classes
             // offset: 7.5 -17 -14.5 scale: 35 7 35
             InRange.Spawn(scp106.Transform, new Vector3(7.5f, -17, -14.5f), new Vector3(35, 7, 35), OnEnter, OnExit);
 
-            Module.RunSafeCoroutine(this.DoRoundLoop(), nameof(this.DoRoundLoop), true);
+            Module.RunSafeCoroutine(this.UpdateSpawnPoints(), nameof(this.UpdateSpawnPoints), true);
         }
 
         private void Player_InteractingDoor(InteractingDoorEventArgs ev)
@@ -192,19 +193,19 @@ namespace Mistaken.CustomMTF.Classes
                 return;
 
             var item = ev.Player.CurrentItem;
-            if (item == null || item.Type != ItemType.KeycardContainmentEngineer)
+            if (item is null || item.Type != ItemType.KeycardContainmentEngineer)
                 return;
 
             if (ev.Door.Type == DoorType.Scp106Primary || ev.Door.Type == DoorType.Scp106Bottom || ev.Door.Type == DoorType.Scp106Secondary)
                 ev.IsAllowed = true;
         }
 
-        private IEnumerator<float> DoRoundLoop()
+        private IEnumerator<float> UpdateSpawnPoints()
         {
-            yield return MEC.Timing.WaitForSeconds(60);
-            while (Round.IsStarted)
+            yield return Timing.WaitForSeconds(60);
+            while (true)
             {
-                yield return MEC.Timing.WaitForSeconds(PluginHandler.Instance.Config.MtfContainmentEnginnerSpawnPointTime);
+                yield return Timing.WaitForSeconds(PluginHandler.Instance.Config.MtfContainmentEnginnerSpawnPointTime);
                 if (Campers.Count != 0)
                     this.spawnChance++;
             }

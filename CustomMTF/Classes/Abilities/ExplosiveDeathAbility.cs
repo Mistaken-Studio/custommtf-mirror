@@ -14,7 +14,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
     /// Spawns grenade on death.
     /// </summary>
     [CustomAbility]
-    public class ExplosiveDeathAbility : PassiveAbility
+    public sealed class ExplosiveDeathAbility : PassiveAbility
     {
         /// <inheritdoc/>
         public override string Name { get; set; } = nameof(ExplosiveDeathAbility);
