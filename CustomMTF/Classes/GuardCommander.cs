@@ -26,11 +26,6 @@ namespace Mistaken.CustomMTF.Classes
     [CustomRole(RoleType.NtfCaptain)]
     public sealed class GuardCommander : MistakenCustomRole
     {
-        /// <summary>
-        /// Gets the guard commander instance.
-        /// </summary>
-        public static GuardCommander Instance { get; private set; }
-
         /// <inheritdoc/>
         public override MistakenCustomRoles CustomRole => MistakenCustomRoles.GUARD_COMMANDER;
 
@@ -96,6 +91,8 @@ namespace Mistaken.CustomMTF.Classes
             base.Init();
             Instance = this;
         }
+
+        internal static GuardCommander Instance { get; private set; }
 
         /*/// <inheritdoc/>
         public override void AddRole(Player player)
@@ -220,8 +217,8 @@ namespace Mistaken.CustomMTF.Classes
                 }
             }
 
-            Module.CallSafeDelayed(60 * 6, AfterEscortAccess, "AfterEscortAccess", true);
-            Module.CallSafeDelayed(1.2f, SpawnGuardCommander, "SpawnGuardCommander");
+            Module.CallSafeDelayed(60 * 6, AfterEscortAccess, nameof(AfterEscortAccess), true);
+            Module.CallSafeDelayed(1.2f, SpawnGuardCommander, nameof(SpawnGuardCommander));
         }
 
         private void Player_InteractingDoor(Exiled.Events.EventArgs.InteractingDoorEventArgs ev)

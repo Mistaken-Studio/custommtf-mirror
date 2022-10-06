@@ -153,7 +153,7 @@ namespace Mistaken.CustomMTF.Classes
             if (ev.Players.Count == 0)
                 return;
 
-            MEC.Timing.CallDelayed(1.5f, () =>
+            Timing.CallDelayed(1.5f, () =>
             {
                 var players = ev.Players.Where(x => x.Role.Type != RoleType.NtfCaptain && !Registered.Any(y => y.TrackedPlayers.Contains(x))).ToArray();
                 players.ShuffleList();
