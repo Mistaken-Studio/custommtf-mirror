@@ -37,10 +37,10 @@ namespace Mistaken.CustomMTF.Classes
         public override int MaxHealth { get; set; } = 100;
 
         /// <inheritdoc/>
-        public override string Name { get; set; } = "MTF Explosives Specialist";
+        public override string Name { get; set; } = PluginHandler.Instance.Translation.MtfExplosivesSpecialist;
 
         /// <inheritdoc/>
-        public override string Description { get; set; } = "MTF Explosives Specialist";
+        public override string Description { get; set; } = PluginHandler.Instance.Translation.MtfExplosivesSpecialistDescription;
 
         /// <inheritdoc/>
         public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>()
@@ -49,7 +49,7 @@ namespace Mistaken.CustomMTF.Classes
         };
 
         /// <inheritdoc/>
-        public override string DisplayName => this.Name;
+        public override string DisplayName => $"<color=#0096FF>{this.Name}</color>";
 
         /// <inheritdoc/>
         public override bool KeepInventoryOnSpawn { get; set; } = false;
@@ -104,18 +104,14 @@ namespace Mistaken.CustomMTF.Classes
         protected override void RoleAdded(Player player)
         {
             base.RoleAdded(player);
-            RLogger.Log("MTF EXPLOSIVES SPECIALIST", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
-
-            // player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, string.Format(PluginHandler.Instance.Translation.PlayingAs, PluginHandler.Instance.Translation.MtfSergantColor, PluginHandler.Instance.Translation.MtfExplosivesSpecialist));
+            RLogger.Log("MTF EXPLOSIVES SPECIALIST", "SPAWN", $"Player {player.PlayerToString()} is now a MTF Explosives Specialist");
         }
 
         /// <inheritdoc/>
         protected override void RoleRemoved(Player player)
         {
             base.RoleRemoved(player);
-            RLogger.Log("MTF EXPLOSIVES SPECIALIST", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
-
-            // player.SetGUI("cc_mtf_es", API.GUI.PseudoGUIPosition.BOTTOM, null);
+            RLogger.Log("MTF EXPLOSIVES SPECIALIST", "DEATH", $"Player {player.PlayerToString()} is no longer a MTF Explosives Specialist");
         }
 
         /// <inheritdoc/>

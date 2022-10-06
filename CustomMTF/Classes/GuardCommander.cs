@@ -18,6 +18,7 @@ using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
 using Mistaken.API.Extensions;
 using Mistaken.API.GUI;
+using Mistaken.RoundLogger;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Classes
@@ -36,10 +37,10 @@ namespace Mistaken.CustomMTF.Classes
         public override int MaxHealth { get; set; } = 100;
 
         /// <inheritdoc/>
-        public override string Name { get; set; } = "Guard Commander";
+        public override string Name { get; set; } = PluginHandler.Instance.Translation.GuardCommander;
 
         /// <inheritdoc/>
-        public override string Description { get; set; } = "Twoim zadaniem jest <color=yellow>dowodzenie</color> <color=#7795a9>ochroną placówki</color>.<br>Twoja karta <color=yellow>pozwala</color> ci otworzyć Gate A i Gate B, ale tylko gdy:<br>- Obok jest <color=#f1e96e>Naukowiec</color><br>- Obok jest skuta <color=#ff8400>Klasa D</color><br>- Obok jest skuty <color=#1d6f00>Rebeliant Chaosu</color>";
+        public override string Description { get; set; } = PluginHandler.Instance.Translation.GuardCommanderDescription;
 
         /// <inheritdoc/>
         public override bool KeepInventoryOnSpawn { get; set; } = false;
@@ -51,7 +52,7 @@ namespace Mistaken.CustomMTF.Classes
         public override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
-        public override string DisplayName => "Guard Commander";
+        public override string DisplayName => $"<color=#003ECA>{this.Name}</color>";
 
         /// <inheritdoc/>
         public override Dictionary<ItemType, ushort> Ammo => new ()
@@ -94,25 +95,19 @@ namespace Mistaken.CustomMTF.Classes
 
         internal static GuardCommander Instance { get; private set; }
 
-        /*/// <inheritdoc/>
-        public override void AddRole(Player player)
+        /// <inheritdoc/>
+        protected override void RoleAdded(Player player)
         {
-            base.AddRole(player);
-            player.InfoArea = ~PlayerInfoArea.Role;
-            CustomInfoHandler.Set(player, "Guard_Commander", "<color=blue><b>Dowódca Ochrony</b></color>");
-            player.SetGUI("Guard_Commander", PseudoGUIPosition.MIDDLE, $"<size=150%>Jesteś <color=blue>Dowódcą Ochrony</color></size><br>{this.Description}", 20);
-            player.SetGUI("Guard_Commander_Info", PseudoGUIPosition.BOTTOM, "<color=yellow>Grasz</color> jako <color=blue>Dowódca Ochrony</color>");
-            RLogger.Log("GUARD COMMANDER", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
+            base.RoleAdded(player);
+            RLogger.Log("GUARD COMMANDER", "SPAWN", $"Player {player.PlayerToString()} is now a Guard Commander");
         }
 
         /// <inheritdoc/>
-        public override void RemoveRole(Player player)
+        protected override void RoleRemoved(Player player)
         {
-            base.RemoveRole(player);
-            CustomInfoHandler.Set(player, "Guard_Commander", null);
-            player.SetGUI("Guard_Commander_Info", PseudoGUIPosition.BOTTOM, null);
-            RLogger.Log("GUARD COMMANDER", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
-        }*/
+            base.RoleRemoved(player);
+            RLogger.Log("GUARD COMMANDER", "DEATH", $"Player {player.PlayerToString()} is no longer a Guard Commander");
+        }
 
         /// <inheritdoc/>
         protected override void SubscribeEvents()
@@ -155,7 +150,7 @@ namespace Mistaken.CustomMTF.Classes
             if (!this.hasCommanderEscorted)
             {
                 foreach (var item in this.TrackedPlayers)
-                    item.SetGUI("GuardCommander_Escort", PseudoGUIPosition.TOP, "Dostałeś <color=yellow>informację</color> przez pager: W związu z <color=yellow>eskortą personelu</color>, od teraz jesteś <color=yellow>autoryzowany</color> do otwierania Gatów bez kogoś obok oraz do otwierania <color=yellow>generatorów</color>.", 10);
+                    item.SetGUI("GuardCommander_Escort", PseudoGUIPosition.TOP, PluginHandler.Instance.Translation.GuardCommanderEscort, 10);
             }
 
             this.hasCommanderEscorted = true;
@@ -195,7 +190,8 @@ namespace Mistaken.CustomMTF.Classes
                 if (!this.hasCommanderEscorted)
                 {
                     foreach (var item in this.TrackedPlayers)
-                        item.SetGUI("GuardCommander_Access", PseudoGUIPosition.TOP, "Dostałeś <color=yellow>informację</color> przez pager: Aktywowano protokuł <color=yellow>GB-12</color>, od teraz jesteś <color=yellow>autoryzowany</color> do otwierania Gatów bez kogoś obok oraz do otwierania <color=yellow>generatorów</color>.", 10);
+                        item.SetGUI("GuardCommander_Access", PseudoGUIPosition.TOP, PluginHandler.Instance.Translation.GuardCommanderAccess, 10);
+
                     this.hasCommanderEscorted = true;
                 }
             }

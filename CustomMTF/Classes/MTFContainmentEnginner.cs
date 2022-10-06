@@ -41,13 +41,13 @@ namespace Mistaken.CustomMTF.Classes
         public override int MaxHealth { get; set; } = 100;
 
         /// <inheritdoc/>
-        public override string Name { get; set; } = "MTF Containment Enginner";
+        public override string Name { get; set; } = PluginHandler.Instance.Translation.MtfContainmentEnginner;
 
         /// <inheritdoc/>
-        public override string Description { get; set; } = "MTF Containment Enginner";
+        public override string Description { get; set; } = PluginHandler.Instance.Translation.MtfContainmentEnginnerDescription;
 
         /// <inheritdoc/>
-        public override string DisplayName => this.Name;
+        public override string DisplayName => $"<color=#6FC3FF>{this.Name}</color>";
 
         /// <inheritdoc/>
         public override bool KeepInventoryOnSpawn { get; set; } = false;
@@ -101,18 +101,14 @@ namespace Mistaken.CustomMTF.Classes
         protected override void RoleAdded(Player player)
         {
             base.RoleAdded(player);
-            RLogger.Log("MTF CONTAINMENT ENGINNER", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
-
-            // player.SetGUI("cc_mtf_ce", API.GUI.PseudoGUIPosition.BOTTOM, string.Format(PluginHandler.Instance.Translation.PlayingAs, PluginHandler.Instance.Translation.MtfPrivateColor, PluginHandler.Instance.Translation.MtfContainmentEnginner));
+            RLogger.Log("MTF CONTAINMENT ENGINNER", "SPAWN", $"Player {player.PlayerToString()} is now a MTF Containment Enginner");
         }
 
         /// <inheritdoc/>
         protected override void RoleRemoved(Player player)
         {
             base.RoleRemoved(player);
-            RLogger.Log("MTF CONTAINMENT ENGINNER", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
-
-            // player.SetGUI("cc_mtf_ce", API.GUI.PseudoGUIPosition.BOTTOM, null);
+            RLogger.Log("MTF CONTAINMENT ENGINNER", "DEATH", $"Player {player.PlayerToString()} is no longer a MTF Containment Enginner");
         }
 
         /// <inheritdoc/>
