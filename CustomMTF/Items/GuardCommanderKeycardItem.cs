@@ -24,18 +24,8 @@ namespace Mistaken.CustomMTF.Items
     /// Keycard that Guard commander uses.
     /// </summary>
     [CustomItem(ItemType.KeycardNTFOfficer)]
-    public class GuardCommanderKeycardItem : MistakenCustomItem
+    public sealed class GuardCommanderKeycardItem : MistakenCustomItem
     {
-        /// <summary>
-        /// Gets the guard commander keycard instance.
-        /// </summary>
-        public static GuardCommanderKeycardItem Instance { get; private set; }
-
-        /// <summary>
-        /// Gets or sets owner of the item.
-        /// </summary>
-        public Player CurrentOwner { get; set; }
-
         /// <inheritdoc/>
         public override MistakenCustomItems CustomItem => MistakenCustomItems.GUARD_COMMANDER_KEYCARD;
 
@@ -75,9 +65,13 @@ namespace Mistaken.CustomMTF.Items
         {
             var pickup = base.Spawn(position, item, previousOwner);
             RLogger.Log("GUARD COMMANDER KEYCARD", "SPAWN", $"{this.Name} spawned");
-            pickup.Scale = Classes.GuardCommander.KeycardSize;
+            pickup.Scale = KeycardSize;
             return pickup;
         }
+
+        internal static GuardCommanderKeycardItem Instance { get; private set; }
+
+        internal Player CurrentOwner { get; set; }
 
         /// <inheritdoc/>
         protected override void ShowSelectedMessage(Player player)
@@ -90,6 +84,7 @@ namespace Mistaken.CustomMTF.Items
         {
             if (this.CurrentOwner is null)
                 return;
+
             this.CurrentOwner = null;
         }
 
@@ -98,6 +93,8 @@ namespace Mistaken.CustomMTF.Items
         {
             this.CurrentOwner = null;
         }
+
+        private static readonly Vector3 KeycardSize = new(1, 5, 1);
 
         private IEnumerator<float> UpdateInterface(Player player)
         {

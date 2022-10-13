@@ -11,30 +11,22 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
+using InventorySystem.Disarming;
 using Mistaken.API;
 using Mistaken.API.CustomItems;
 using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
 using Mistaken.API.Extensions;
 using Mistaken.API.GUI;
+using Mistaken.RoundLogger;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Classes
 {
     /// <inheritdoc/>
     [CustomRole(RoleType.NtfCaptain)]
-    public class GuardCommander : MistakenCustomRole
+    public sealed class GuardCommander : MistakenCustomRole
     {
-        /// <summary>
-        /// Gets the guard commander instance.
-        /// </summary>
-        public static GuardCommander Instance { get; private set; }
-
-        /// <summary>
-        /// Gets the size of the keycard.
-        /// </summary>
-        public static Vector3 KeycardSize => new Vector3(1, 5, 1);
-
         /// <inheritdoc/>
         public override MistakenCustomRoles CustomRole => MistakenCustomRoles.GUARD_COMMANDER;
 
@@ -45,10 +37,10 @@ namespace Mistaken.CustomMTF.Classes
         public override int MaxHealth { get; set; } = 100;
 
         /// <inheritdoc/>
-        public override string Name { get; set; } = "Guard Commander";
+        public override string Name { get; set; } = PluginHandler.Instance.Translation.GuardCommander;
 
         /// <inheritdoc/>
-        public override string Description { get; set; } = "Twoim zadaniem jest <color=yellow>dowodzenie</color> <color=#7795a9>ochroną placówki</color>.<br>Twoja karta <color=yellow>pozwala</color> ci otworzyć Gate A i Gate B, ale tylko gdy:<br>- Obok jest <color=#f1e96e>Naukowiec</color><br>- Obok jest skuta <color=#ff8400>Klasa D</color><br>- Obok jest skuty <color=#1d6f00>Rebeliant Chaosu</color>";
+        public override string Description { get; set; } = PluginHandler.Instance.Translation.GuardCommanderDescription;
 
         /// <inheritdoc/>
         public override bool KeepInventoryOnSpawn { get; set; } = false;
@@ -60,17 +52,17 @@ namespace Mistaken.CustomMTF.Classes
         public override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
-        public override string DisplayName => "Guard Commander";
+        public override string DisplayName => $"<color=#003ECA>{this.Name}</color>";
 
         /// <inheritdoc/>
-        public override Dictionary<ItemType, ushort> Ammo => new Dictionary<ItemType, ushort>()
+        public override Dictionary<ItemType, ushort> Ammo => new()
         {
             { ItemType.Ammo556x45, 80 },
             { ItemType.Ammo9x19, 50 },
         };
 
         /// <inheritdoc/>
-        public override List<string> Inventory { get; set; } = new List<string>
+        public override List<string> Inventory { get; set; } = new()
         {
             ((int)MistakenCustomItems.GUARD_COMMANDER_KEYCARD).ToString(),
             ItemType.GunCrossvec.ToString(),
@@ -82,11 +74,11 @@ namespace Mistaken.CustomMTF.Classes
         };
 
         /// <inheritdoc/>
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new()
         {
-            RoleSpawnPoints = new List<RoleSpawnPoint>()
+            RoleSpawnPoints = new()
             {
-                new RoleSpawnPoint()
+                new()
                 {
                     Chance = 100,
                     Role = RoleType.FacilityGuard,
@@ -101,25 +93,7 @@ namespace Mistaken.CustomMTF.Classes
             Instance = this;
         }
 
-        /*/// <inheritdoc/>
-        public override void AddRole(Player player)
-        {
-            base.AddRole(player);
-            player.InfoArea = ~PlayerInfoArea.Role;
-            CustomInfoHandler.Set(player, "Guard_Commander", "<color=blue><b>Dowódca Ochrony</b></color>");
-            player.SetGUI("Guard_Commander", PseudoGUIPosition.MIDDLE, $"<size=150%>Jesteś <color=blue>Dowódcą Ochrony</color></size><br>{this.Description}", 20);
-            player.SetGUI("Guard_Commander_Info", PseudoGUIPosition.BOTTOM, "<color=yellow>Grasz</color> jako <color=blue>Dowódca Ochrony</color>");
-            RLogger.Log("GUARD COMMANDER", "SPAWN", $"Player {player.PlayerToString()} is now a {this.Name}");
-        }
-
-        /// <inheritdoc/>
-        public override void RemoveRole(Player player)
-        {
-            base.RemoveRole(player);
-            CustomInfoHandler.Set(player, "Guard_Commander", null);
-            player.SetGUI("Guard_Commander_Info", PseudoGUIPosition.BOTTOM, null);
-            RLogger.Log("GUARD COMMANDER", "DEATH", $"Player {player.PlayerToString()} is no longer a {this.Name}");
-        }*/
+        internal static GuardCommander Instance { get; private set; }
 
         /// <inheritdoc/>
         protected override void SubscribeEvents()
@@ -130,6 +104,7 @@ namespace Mistaken.CustomMTF.Classes
             Exiled.Events.Handlers.Player.UnlockingGenerator += this.Player_UnlockingGenerator;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer += this.Scp914_UpgradingPlayer;
             Exiled.Events.Handlers.Map.Decontaminating += this.Map_Decontaminating;
+            base.SubscribeEvents();
         }
 
         /// <inheritdoc/>
@@ -141,6 +116,7 @@ namespace Mistaken.CustomMTF.Classes
             Exiled.Events.Handlers.Player.UnlockingGenerator -= this.Player_UnlockingGenerator;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer -= this.Scp914_UpgradingPlayer;
             Exiled.Events.Handlers.Map.Decontaminating -= this.Map_Decontaminating;
+            base.UnsubscribeEvents();
         }
 
         private bool hasCommanderEscorted = false;
@@ -161,8 +137,8 @@ namespace Mistaken.CustomMTF.Classes
 
             if (!this.hasCommanderEscorted)
             {
-                foreach (var item in Classes.GuardCommander.Instance.TrackedPlayers)
-                    item.SetGUI("GuardCommander_Escort", PseudoGUIPosition.TOP, "Dostałeś <color=yellow>informację</color> przez pager: W związu z <color=yellow>eskortą personelu</color>, od teraz jesteś <color=yellow>autoryzowany</color> do otwierania Gatów bez kogoś obok oraz do otwierania <color=yellow>generatorów</color>.", 10);
+                foreach (var item in this.TrackedPlayers)
+                    item.SetGUI("GuardCommander_Escort", PseudoGUIPosition.TOP, PluginHandler.Instance.Translation.GuardCommanderEscort, 10);
             }
 
             this.hasCommanderEscorted = true;
@@ -176,7 +152,7 @@ namespace Mistaken.CustomMTF.Classes
             if (!Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
                 return;
 
-            if (Classes.GuardCommander.Instance.TrackedPlayers.Contains(ev.Player) || Items.GuardCommanderKeycardItem.Instance.CurrentOwner == ev.Player)
+            if (this.TrackedPlayers.Contains(ev.Player) || Items.GuardCommanderKeycardItem.Instance.CurrentOwner == ev.Player)
             {
                 ev.IsAllowed = false;
                 return;
@@ -197,46 +173,47 @@ namespace Mistaken.CustomMTF.Classes
             this.hasCommanderEscorted = false;
             this.isCommanderNow = false;
             var rid = RoundPlus.RoundId;
-            Module.CallSafeDelayed(
-                60 * 6,
-                () =>
+            void AfterEscortAccess()
+            {
+                if (!this.hasCommanderEscorted)
                 {
-                    if (rid != RoundPlus.RoundId)
+                    foreach (var item in this.TrackedPlayers)
+                        item.SetGUI("GuardCommander_Access", PseudoGUIPosition.TOP, PluginHandler.Instance.Translation.GuardCommanderAccess, 10);
+
+                    this.hasCommanderEscorted = true;
+                }
+            }
+
+            void SpawnGuardCommander()
+            {
+                try
+                {
+                    var guards = RealPlayers.Get(RoleType.FacilityGuard).ToArray();
+                    if (guards.Length < 3)
                         return;
 
-                    if (!this.hasCommanderEscorted)
-                    {
-                        foreach (var item in Classes.GuardCommander.Instance.TrackedPlayers)
-                            item.SetGUI("GuardCommander_Access", PseudoGUIPosition.TOP, "Dostałeś <color=yellow>informację</color> przez pager: Aktywowano protokuł <color=yellow>GB-12</color>, od teraz jesteś <color=yellow>autoryzowany</color> do otwierania Gatów bez kogoś obok oraz do otwierania <color=yellow>generatorów</color>.", 10);
-                        this.hasCommanderEscorted = true;
-                    }
-                }, "RoundStart1");
-            Module.CallSafeDelayed(
-                1.2f,
-                () =>
+                    this.AddRole(guards[UnityEngine.Random.Range(0, guards.Length)]);
+                }
+                catch (System.Exception ex)
                 {
-                    try
-                    {
-                        var guards = RealPlayers.Get(RoleType.FacilityGuard).ToArray();
-                        if (guards.Length < 3)
-                            return;
+                    Log.Error(ex.Message);
+                    Log.Error(ex.StackTrace);
+                }
+            }
 
-                        Classes.GuardCommander.Instance.AddRole(guards[UnityEngine.Random.Range(0, guards.Length)]);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Log.Error(ex.Message);
-                        Log.Error(ex.StackTrace);
-                    }
-                }, "RoundStart2");
+            Module.CallSafeDelayed(60 * 6, AfterEscortAccess, nameof(AfterEscortAccess), true);
+            Module.CallSafeDelayed(1.2f, SpawnGuardCommander, nameof(SpawnGuardCommander));
         }
 
         private void Player_InteractingDoor(Exiled.Events.EventArgs.InteractingDoorEventArgs ev)
         {
+            if (ev.Player is null)
+                return;
+
             if (!Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
                 return;
 
-            if (!Classes.GuardCommander.Instance.Check(ev.Player) && Items.GuardCommanderKeycardItem.Instance.CurrentOwner != ev.Player)
+            if (!this.Check(ev.Player) && Items.GuardCommanderKeycardItem.Instance.CurrentOwner != ev.Player)
             {
                 ev.IsAllowed = false;
                 return;
@@ -249,16 +226,29 @@ namespace Mistaken.CustomMTF.Classes
             switch (type)
             {
                 case DoorType.Intercom:
-                    ev.IsAllowed = true;
-                    return;
+                    {
+                        ev.IsAllowed = true;
+                        return;
+                    }
 
                 case DoorType.NukeSurface:
-                    foreach (var player in RealPlayers.List.Where(p => p.Id != ev.Player.Id && (p.Role != RoleType.FacilityGuard && p.Role.Team == Team.MTF)))
                     {
-                        if (Vector3.Distance(player.Position, ev.Player.Position) < 10)
+                        foreach (var player in RealPlayers.List.ToArray())
                         {
-                            ev.IsAllowed = true;
-                            return;
+                            if (ev.Player == player)
+                                continue;
+
+                            if (player.Role.Type == RoleType.FacilityGuard)
+                                continue;
+
+                            if (player.Role.Team != Team.MTF)
+                                continue;
+
+                            if (Vector3.Distance(player.Position, ev.Player.Position) < 10)
+                            {
+                                ev.IsAllowed = true;
+                                return;
+                            }
                         }
                     }
 
@@ -267,18 +257,29 @@ namespace Mistaken.CustomMTF.Classes
                 case DoorType.Scp106Primary:
                 case DoorType.Scp106Secondary:
                 case DoorType.Scp106Bottom:
-                    if (!this.isCommanderNow)
-                        return;
-
-                    bool tmp = false;
-                    foreach (var player in RealPlayers.List.Where(p => p.Id != ev.Player.Id && (p.Role == RoleType.NtfCaptain || p.Role == RoleType.NtfSpecialist)))
                     {
-                        if (Vector3.Distance(player.Position, ev.Player.Position) < 10)
+                        if (!this.isCommanderNow)
+                            return;
+
+                        bool tmp = false;
+                        foreach (var player in RealPlayers.List.ToArray())
                         {
-                            if (!tmp)
-                                tmp = true;
-                            else
-                                ev.IsAllowed = true;
+                            if (ev.Player == player)
+                                continue;
+
+                            if (player.Role.Type != RoleType.NtfCaptain && player.Role.Type != RoleType.NtfSpecialist)
+                                continue;
+
+                            if (Vector3.Distance(player.Position, ev.Player.Position) < 10)
+                            {
+                                if (!tmp)
+                                    tmp = true;
+                                else
+                                {
+                                    ev.IsAllowed = true;
+                                    return;
+                                }
+                            }
                         }
                     }
 
@@ -286,18 +287,26 @@ namespace Mistaken.CustomMTF.Classes
 
                 case DoorType.GateA:
                 case DoorType.GateB:
-                    if (this.hasCommanderEscorted)
                     {
-                        ev.IsAllowed = true;
-                        return;
-                    }
-
-                    foreach (var player in RealPlayers.List.Where(p => (p.Id != ev.Player.Id && p.Role.Team == Team.RSC) || ((p.Role.Team == Team.CDP || p.Role.Team == Team.CHI) && p.IsCuffed)))
-                    {
-                        if (Vector3.Distance(player.Position, ev.Player.Position) < 10)
+                        if (this.hasCommanderEscorted)
                         {
                             ev.IsAllowed = true;
                             return;
+                        }
+
+                        foreach (var player in RealPlayers.List.ToArray())
+                        {
+                            if (ev.Player == player)
+                                continue;
+
+                            if (player.Role.Team != Team.RSC && ((player.Role.Team != Team.CDP && player.Role.Team != Team.CHI) || !player.Inventory.IsDisarmed()))
+                                continue;
+
+                            if (Vector3.Distance(player.Position, ev.Player.Position) < 10)
+                            {
+                                ev.IsAllowed = true;
+                                return;
+                            }
                         }
                     }
 
@@ -306,10 +315,12 @@ namespace Mistaken.CustomMTF.Classes
                 case DoorType.HID:
                 case DoorType.Scp079First:
                 case DoorType.Scp079Second:
-                    if (this.isCommanderNow)
                     {
-                        ev.IsAllowed = true;
-                        return;
+                        if (this.isCommanderNow)
+                        {
+                            ev.IsAllowed = true;
+                            return;
+                        }
                     }
 
                     break;

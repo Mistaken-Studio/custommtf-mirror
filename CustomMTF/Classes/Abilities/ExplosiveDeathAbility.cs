@@ -14,7 +14,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
     /// Spawns grenade on death.
     /// </summary>
     [CustomAbility]
-    public class ExplosiveDeathAbility : PassiveAbility
+    public sealed class ExplosiveDeathAbility : PassiveAbility
     {
         /// <inheritdoc/>
         public override string Name { get; set; } = nameof(ExplosiveDeathAbility);
@@ -26,17 +26,19 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Dying += this.Player_Dying;
+            base.SubscribeEvents();
         }
 
         /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Dying -= this.Player_Dying;
+            base.UnsubscribeEvents();
         }
 
         private void Player_Dying(Exiled.Events.EventArgs.DyingEventArgs ev)
         {
-            if (ev.IsAllowed && this.Players.Contains(ev.Target))
+            if (ev.IsAllowed && this.Check(ev.Target))
             {
                 var grenade = Item.Create(ItemType.GrenadeHE, ev.Target) as ExplosiveGrenade;
                 grenade.FuseTime = 5f;
