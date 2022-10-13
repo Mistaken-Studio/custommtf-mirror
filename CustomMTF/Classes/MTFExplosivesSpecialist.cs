@@ -101,20 +101,6 @@ namespace Mistaken.CustomMTF.Classes
         }
 
         /// <inheritdoc/>
-        protected override void RoleAdded(Player player)
-        {
-            base.RoleAdded(player);
-            RLogger.Log("MTF EXPLOSIVES SPECIALIST", "SPAWN", $"Player {player.PlayerToString()} is now a MTF Explosives Specialist");
-        }
-
-        /// <inheritdoc/>
-        protected override void RoleRemoved(Player player)
-        {
-            base.RoleRemoved(player);
-            RLogger.Log("MTF EXPLOSIVES SPECIALIST", "DEATH", $"Player {player.PlayerToString()} is no longer a MTF Explosives Specialist");
-        }
-
-        /// <inheritdoc/>
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;

@@ -98,22 +98,9 @@ namespace Mistaken.CustomMTF.Classes
         }
 
         /// <inheritdoc/>
-        protected override void RoleAdded(Player player)
-        {
-            base.RoleAdded(player);
-            RLogger.Log("MTF CONTAINMENT ENGINNER", "SPAWN", $"Player {player.PlayerToString()} is now a MTF Containment Enginner");
-        }
-
-        /// <inheritdoc/>
-        protected override void RoleRemoved(Player player)
-        {
-            base.RoleRemoved(player);
-            RLogger.Log("MTF CONTAINMENT ENGINNER", "DEATH", $"Player {player.PlayerToString()} is no longer a MTF Containment Enginner");
-        }
-
-        /// <inheritdoc/>
         protected override void SubscribeEvents()
         {
+            base.SubscribeEvents();
             Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
             Exiled.Events.Handlers.Server.RoundStarted += this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor += this.Player_InteractingDoor;
@@ -122,6 +109,7 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
+            base.UnsubscribeEvents();
             Exiled.Events.Handlers.Server.RespawningTeam -= this.Server_RespawningTeam;
             Exiled.Events.Handlers.Server.RoundStarted -= this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor -= this.Player_InteractingDoor;

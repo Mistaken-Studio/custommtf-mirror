@@ -103,20 +103,6 @@ namespace Mistaken.CustomMTF.Classes
         }
 
         /// <inheritdoc/>
-        protected override void RoleAdded(Player player)
-        {
-            base.RoleAdded(player);
-            RLogger.Log("MTF MEDIC", "SPAWN", $"Player {player.PlayerToString()} is now a MTF Medic");
-        }
-
-        /// <inheritdoc/>
-        protected override void RoleRemoved(Player player)
-        {
-            base.RoleRemoved(player);
-            RLogger.Log("MTF MEDIC", "DEATH", $"Player {player.PlayerToString()} is no longer a MTF Medic");
-        }
-
-        /// <inheritdoc/>
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;

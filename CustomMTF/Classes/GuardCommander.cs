@@ -96,22 +96,9 @@ namespace Mistaken.CustomMTF.Classes
         internal static GuardCommander Instance { get; private set; }
 
         /// <inheritdoc/>
-        protected override void RoleAdded(Player player)
-        {
-            base.RoleAdded(player);
-            RLogger.Log("GUARD COMMANDER", "SPAWN", $"Player {player.PlayerToString()} is now a Guard Commander");
-        }
-
-        /// <inheritdoc/>
-        protected override void RoleRemoved(Player player)
-        {
-            base.RoleRemoved(player);
-            RLogger.Log("GUARD COMMANDER", "DEATH", $"Player {player.PlayerToString()} is no longer a Guard Commander");
-        }
-
-        /// <inheritdoc/>
         protected override void SubscribeEvents()
         {
+            base.SubscribeEvents();
             Exiled.Events.Handlers.Server.RoundStarted += this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor += this.Player_InteractingDoor;
             Exiled.Events.Handlers.Player.ChangingRole += this.Player_ChangingRole;
@@ -123,6 +110,7 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
+            base.UnsubscribeEvents();
             Exiled.Events.Handlers.Server.RoundStarted -= this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor -= this.Player_InteractingDoor;
             Exiled.Events.Handlers.Player.ChangingRole -= this.Player_ChangingRole;
