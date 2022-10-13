@@ -25,20 +25,20 @@ namespace Mistaken.CustomMTF.Classes.Abilities
         /// <inheritdoc/>
         protected override void SubscribeEvents()
         {
-            base.SubscribeEvents();
             Exiled.Events.Handlers.Player.Dying += this.Player_Dying;
+            base.SubscribeEvents();
         }
 
         /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
-            base.UnsubscribeEvents();
             Exiled.Events.Handlers.Player.Dying -= this.Player_Dying;
+            base.UnsubscribeEvents();
         }
 
         private void Player_Dying(Exiled.Events.EventArgs.DyingEventArgs ev)
         {
-            if (ev.IsAllowed && this.Players.Contains(ev.Target))
+            if (ev.IsAllowed && this.Check(ev.Target))
             {
                 var grenade = Item.Create(ItemType.GrenadeHE, ev.Target) as ExplosiveGrenade;
                 grenade.FuseTime = 5f;

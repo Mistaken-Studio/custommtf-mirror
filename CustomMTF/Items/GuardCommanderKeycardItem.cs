@@ -94,7 +94,7 @@ namespace Mistaken.CustomMTF.Items
             this.CurrentOwner = null;
         }
 
-        private static readonly Vector3 KeycardSize = new (1, 5, 1);
+        private static readonly Vector3 KeycardSize = new(1, 5, 1);
 
         private IEnumerator<float> UpdateInterface(Player player)
         {

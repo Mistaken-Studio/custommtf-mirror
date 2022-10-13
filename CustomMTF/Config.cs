@@ -5,16 +5,16 @@
 // -----------------------------------------------------------------------
 
 using System.ComponentModel;
-using Mistaken.Updater.Config;
+using Exiled.API.Interfaces;
 
 namespace Mistaken.CustomMTF
 {
-    internal class Config : IAutoUpdatableConfig
+    internal class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
 
         [Description("If true then debug will be displayed")]
-        public bool VerbouseOutput { get; set; }
+        public bool VerboseOutput { get; set; }
 
         [Description("Abilities Settings")]
         public float MedicGunBulletRecoveryTime { get; set; } = 70f;
@@ -25,14 +25,5 @@ namespace Mistaken.CustomMTF
         public float MtfExplosivesSpecialistSpawnChance { get; set; } = 10f;
 
         public float MtfContainmentEnginnerSpawnPointTime { get; set; } = 1f;
-
-        [Description("Auto Update Settings")]
-        public System.Collections.Generic.Dictionary<string, string> AutoUpdateConfig { get; set; } = new System.Collections.Generic.Dictionary<string, string>
-        {
-            { "Url", "https://git.mistaken.pl/api/v4/projects/23" },
-            { "Token", string.Empty },
-            { "Type", "GITLAB" },
-            { "VerbouseOutput", "false" },
-        };
     }
 }

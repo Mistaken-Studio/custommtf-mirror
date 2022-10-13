@@ -41,7 +41,8 @@ namespace Mistaken.CustomMTF.Classes.Abilities
             yield return Timing.WaitForSeconds(5f);
             var medicGun = MistakenCustomItems.MEDIC_GUN.Get();
             Firearm item = (Firearm)player.Items.FirstOrDefault(x => medicGun.Check(x));
-            while (this.Players.Contains(player))
+
+            while (this.Check(player))
             {
                 if (!player.IsConnected())
                     break;
@@ -52,6 +53,7 @@ namespace Mistaken.CustomMTF.Classes.Abilities
                 while (item is not null && item.Ammo < 4)
                 {
                     yield return Timing.WaitForSeconds(PluginHandler.Instance.Config.MedicGunBulletRecoveryTime);
+
                     if (!player.IsConnected())
                         break;
 

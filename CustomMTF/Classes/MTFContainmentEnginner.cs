@@ -59,14 +59,14 @@ namespace Mistaken.CustomMTF.Classes
         public override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
-        public override Dictionary<ItemType, ushort> Ammo => new ()
+        public override Dictionary<ItemType, ushort> Ammo => new()
         {
             { ItemType.Ammo556x45, 100 },
             { ItemType.Ammo9x19, 40 },
         };
 
         /// <inheritdoc/>
-        public override List<string> Inventory { get; set; } = new List<string>()
+        public override List<string> Inventory { get; set; } = new()
         {
             ItemType.KeycardNTFOfficer.ToString(),
             ItemType.KeycardContainmentEngineer.ToString(),
@@ -78,11 +78,11 @@ namespace Mistaken.CustomMTF.Classes
         };
 
         /// <inheritdoc/>
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new()
         {
-            RoleSpawnPoints = new List<RoleSpawnPoint>()
+            RoleSpawnPoints = new()
             {
-                new RoleSpawnPoint()
+                new()
                 {
                     Chance = 100,
                     Role = RoleType.NtfPrivate,
@@ -100,22 +100,22 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void SubscribeEvents()
         {
-            base.SubscribeEvents();
             Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
             Exiled.Events.Handlers.Server.RoundStarted += this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor += this.Player_InteractingDoor;
+            base.SubscribeEvents();
         }
 
         /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
-            base.UnsubscribeEvents();
             Exiled.Events.Handlers.Server.RespawningTeam -= this.Server_RespawningTeam;
             Exiled.Events.Handlers.Server.RoundStarted -= this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor -= this.Player_InteractingDoor;
+            base.UnsubscribeEvents();
         }
 
-        private static readonly HashSet<Player> Campers = new ();
+        private static readonly HashSet<Player> Campers = new();
 
         private static readonly Action<Player> OnEnter = (player) => Campers.Add(player);
 
@@ -190,6 +190,7 @@ namespace Mistaken.CustomMTF.Classes
             while (true)
             {
                 yield return Timing.WaitForSeconds(PluginHandler.Instance.Config.MtfContainmentEnginnerSpawnPointTime);
+
                 if (Campers.Count != 0)
                     this.spawnChance++;
             }

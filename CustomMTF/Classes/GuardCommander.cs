@@ -55,14 +55,14 @@ namespace Mistaken.CustomMTF.Classes
         public override string DisplayName => $"<color=#003ECA>{this.Name}</color>";
 
         /// <inheritdoc/>
-        public override Dictionary<ItemType, ushort> Ammo => new ()
+        public override Dictionary<ItemType, ushort> Ammo => new()
         {
             { ItemType.Ammo556x45, 80 },
             { ItemType.Ammo9x19, 50 },
         };
 
         /// <inheritdoc/>
-        public override List<string> Inventory { get; set; } = new List<string>()
+        public override List<string> Inventory { get; set; } = new()
         {
             ((int)MistakenCustomItems.GUARD_COMMANDER_KEYCARD).ToString(),
             ItemType.GunCrossvec.ToString(),
@@ -74,11 +74,11 @@ namespace Mistaken.CustomMTF.Classes
         };
 
         /// <inheritdoc/>
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new()
         {
-            RoleSpawnPoints = new List<RoleSpawnPoint>()
+            RoleSpawnPoints = new()
             {
-                new RoleSpawnPoint()
+                new()
                 {
                     Chance = 100,
                     Role = RoleType.FacilityGuard,
@@ -98,25 +98,25 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void SubscribeEvents()
         {
-            base.SubscribeEvents();
             Exiled.Events.Handlers.Server.RoundStarted += this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor += this.Player_InteractingDoor;
             Exiled.Events.Handlers.Player.ChangingRole += this.Player_ChangingRole;
             Exiled.Events.Handlers.Player.UnlockingGenerator += this.Player_UnlockingGenerator;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer += this.Scp914_UpgradingPlayer;
             Exiled.Events.Handlers.Map.Decontaminating += this.Map_Decontaminating;
+            base.SubscribeEvents();
         }
 
         /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
-            base.UnsubscribeEvents();
             Exiled.Events.Handlers.Server.RoundStarted -= this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor -= this.Player_InteractingDoor;
             Exiled.Events.Handlers.Player.ChangingRole -= this.Player_ChangingRole;
             Exiled.Events.Handlers.Player.UnlockingGenerator -= this.Player_UnlockingGenerator;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer -= this.Scp914_UpgradingPlayer;
             Exiled.Events.Handlers.Map.Decontaminating -= this.Map_Decontaminating;
+            base.UnsubscribeEvents();
         }
 
         private bool hasCommanderEscorted = false;

@@ -43,7 +43,7 @@ namespace Mistaken.CustomMTF.Classes
         public override string Description { get; set; } = PluginHandler.Instance.Translation.MtfExplosivesSpecialistDescription;
 
         /// <inheritdoc/>
-        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>()
+        public override List<CustomAbility> CustomAbilities { get; set; } = new()
         {
             CustomAbility.Get(nameof(Abilities.ExplosiveDeathAbility)),
         };
@@ -61,14 +61,14 @@ namespace Mistaken.CustomMTF.Classes
         public override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
-        public override Dictionary<ItemType, ushort> Ammo => new ()
+        public override Dictionary<ItemType, ushort> Ammo => new()
         {
             { ItemType.Ammo556x45, 40 },
             { ItemType.Ammo9x19, 100 },
         };
 
         /// <inheritdoc/>
-        public override List<string> Inventory { get; set; } = new List<string>()
+        public override List<string> Inventory { get; set; } = new()
         {
             ItemType.KeycardNTFLieutenant.ToString(),
             ItemType.GunFSP9.ToString(),
@@ -81,11 +81,11 @@ namespace Mistaken.CustomMTF.Classes
         };
 
         /// <inheritdoc/>
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new()
         {
-            RoleSpawnPoints = new List<RoleSpawnPoint>()
+            RoleSpawnPoints = new()
             {
-                new RoleSpawnPoint()
+                new()
                 {
                     Chance = 100,
                     Role = RoleType.NtfSergeant,
