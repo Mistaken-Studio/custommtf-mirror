@@ -21,7 +21,7 @@ namespace Mistaken.CustomMTF
 
         public override PluginPriority Priority => PluginPriority.Low;
 
-        public override Version RequiredExiledVersion => new (5, 2, 2);
+        public override Version RequiredExiledVersion => new(5, 2, 2);
 
         public AutoUpdateConfig AutoUpdateConfig => new()
         {
@@ -32,6 +32,8 @@ namespace Mistaken.CustomMTF
         public override void OnEnabled()
         {
             Instance = this;
+
+            CustomHierarchyIntegration.Init();
 
             base.OnEnabled();
         }
