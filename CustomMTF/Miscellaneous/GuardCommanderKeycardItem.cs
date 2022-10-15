@@ -18,7 +18,7 @@ using Mistaken.API.GUI;
 using Mistaken.RoundLogger;
 using UnityEngine;
 
-namespace Mistaken.CustomMTF.Items
+namespace Mistaken.CustomMTF.Miscellaneous
 {
     /// <summary>
     /// Keycard that Guard commander uses.

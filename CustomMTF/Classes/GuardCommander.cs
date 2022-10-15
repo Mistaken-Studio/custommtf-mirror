@@ -149,10 +149,10 @@ namespace Mistaken.CustomMTF.Classes
             if (this.hasCommanderEscorted)
                 return;
 
-            if (!Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
+            if (!Miscellaneous.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
                 return;
 
-            if (this.TrackedPlayers.Contains(ev.Player) || Items.GuardCommanderKeycardItem.Instance.CurrentOwner == ev.Player)
+            if (this.TrackedPlayers.Contains(ev.Player) || Miscellaneous.GuardCommanderKeycardItem.Instance.CurrentOwner == ev.Player)
             {
                 ev.IsAllowed = false;
                 return;
@@ -163,8 +163,8 @@ namespace Mistaken.CustomMTF.Classes
         {
             if (ev.KnobSetting == Scp914.Scp914KnobSetting.OneToOne)
             {
-                if (Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
-                    Items.GuardCommanderKeycardItem.Instance.CurrentOwner = ev.Player;
+                if (Miscellaneous.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
+                    Miscellaneous.GuardCommanderKeycardItem.Instance.CurrentOwner = ev.Player;
             }
         }
 
@@ -210,10 +210,10 @@ namespace Mistaken.CustomMTF.Classes
             if (ev.Player is null)
                 return;
 
-            if (!Items.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
+            if (!Miscellaneous.GuardCommanderKeycardItem.Instance.Check(ev.Player.CurrentItem))
                 return;
 
-            if (!this.Check(ev.Player) && Items.GuardCommanderKeycardItem.Instance.CurrentOwner != ev.Player)
+            if (!this.Check(ev.Player) && Miscellaneous.GuardCommanderKeycardItem.Instance.CurrentOwner != ev.Player)
             {
                 ev.IsAllowed = false;
                 return;
