@@ -28,10 +28,10 @@ namespace Mistaken.CustomMTF.Classes
         public override int MaxHealth { get; set; } = 200;
 
         /// <inheritdoc/>
-        public override string Name { get; set; } = "Żołnierz Tau-5 Samsara";
+        public override string Name { get; set; } = PluginHandler.Instance.Translation.MTFTauSoldier;
 
         /// <inheritdoc/>
-        public override string Description { get; set; } = "Twoje zadanie: <color=red>Zneutralizować wszystko poza personelem fundacji</color><br><b>Karta O5 jest wbudowana w twoją rękę</b>, więc <color=yellow>możesz otwierać <b>wszystkie</b> drzwi nie używając karty</color>";
+        public override string Description { get; set; } = PluginHandler.Instance.Translation.MTFTauSoldierDescription;
 
         // /// <inheritdoc/>
         // public override List<CustomAbility> CustomAbilities { get; set; } = new()
@@ -78,7 +78,7 @@ namespace Mistaken.CustomMTF.Classes
         public override bool InfiniteAmmo => true;
 
         /// <inheritdoc/>
-        public override string DisplayName => "<color=#C00>Żołnierz Tau-5 Samsara</color>";
+        public override string DisplayName => $"<color=#C00>{this.Name}</color>";
 
         /// <inheritdoc/>
         public override void Init()

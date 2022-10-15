@@ -9,7 +9,7 @@ using Exiled.API.Interfaces;
 
 namespace Mistaken.CustomMTF
 {
-    internal class Config : IConfig
+    internal sealed class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
 
