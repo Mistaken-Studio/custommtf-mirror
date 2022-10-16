@@ -93,8 +93,8 @@ namespace Mistaken.CustomMTF.Classes
         protected override void RoleAdded(Player player)
         {
             base.RoleAdded(player);
-            player.ArtificialHealth = 150;
-            player.GetEffect(EffectType.MovementBoost).Intensity = 20;
+            player.ArtificialHealth = 1;
+            player.GetEffect(EffectType.MovementBoost).Intensity = 10;
             Shield.Ini<Miscellaneous.Tau5Shield>(player);
         }
     }

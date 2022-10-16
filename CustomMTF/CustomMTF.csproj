@@ -92,7 +92,9 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(MISTAKEN_REFERENCES)\$(TargetFileName)
-copy $(TargetDir)\$(TargetName).xml $(MISTAKEN_REFERENCES)\$(TargetName).xml</PostBuildEvent>
+    <PostBuildEvent>
+      copy $(TargetPath) $(MISTAKEN_REFERENCES)\$(TargetFileName)
+      copy $(TargetDir)\$(TargetName).xml $(MISTAKEN_REFERENCES)\$(TargetName).xml
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
