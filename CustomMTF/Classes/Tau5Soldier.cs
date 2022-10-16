@@ -53,7 +53,7 @@ namespace Mistaken.CustomMTF.Classes
         {
             ItemType.GunE11SR.ToString(),
             ItemType.ArmorHeavy.ToString(),
-            ItemType.SCP500.ToString(),
+            ItemType.Medkit.ToString(),
             ItemType.Radio.ToString(),
             ItemType.GrenadeHE.ToString(),
         };
