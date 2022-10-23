@@ -17,7 +17,6 @@ using Mistaken.API;
 using Mistaken.API.Components;
 using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
-using Mistaken.RoundLogger;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Classes
@@ -71,10 +70,10 @@ namespace Mistaken.CustomMTF.Classes
             ItemType.KeycardNTFOfficer.ToString(),
             ItemType.KeycardContainmentEngineer.ToString(),
             ItemType.GunE11SR.ToString(),
-            ItemType.Medkit.ToString(),
-            ItemType.GrenadeHE.ToString(),
             ItemType.Radio.ToString(),
             ItemType.ArmorCombat.ToString(),
+            ItemType.GrenadeHE.ToString(),
+            ItemType.Medkit.ToString(),
         };
 
         /// <inheritdoc/>
@@ -187,6 +186,7 @@ namespace Mistaken.CustomMTF.Classes
         private IEnumerator<float> UpdateSpawnPoints()
         {
             yield return Timing.WaitForSeconds(60);
+
             while (true)
             {
                 yield return Timing.WaitForSeconds(PluginHandler.Instance.Config.MtfContainmentEnginnerSpawnPointTime);
