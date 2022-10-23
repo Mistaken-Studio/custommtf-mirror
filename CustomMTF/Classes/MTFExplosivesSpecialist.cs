@@ -7,14 +7,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs;
-using Mistaken.API.CustomItems;
 using Mistaken.API.CustomRoles;
-using Mistaken.RoundLogger;
 
 namespace Mistaken.CustomMTF.Classes
 {
@@ -71,13 +68,14 @@ namespace Mistaken.CustomMTF.Classes
         public override List<string> Inventory { get; set; } = new()
         {
             ItemType.KeycardNTFLieutenant.ToString(),
-            ItemType.GunFSP9.ToString(),
-            ((int)MistakenCustomItems.GRENADE_LAUNCHER).ToString(),
-            ItemType.Painkillers.ToString(),
-            ItemType.GrenadeHE.ToString(),
-            ItemType.GrenadeHE.ToString(),
+            ItemType.GunCrossvec.ToString(),
             ItemType.Radio.ToString(),
             ItemType.ArmorHeavy.ToString(),
+
+            // ((int)MistakenCustomItems.GRENADE_LAUNCHER).ToString(),
+            ItemType.GrenadeHE.ToString(),
+            ItemType.GrenadeHE.ToString(),
+            ItemType.Painkillers.ToString(),
         };
 
         /// <inheritdoc/>

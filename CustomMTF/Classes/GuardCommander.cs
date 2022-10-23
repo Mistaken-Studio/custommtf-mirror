@@ -18,7 +18,6 @@ using Mistaken.API.CustomRoles;
 using Mistaken.API.Diagnostics;
 using Mistaken.API.Extensions;
 using Mistaken.API.GUI;
-using Mistaken.RoundLogger;
 using UnityEngine;
 
 namespace Mistaken.CustomMTF.Classes
@@ -57,8 +56,8 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         public override Dictionary<ItemType, ushort> Ammo => new()
         {
-            { ItemType.Ammo556x45, 80 },
-            { ItemType.Ammo9x19, 50 },
+            { ItemType.Ammo556x45, 40 },
+            { ItemType.Ammo9x19, 90 },
         };
 
         /// <inheritdoc/>
@@ -67,9 +66,11 @@ namespace Mistaken.CustomMTF.Classes
             ((int)MistakenCustomItems.GUARD_COMMANDER_KEYCARD).ToString(),
             ItemType.GunCrossvec.ToString(),
             ItemType.Radio.ToString(),
-            ((int)MistakenCustomItems.TASER).ToString(),
-            ((int)MistakenCustomItems.IMPACT_GRENADE).ToString(),
-            ItemType.ArmorCombat.ToString(),
+            ItemType.ArmorHeavy.ToString(),
+
+            // ((int)MistakenCustomItems.TASER).ToString(),
+            // ((int)MistakenCustomItems.IMPACT_GRENADE).ToString(),
+            ItemType.GrenadeHE.ToString(),
             ItemType.Medkit.ToString(),
         };
 
@@ -172,7 +173,7 @@ namespace Mistaken.CustomMTF.Classes
         {
             this.hasCommanderEscorted = false;
             this.isCommanderNow = false;
-            var rid = RoundPlus.RoundId;
+
             void AfterEscortAccess()
             {
                 if (!this.hasCommanderEscorted)
