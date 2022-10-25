@@ -56,22 +56,21 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         public override Dictionary<ItemType, ushort> Ammo => new()
         {
-            { ItemType.Ammo556x45, 40 },
-            { ItemType.Ammo9x19, 90 },
+            { ItemType.Ammo9x19, 80 },
         };
 
         /// <inheritdoc/>
         public override List<string> Inventory { get; set; } = new()
         {
             ((int)MistakenCustomItems.GUARD_COMMANDER_KEYCARD).ToString(),
-            ItemType.GunCrossvec.ToString(),
+            ItemType.GunFSP9.ToString(),
+            ItemType.ArmorCombat.ToString(),
             ItemType.Radio.ToString(),
-            ItemType.ArmorHeavy.ToString(),
+            ItemType.GrenadeFlash.ToString(),
+            ItemType.Medkit.ToString(),
 
             // ((int)MistakenCustomItems.TASER).ToString(),
             // ((int)MistakenCustomItems.IMPACT_GRENADE).ToString(),
-            ItemType.GrenadeHE.ToString(),
-            ItemType.Medkit.ToString(),
         };
 
         /// <inheritdoc/>
@@ -190,6 +189,7 @@ namespace Mistaken.CustomMTF.Classes
                 try
                 {
                     var guards = RealPlayers.Get(RoleType.FacilityGuard).ToArray();
+
                     if (guards.Length < 3)
                         return;
 
@@ -220,11 +220,16 @@ namespace Mistaken.CustomMTF.Classes
                 return;
             }
 
+            if (ev.Door.RequiredPermissions.RequiredPermissions.HasFlag(Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelTwo))
+            {
+                ev.IsAllowed = false;
+                return;
+            }
+
             if (ev.IsAllowed)
                 return;
 
-            var type = ev.Door.Type;
-            switch (type)
+            switch (ev.Door.Type)
             {
                 case DoorType.Intercom:
                     {
@@ -263,6 +268,7 @@ namespace Mistaken.CustomMTF.Classes
                             return;
 
                         bool tmp = false;
+
                         foreach (var player in RealPlayers.List.ToArray())
                         {
                             if (ev.Player == player)
