@@ -222,7 +222,7 @@ namespace Mistaken.CustomMTF.Classes
 
             if (ev.Door.RequiredPermissions.RequiredPermissions.HasFlag(Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelTwo))
             {
-                ev.IsAllowed = false;
+                ev.IsAllowed = this.hasCommanderEscorted;
                 return;
             }
 
