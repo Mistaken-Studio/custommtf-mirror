@@ -101,15 +101,15 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
             base.SubscribeEvents();
+            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
         }
 
         /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
             base.UnsubscribeEvents();
+            Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
         }
 
         private void Server_RespawningTeam(RespawningTeamEventArgs ev)

@@ -99,19 +99,19 @@ namespace Mistaken.CustomMTF.Classes
         /// <inheritdoc/>
         protected override void SubscribeEvents()
         {
+            base.SubscribeEvents();
             Exiled.Events.Handlers.Server.RespawningTeam += this.Server_RespawningTeam;
             Exiled.Events.Handlers.Server.RoundStarted += this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor += this.Player_InteractingDoor;
-            base.SubscribeEvents();
         }
 
         /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
+            base.UnsubscribeEvents();
             Exiled.Events.Handlers.Server.RespawningTeam -= this.Server_RespawningTeam;
             Exiled.Events.Handlers.Server.RoundStarted -= this.Server_RoundStarted;
             Exiled.Events.Handlers.Player.InteractingDoor -= this.Player_InteractingDoor;
-            base.UnsubscribeEvents();
         }
 
         private static readonly HashSet<Player> Campers = new();
@@ -176,6 +176,7 @@ namespace Mistaken.CustomMTF.Classes
                 return;
 
             var item = ev.Player.CurrentItem;
+
             if (item is null || item.Type != ItemType.KeycardContainmentEngineer)
                 return;
 

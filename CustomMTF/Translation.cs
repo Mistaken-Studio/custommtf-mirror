@@ -10,23 +10,23 @@ namespace Mistaken.CustomMTF
 {
     internal sealed class Translation : ITranslation
     {
-        public string GuardCommander { get; set; } = "Guard Commander";
+        public string GuardCommander { get; set; } = "Dowódca Ochrony";
 
-        public string MtfMedic { get; set; } = "MTF Medic";
+        public string MtfMedic { get; set; } = "Medyk NTF";
 
-        public string MtfContainmentEnginner { get; set; } = "MTF Containment Enginner";
+        public string MtfContainmentEnginner { get; set; } = "Technik Zabezpieczeń NTF";
 
-        public string MtfExplosivesSpecialist { get; set; } = "MTF Explosives Specialist";
+        public string MtfExplosivesSpecialist { get; set; } = "Specjalista od Ładunków Wybuchowych NTF";
 
-        public string MTFTauSoldier { get; set; } = "Samsara Soldier";
+        public string MTFTauSoldier { get; set; } = "Żołnierz Samsara";
 
         public string GuardCommanderDescription { get; set; } = "Twoim zadaniem jest <color=yellow>dowodzenie</color> <color=#7795a9>ochroną placówki</color>.<br>Twoja karta <color=yellow>pozwala</color> ci otworzyć Gate A i Gate B, ale tylko gdy:<br>- Obok jest <color=#f1e96e>Naukowiec</color><br>- Obok jest skuta <color=#ff8400>Klasa D</color><br>- Obok jest skuty <color=#1d6f00>Rebeliant Chaosu</color>";
 
-        public string MtfMedicDescription { get; set; } = "MTF Medic";
+        public string MtfMedicDescription { get; set; } = "Medyk NTF";
 
-        public string MtfContainmentEnginnerDescription { get; set; } = "MTF Containment Enginner";
+        public string MtfContainmentEnginnerDescription { get; set; } = "Technik Zabezpieczeń NTF";
 
-        public string MtfExplosivesSpecialistDescription { get; set; } = "MTF Explosives Specialist";
+        public string MtfExplosivesSpecialistDescription { get; set; } = "Specjalista od Ładunków Wybuchowych NTF";
 
         public string MTFTauSoldierDescription { get; set; } = "Twoje zadanie: <color=red>Zneutralizować wszystko poza personelem fundacji</color><br><b>Karta O5 jest wbudowana w twoją rękę</b>, więc <color=yellow>możesz otwierać <b>wszystkie</b> drzwi nie używając karty</color>";
 

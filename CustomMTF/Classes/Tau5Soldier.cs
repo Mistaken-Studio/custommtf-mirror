@@ -49,6 +49,13 @@ namespace Mistaken.CustomMTF.Classes
         public override bool RemovalKillsPlayer { get; set; } = false;
 
         /// <inheritdoc/>
+        public override Dictionary<ItemType, ushort> Ammo => new()
+        {
+            { ItemType.Ammo556x45, 120 },
+            { ItemType.Ammo9x19, 40 },
+        };
+
+        /// <inheritdoc/>
         public override List<string> Inventory { get; set; } = new()
         {
             ItemType.GunE11SR.ToString(),
@@ -73,9 +80,6 @@ namespace Mistaken.CustomMTF.Classes
 
         /// <inheritdoc/>
         public override bool SetLatestUnitName => true;
-
-        /// <inheritdoc/>
-        public override bool InfiniteAmmo => true;
 
         /// <inheritdoc/>
         public override string DisplayName => $"<color=#C00>{this.Name}</color>";
