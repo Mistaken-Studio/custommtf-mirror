@@ -4,13 +4,18 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Generic;
+using System.Linq;
+using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs;
-using MEC;
+using InventorySystem.Disarming;
+using InventorySystem.Items.Keycards;
+using InventorySystem.Items.Pickups;
+using Mistaken.API;
 using Mistaken.API.CustomItems;
 using Mistaken.API.Diagnostics;
 using Mistaken.API.Extensions;
@@ -71,44 +76,154 @@ namespace Mistaken.CustomMTF.Miscellaneous
 
         internal static GuardCommanderKeycardItem Instance { get; private set; }
 
-        internal Player CurrentOwner { get; set; }
-
         /// <inheritdoc/>
-        protected override void ShowSelectedMessage(Player player)
+        protected override void SubscribeEvents()
         {
-            Module.RunSafeCoroutine(this.UpdateInterface(player), nameof(this.UpdateInterface));
+            base.SubscribeEvents();
+            Exiled.Events.Handlers.Server.RoundStarted += this.Server_RoundStarted;
+            Exiled.Events.Handlers.Player.InteractingDoor += this.Player_InteractingDoor;
+            Exiled.Events.Handlers.Player.ChangingRole += this.Player_ChangingRole;
+            Exiled.Events.Handlers.Player.UnlockingGenerator += this.Player_UnlockingGenerator;
+            Exiled.Events.Handlers.Map.Decontaminating += this.Map_Decontaminating;
         }
 
         /// <inheritdoc/>
-        protected override void OnDropping(DroppingItemEventArgs ev)
+        protected override void UnsubscribeEvents()
         {
-            if (this.CurrentOwner is null)
-                return;
-
-            this.CurrentOwner = null;
-        }
-
-        /// <inheritdoc/>
-        protected override void OnWaitingForPlayers()
-        {
-            this.CurrentOwner = null;
+            base.UnsubscribeEvents();
+            Exiled.Events.Handlers.Server.RoundStarted -= this.Server_RoundStarted;
+            Exiled.Events.Handlers.Player.InteractingDoor -= this.Player_InteractingDoor;
+            Exiled.Events.Handlers.Player.ChangingRole -= this.Player_ChangingRole;
+            Exiled.Events.Handlers.Player.UnlockingGenerator -= this.Player_UnlockingGenerator;
+            Exiled.Events.Handlers.Map.Decontaminating -= this.Map_Decontaminating;
         }
 
         private static readonly Vector3 KeycardSize = new(1, 5, 1);
+        private static bool _afterEscort = false;
+        private static bool _afterDecontamination = false;
 
-        private IEnumerator<float> UpdateInterface(Player player)
+        private void Map_Decontaminating(DecontaminatingEventArgs ev)
         {
-            yield return Timing.WaitForSeconds(0.1f);
+            _afterDecontamination = true;
+        }
 
-            while (this.Check(player.CurrentItem))
+        private void Player_ChangingRole(ChangingRoleEventArgs ev)
+        {
+            if (ev.Reason != SpawnReason.Escaped)
+                return;
+
+            if (ev.NewRole.GetTeam() != Team.MTF)
+                return;
+
+            if (!_afterEscort)
             {
-                if (!(Classes.GuardCommander.Instance.Check(player) || player == this.CurrentOwner))
-                    player.SetGUI("GC_Keycard", PseudoGUIPosition.BOTTOM, "<color=yellow>Trzymasz</color> kartę <color=blue>Dowódcy Ochrony</color>, ale chyba <color=yellow>nie</color> możesz jej używać");
-
-                yield return Timing.WaitForSeconds(1f);
+                foreach (var item in Classes.GuardCommander.Instance.TrackedPlayers)
+                    item.SetGUI("GuardCommander_Escort", PseudoGUIPosition.TOP, PluginHandler.Instance.Translation.GuardCommanderEscort, 10);
             }
 
-            player.SetGUI("GC_Keycard", PseudoGUIPosition.BOTTOM, null);
+            _afterEscort = true;
+        }
+
+        private void Player_UnlockingGenerator(UnlockingGeneratorEventArgs ev)
+        {
+            if (_afterEscort)
+                return;
+
+            if (this.Check(ev.Player.CurrentItem))
+                ev.IsAllowed = false;
+        }
+
+        private void Server_RoundStarted()
+        {
+            _afterEscort = false;
+            _afterDecontamination = false;
+
+            static void AfterEscortAccess()
+            {
+                if (!_afterEscort)
+                {
+                    foreach (var item in Classes.GuardCommander.Instance.TrackedPlayers)
+                        item.SetGUI("GuardCommander_Access", PseudoGUIPosition.TOP, PluginHandler.Instance.Translation.GuardCommanderAccess, 10);
+
+                    _afterEscort = true;
+                }
+            }
+
+            Module.CallSafeDelayed(60 * 6, AfterEscortAccess, nameof(AfterEscortAccess), true);
+        }
+
+        private void Player_InteractingDoor(InteractingDoorEventArgs ev)
+        {
+            if (ev.Player is null)
+                return;
+
+            if (!this.Check(ev.Player.CurrentItem))
+            {
+                if (!ev.Player.TryGetSessionVariable<ItemPickupBase>(SessionVarType.THROWN_ITEM, out var item))
+                    return;
+
+                if (item is not KeycardPickup keycard)
+                    return;
+
+                if (!this.Check(Pickup.Get(keycard)))
+                    return;
+            }
+
+            if (ev.Door.RequiredPermissions.RequiredPermissions.HasFlag(Interactables.Interobjects.DoorUtils.KeycardPermissions.ContainmentLevelTwo))
+            {
+                ev.IsAllowed = _afterEscort;
+                return;
+            }
+
+            if (ev.IsAllowed)
+                return;
+
+            switch (ev.Door.Type)
+            {
+                case DoorType.Intercom:
+                    {
+                        ev.IsAllowed = true;
+                        return;
+                    }
+
+                case DoorType.GateA:
+                case DoorType.GateB:
+                    {
+                        if (_afterEscort)
+                        {
+                            ev.IsAllowed = true;
+                            return;
+                        }
+
+                        foreach (var player in RealPlayers.List.ToArray())
+                        {
+                            if (ev.Player == player)
+                                continue;
+
+                            if (player.Role.Team != Team.RSC && ((player.Role.Team != Team.CDP && player.Role.Team != Team.CHI) || !player.Inventory.IsDisarmed()))
+                                continue;
+
+                            if (Vector3.Distance(player.Position, ev.Player.Position) < 10)
+                            {
+                                ev.IsAllowed = true;
+                                return;
+                            }
+                        }
+                    }
+
+                    break;
+
+                case DoorType.HID:
+                    {
+                        if (_afterDecontamination)
+                        {
+                            ev.IsAllowed = true;
+                            return;
+                        }
+                    }
+
+                    break;
+            }
         }
     }
 }
